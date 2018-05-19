@@ -19,21 +19,16 @@
     <!-- Custom Fonts -->
     <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
     {% endblock %}
-
 </head>
 
 <body>
 
     {% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-grey">
+    <nav class="navbar navbar-light bg-grey">
         <div class="container">
             snowtricks
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
         </div>
-	</nav>
+    </nav>
     {% endblock %}
 
     {# Flash messages defined by the bundle controllers are displayed. #}
@@ -53,8 +48,7 @@
     {% block body %} {% endblock %}
 
     {% block footer %}
-    <div class="clearfix pt-1"></div>
-    <footer class="footer bg-grey justify-content-center">
+    <footer class="footer bg-grey">
         <div class="container">
             <span class="text-muted">SnowTricks &copy; 2017-2018</span>
         </div>

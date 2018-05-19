@@ -2,28 +2,6 @@
 /* ------------------- Layout ------------------ */
 /* --------------------------------------------- */
 
-/*
- * color
- */
-.bg-grey {
-    background-color: #f8f8f8;
-    border: 1px solid #e7e7e7;
-}
-
-/*
- * navbar
- */
-.navbar-brand img {
-    height: 29px;
-}
-
-.pt-5:last-child {
-    padding-bottom: 3rem !important;
-}
-
-/* --------------------------------------------- */
-/* ------------ Sticky footer styles ----------- */
-/* --------------------------------------------- */
 html {
     position: relative;
     min-height: 100%;
@@ -35,8 +13,36 @@ body {
 }
 
 /*
- * Footer
+ * color
  */
+.bg-grey {
+    background-color: #f8f8f8;
+    border: 1px solid #e7e7e7;
+}
+
+/*
+ * center the element vertically and horizontally
+ */
+
+ .hv-body {
+    height: calc(100% - 60px);
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+    -ms-flex-align: center;
+    -ms-flex-pack: center;
+    -webkit-box-align: center;
+    box-align: center;
+    -webkit-box-pack: center;
+    box-pack: center;
+    justify-content: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+/* --------------------------------------------- */
+/* ------------ Sticky footer styles ----------- */
+/* --------------------------------------------- */
 
 .footer {
     position: absolute;

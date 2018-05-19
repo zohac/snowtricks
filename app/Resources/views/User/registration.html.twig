@@ -6,7 +6,7 @@
 
 {% block body %}
 
-	<div class="container h100p-60px">
+	<div class="container hv-body">
 		<div class="col-lg-6 col-md-9 col-12">
             <h3>Inscription</h3>
             <form  method="post">
@@ -17,13 +17,13 @@
                 <div class="form-group">
                     {{ form_label(form.username, "Pseudo") }}
                     {{ form_errors(form.username) }}
-                    {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(form.username) }}
                 </div>
 
                 <div class="form-group">
                     {{ form_label(form.email, "Email") }}
                     {{ form_errors(form.email) }}
-                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(form.email) }}
                 </div>
 
                 <div class="form-group">
@@ -31,7 +31,6 @@
                     {{ form_errors(form.plainPassword.first) }}
                     {{ form_widget(form.plainPassword.first,
                         {'attr': {
-                            'class': 'form-control',
                             'title': 'Le mot de passe doit comporter au moins 6 caractères, minuscule, majuscule et numérique.',
                             'pattern': '[a-zA-Z0-9]{6,}'
                         }})
@@ -42,7 +41,6 @@
                     {{ form_label(form.plainPassword.second, "Retapez votre mot de passe") }}
                     {{ form_widget(form.plainPassword.second,
                         {'attr': {
-                            'class': 'form-control',
                             'title': 'Le mot de passe doit comporter au moins 6 caractères, minuscule, majuscule et numérique.',
                             'pattern': '[a-zA-Z0-9]{6,}'
                         }})
