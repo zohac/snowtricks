@@ -89,8 +89,6 @@ class User implements UserInterface
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="token", type="string", length=64, nullable=false, unique=false)
      */
     private $salt;
 
@@ -294,5 +292,12 @@ class User implements UserInterface
     public function getSalt()
     {
         return $this->salt;
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     */
+    public function eraseCredentials()
+    {
     }
 }
