@@ -3,21 +3,21 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * User
+ * User.
  *
  * @ORM\Table(name="user")
- * 
+ *
  * @UniqueEntity(fields="email", message="Email déjà utilisé")
  * @UniqueEntity(fields="username", message="Pseudo déjà utilisé.")
- * 
+ *
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -32,7 +32,7 @@ class User
      * @var string
      *
      * @ORM\Column(name="username", type="string", length=60, unique=true)
-     * 
+     *
      * @Assert\NotBlank()
      */
     private $username;
@@ -41,7 +41,7 @@ class User
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
-     * 
+     *
      * @Assert\NotBlank()
      */
     private $email;
@@ -55,7 +55,7 @@ class User
 
     /**
      * @var string|null
-     * 
+     *
      * @Assert\Length(max=4096)
      * @Assert\Regex(
      *      pattern="/^[a-zA-Z0-9]{6,}$/",
@@ -75,7 +75,7 @@ class User
      * @var \DateTime|null
      *
      * @ORM\Column(name="dateRegistration", type="datetime", nullable=true)
-     * 
+     *
      * @Assert\DateTime()
      */
     private $dateRegistration;
@@ -89,11 +89,10 @@ class User
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="token", type="string", length=64, nullable=false, unique=false)
      */
     private $salt;
-
 
     /**
      * Get id.
