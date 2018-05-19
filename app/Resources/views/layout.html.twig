@@ -1,0 +1,74 @@
+{# src/AppBundle/Resources/views/layout.html.twig #}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}SnowTricks{% endblock %}</title>
+
+    {# The bootstrap CSS is loaded directly from the site. #}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    {% block stylesheets %}
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}" type="text/css" />
+
+    <!-- Custom Fonts -->
+    <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
+    {% endblock %}
+</head>
+
+<body>
+
+    {% block navbar %}
+    <nav class="navbar navbar-light bg-grey">
+        <div class="container">
+            snowtricks
+        </div>
+    </nav>
+    {% endblock %}
+
+    {# Flash messages defined by the bundle controllers are displayed. #}
+    {% for key, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+        <div class="st-message">
+            <div class="container mt-3 alert alert-{{ key }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    {% endfor %}
+
+    {% block body %} {% endblock %}
+
+    {% block footer %}
+    <footer class="footer bg-grey">
+        <div class="container">
+            <span class="text-muted">SnowTricks &copy; 2017-2018</span>
+        </div>
+    </footer>
+    {% endblock %}
+
+
+    {% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    {% endblock %}
+
+</body>
+
+</html>
