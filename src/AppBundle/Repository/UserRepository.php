@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\User;
+
 /**
  * UserRepository.
  *
@@ -10,4 +12,20 @@ namespace AppBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Recovers a user by token.
+     *
+     * @param string $token
+     *
+     * @return User|null
+     */
+    public function getUserWithToken(string $token): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.token = :token')
+            ->setParameter('token', $token)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

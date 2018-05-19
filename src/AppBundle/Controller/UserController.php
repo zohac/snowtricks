@@ -8,8 +8,11 @@ use AppBundle\Entity\User;
 use AppBundle\Service\User\Registration;
 use AppBundle\Form\User\RegistrationType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * Class allowing the management of users.
@@ -21,9 +24,12 @@ class UserController extends Controller
      *
      * @Route("/registration", name="ST_registration")
      *
+     * @param Request      $request
      * @param Registration $register
+     *
+     * @return Response
      */
-    public function registrationAction(Request $request, Registration $register)
+    public function registrationAction(Request $request, Registration $register): Response
     {
         // 1) build the form
         $user = new User();
@@ -45,8 +51,24 @@ class UserController extends Controller
      * Check the mail of a new user.
      *
      * @Route("/registration/{token}", name="ST_registration_check")
+     * @Entity("user", expr="repository.getUserWithToken(token)")
+     *
+     * @Method({"GET"})
+     *
+     * @param User|null    $user
+     * @param Registration $register
+     *
+     * @return Response
      */
-    public function registrationCheckAction()
+    public function registrationCheckAction(?User $user, Registration $register): Response
     {
+        // User registration
+        $message = $register->check($user);
+
+        // Add a flash message
+        $this->addFlash('info', $message);
+
+        // Redirect to home
+        return $this->redirectToRoute('ST_registration');
     }
 }

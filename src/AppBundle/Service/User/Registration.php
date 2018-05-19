@@ -93,23 +93,23 @@ class Registration
     /**
      * User registration.
      *
-     * @param User $user
+     * @param User|null $user
      *
-     * @return bool
+     * @return string
      */
-    public function check(User $user = null): bool
+    public function check(?User $user): string
     {
         // If user exist, we record it
         if (!empty($user)) {
             $user->setToken(null);
-            $user->setRegistered('registered');
+            $user->setRoles(['ROLE_USER']);
 
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            return true;
+            return $message = 'Votre compte est maintenant validé.';
         }
 
-        return false;
+        return $message = 'Une erreur c\'est produite lors de la validation de votre compte.';
     }
 }
