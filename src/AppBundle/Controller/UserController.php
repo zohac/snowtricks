@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
  * Class allowing the management of users.
@@ -70,5 +71,39 @@ class UserController extends Controller
 
         // Redirect to home
         return $this->redirectToRoute('ST_registration');
+    }
+
+    /**
+     * The login form.
+     *
+     * @Route("/login", name="ST_login")
+     *
+     * @param AuthenticationUtils $authUtils
+     *
+     * @return Response
+     */
+    public function loginAction(AuthenticationUtils $authUtils): Response
+    {
+        return $this->render(
+            'User/login.html.twig',
+            [
+                'last_username' => $authUtils->getLastUsername(),
+                'error' => $authUtils->getLastAuthenticationError(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/login_check", name="ST_login_check")
+     */
+    public function loginCheckAction()
+    {
+    }
+
+    /**
+     * @Route("/logout", name="ST_logout")
+     */
+    public function logoutAction()
+    {
     }
 }
