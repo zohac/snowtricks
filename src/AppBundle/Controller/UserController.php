@@ -9,6 +9,9 @@ use AppBundle\Service\User\Update;
 use AppBundle\Form\User\UpdateType;
 use AppBundle\Service\User\Registration;
 use AppBundle\Form\User\RegistrationType;
+use AppBundle\Service\User\ForgotPassword;
+use AppBundle\Form\User\ForgotPasswordType;
+use AppBundle\EventSubscriber\UserSubscriber;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -22,7 +25,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 /**
  * Class allowing the management of users.
  */
-class UserController extends Controller
+class UserController extends Controller implements UserSubscripterController
 {
     /**
      * Register a new user.
@@ -136,5 +139,49 @@ class UserController extends Controller
         // The createView () method of the form is passed to the view
         // so that it can display the form all by itself.
         return $this->render('User/update.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * Provide an email link to change a password.
+     *
+     * @Route("/password/forgot", name="ST_forgot_password")
+     *
+     * @param Request        $request
+     * @param ForgotPassword $forgotPassword
+     * @param UserSubscriber $UserSubscriber
+     *
+     * @return Response
+     */
+    public function forgotPasswordAction(
+        Request $request,
+        ForgotPassword $forgotPassword,
+        UserSubscriber $UserSubscriber
+    ): Response {
+        $user = $UserSubscriber->getUser();
+        // Build the form
+        $form = $this->createForm(ForgotPasswordType::class, $user);
+
+        // handle the submit (will only happen on POST)
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // 3) Register a new user
+            $forgotPassword->forgotPassword($user);
+            // Redirect to home
+            return $this->redirectToRoute('ST_registration');
+        }
+
+        // Return the view
+        return $this->render('User/forgot_password.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * Reset a password.
+     *
+     * @Route("/password/reset/{token}", name="ST_reset_password")
+     *
+     * @param User $user
+     */
+    public function resetPasswordAction()
+    {
     }
 }

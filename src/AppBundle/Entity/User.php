@@ -43,8 +43,18 @@ class User implements UserInterface
      * @ORM\Column(name="email", type="string", length=255, unique=true)
      *
      * @Assert\NotBlank()
+     * @Assert\Email()
      */
     private $email;
+
+    /**
+     * Used to find a user if he have lost his password.
+     *
+     * @var string
+     *
+     * @Assert\Email()
+     */
+    private $emailRecovery;
 
     /**
      * @var string
@@ -148,6 +158,30 @@ class User implements UserInterface
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set emailRecovery.
+     *
+     * @param string $email
+     *
+     * @return User
+     */
+    public function setEmailRecovery($email)
+    {
+        $this->emailRecovery = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get emailRecovery.
+     *
+     * @return string
+     */
+    public function getEmailRecovery()
+    {
+        return $this->emailRecovery;
     }
 
     /**
