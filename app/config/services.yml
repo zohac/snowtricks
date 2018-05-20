@@ -33,3 +33,7 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+    AppBundle\Listener\LoginListener:
+        public: true
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }

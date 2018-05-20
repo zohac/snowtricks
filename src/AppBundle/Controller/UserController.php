@@ -71,7 +71,7 @@ class UserController extends Controller
         $message = $register->check($user);
 
         // Add a flash message
-        $this->addFlash('info', $message);
+        $this->addFlash('registration_check', $message);
 
         // Redirect to home
         return $this->redirectToRoute('ST_registration');
