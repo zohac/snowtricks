@@ -67,6 +67,7 @@ class Registration
         $user->setPassword($password);
         // 2) Set a token for registration
         $user->setToken(hash('sha256', serialize($user).microtime()));
+        $user->setRoles([]);
 
         // 3) save the User!
         $this->entityManager->persist($user);
@@ -75,18 +76,25 @@ class Registration
         // 4) Send a confirmation mail
         if ($this->mailer->sendNewRegistration($user)) {
             $this->flashBag->add(
-                'info',
-                'Vérifiez votre email, pour confirmer votre inscription.'
+                'update_user',
+                [
+                   'type' => 'info',
+                   'title' => 'Vérifiez votre email, pour confirmer votre inscription.',
+                   'message' => '',
+                ]
             );
 
             return;
         }
         // 5) In case of error
         $this->flashBag->add(
-            'danger',
-            'Un email de confirmation n\'a pu vous être envoyé. Connectez vous à votre compte 
-            et vérifié votre adresse mail. Tant que votre adresse email ne seras pas vérifié, 
-            vous ne pourrez pas poster de commentaire.'
+            'update_user',
+            [
+               'type' => 'danger',
+               'title' => 'Un email de confirmation n\'a pu vous être envoyé.',
+               'message' => 'Connectez vous à votre compte et vérifié votre adresse mail.
+               Tant que votre adresse email ne seras pas vérifié, vous ne pourrez pas poster de commentaire.',
+            ]
         );
     }
 
@@ -95,9 +103,9 @@ class Registration
      *
      * @param User|null $user
      *
-     * @return string
+     * @return array
      */
-    public function check(?User $user): string
+    public function check(?User $user): array
     {
         // If user exist, we record it
         if (!empty($user)) {
@@ -107,9 +115,17 @@ class Registration
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            return $message = 'Votre compte est maintenant validé.';
+            return $message = [
+                'type' => 'info',
+                'title' => 'Votre compte est maintenant validé.',
+                'message' => '',
+             ];
         }
 
-        return $message = 'Une erreur c\'est produite lors de la validation de votre compte.';
+        return $message = [
+            'type' => 'info',
+            'title' => 'Une erreur c\'est produite lors de la validation de votre compte.',
+            'message' => '',
+         ];
     }
 }

@@ -55,6 +55,12 @@ class Update
         $this->entityManager->flush();
 
         // 4) Add a flash message
-        $this->flashBag->add('info', 'Vos infos sont bien misent à jour.');
+        $this->flashBag->add(
+            'update_user',
+            [
+               'type' => 'info',
+               'title' => 'Vos infos sont bien misent à jour.',
+            ]
+        );
     }
 }

@@ -10,11 +10,11 @@
 		<div class="col-lg-6 col-md-9 col-12">
             <h3>Login</h3>
             <form class="form-horizontal" role="form" method="POST" action="{{ path('ST_login_check') }}">
+
                 {% if error %}
-                {{ dump(error) }}
-                    <div class="alert alert-danger">
-                        {{ error.messageKey }}
-                    </div>
+                <div class="alert alert-danger">
+                    {{ error.messageKey }}
+                </div>
                 {% endif %}
 
                 <div class="form-group">
