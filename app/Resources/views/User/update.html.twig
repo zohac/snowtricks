@@ -1,21 +1,22 @@
-{# src/AppBundle/Resources/views/User/registration.html.twig #}
+{# src/AppBundle/Resources/views/User/update.html.twig #}
 
 {% extends "layout.html.twig" %}
 
-{% form_theme form  'Form/form_errors.html.twig' %}
+{% form_theme form 'Form/form_errors.html.twig' %}
 
-{% block title %}SnowTricks::Inscription{% endblock %}
+{% block title %}SnowTricks::Update{% endblock %}
 
 {% block body %}
 
 	<div class="container hv-body">
 		<div class="col-lg-6 col-md-9 col-12">
-            <h3>Inscription</h3>
-            <form action="{{ path('ST_registration') }}" method="post">
+            <form action="{{ path('ST_user_update') }}" class="form-signin" method="POST">
 
                 {# General errors in the form. #}
                 {{ form_errors(form) }}
-                
+
+                <h3>Mon compte utilisateur</h3>
+
                 <div class="form-group">
                     {{ form_label(form.username, "Pseudo") }}
                     {{ form_widget(form.username) }}
@@ -47,13 +48,13 @@
                 </div>
 
                 {# Automatic generation of fields not yet written.
-                    In this example, it would be the CSRF field (automatically managed by Symfony !)
-                    and all hidden fields. #}
+                In this example, it would be the CSRF field (automatically managed by Symfony !)
+                and all hidden fields. #}
                 {{ form_rest(form) }}
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary col-12">
-                        Get Started
+                        Mettre à jour
                     </button>
                 </div>
             </form>

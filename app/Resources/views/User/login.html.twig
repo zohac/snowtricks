@@ -11,8 +11,9 @@
             <h3>Login</h3>
             <form class="form-horizontal" role="form" method="POST" action="{{ path('ST_login_check') }}">
                 {% if error %}
+                {{ dump(error) }}
                     <div class="alert alert-danger">
-                        {{ error.messageKey|trans(error.messageData) }}
+                        {{ error.messageKey }}
                     </div>
                 {% endif %}
 

@@ -5,14 +5,18 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Service\User\Update;
+use AppBundle\Form\User\UpdateType;
 use AppBundle\Service\User\Registration;
 use AppBundle\Form\User\RegistrationType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
@@ -105,5 +109,32 @@ class UserController extends Controller
      */
     public function logoutAction()
     {
+    }
+
+    /**
+     * Update the user info.
+     *
+     * @Route("/user/update", name="ST_user_update")
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @param Update             $updateUser
+     * @param UserInterface|null $user
+     *
+     * @return Response
+     */
+    public function updateAction(Request $request, Update $updateUser, ?UserInterface $user): Response
+    {
+        // 1) We create the form
+        $form = $this->createForm(UpdateType::class, $user);
+
+        // 2) handle the submit (will only happen on POST)
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // 3) Update a user
+            $updateUser->update($user);
+        }
+        // The createView () method of the form is passed to the view
+        // so that it can display the form all by itself.
+        return $this->render('User/update.html.twig', ['form' => $form->createView()]);
     }
 }
