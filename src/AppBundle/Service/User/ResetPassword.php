@@ -6,7 +6,6 @@ use AppBundle\Entity\User;
 use AppBundle\Form\User\ResetPasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -14,7 +13,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 /**
  * Class managing password replacement.
  */
-class UserQuery
+class ResetPassword
 {
     /**
      * @var RegistrationMailer
@@ -37,11 +36,6 @@ class UserQuery
     private $formFactory;
 
     /**
-     * @var RouterInterface
-     */
-    private $router;
-
-    /**
      * Constructor.
      *
      * @param UserPasswordEncoderInterface $passwordEncoder
@@ -53,26 +47,12 @@ class UserQuery
         UserPasswordEncoderInterface $passwordEncoder,
         ObjectManager $entityManager,
         SessionInterface $session,
-        FormFactoryInterface $formFactory,
-        RouterInterface  $router
+        FormFactoryInterface $formFactory
     ) {
         $this->passwordEncoder = $passwordEncoder;
         $this->entityManager = $entityManager;
         $this->flashBag = $session->getFlashBag();
         $this->formFactory = $formFactory;
-        $this->router = $router;
-    }
-
-    public function register()
-    {
-    }
-
-    public function update()
-    {
-    }
-
-    public function forgotPassword()
-    {
     }
 
     /**
@@ -81,7 +61,7 @@ class UserQuery
      * @param Request   $request
      * @param User|null $user
      */
-    public function resetPassword(Request $request, ?User $user)
+    public function reset(Request $request, ?User $user)
     {
         // If the user doesn't exist
         if (!$user) {

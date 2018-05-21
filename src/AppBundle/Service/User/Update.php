@@ -5,9 +5,13 @@
 namespace AppBundle\Service\User;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\User\UpdateType;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 
 /**
  * Update a user.
@@ -20,7 +24,7 @@ class Update
     private $passwordEncoder;
 
     /**
-     * @var EntityManager
+     * @var ObjectManager
      */
     private $entityManager;
 
@@ -29,14 +33,29 @@ class Update
      */
     private $flashBag;
 
+    /**
+     * @var FormFactoryInterface
+     */
+    private $formFactory;
+
+    /**
+     * Constructor.
+     *
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param ObjectManager                $entityManager
+     * @param SessionInterface             $session
+     * @param FormFactoryInterface         $formFactory
+     */
     public function __construct(
         UserPasswordEncoderInterface $passwordEncoder,
         ObjectManager $entityManager,
-        SessionInterface $session
+        SessionInterface $session,
+        FormFactoryInterface $formFactory
     ) {
         $this->passwordEncoder = $passwordEncoder;
         $this->entityManager = $entityManager;
         $this->flashBag = $session->getFlashBag();
+        $this->formFactory = $formFactory;
     }
 
     /**
@@ -44,23 +63,34 @@ class Update
      *
      * @param User $user
      */
-    public function update(User $user)
+    public function update(Request $request, User $user): ?FormView
     {
-        if ($user->getPlainPassword()) {
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()));
+        // 1) We create the form
+        $form = $this->formFactory->create(UpdateType::class, $user);
+
+        // 2) handle the submit (will only happen on POST)
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($user->getPlainPassword()) {
+                $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()));
+            }
+            // 3) save the User!
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+
+            // 4) Add a flash message
+            $this->flashBag->add(
+                'update_user',
+                [
+                    'type' => 'info',
+                    'title' => 'Vos infos sont bien misent à jour.',
+                    'message' => '',
+                ]
+            );
+
+            return null;
         }
 
-        // 3) save the User!
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
-
-        // 4) Add a flash message
-        $this->flashBag->add(
-            'update_user',
-            [
-               'type' => 'info',
-               'title' => 'Vos infos sont bien misent à jour.',
-            ]
-        );
+        return $form->createView();
     }
 }
