@@ -7,6 +7,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use AppBundle\Service\User\Update;
 use AppBundle\Form\User\UpdateType;
+use AppBundle\Service\User\UserQuery;
 use AppBundle\Service\User\Registration;
 use AppBundle\Form\User\RegistrationType;
 use AppBundle\Service\User\ForgotPassword;
@@ -120,6 +121,7 @@ class UserController extends Controller implements UserSubscripterController
      * @Route("/user/update", name="ST_user_update")
      * @Security("has_role('ROLE_USER')")
      *
+     * @param Request            $request
      * @param Update             $updateUser
      * @param UserInterface|null $user
      *
@@ -178,10 +180,23 @@ class UserController extends Controller implements UserSubscripterController
      * Reset a password.
      *
      * @Route("/password/reset/{token}", name="ST_reset_password")
+     * @Entity("user", expr="repository.getUserWithToken(token)")
      *
-     * @param User $user
+     * @param UserQuery $userQuery
+     * @param User|null $user
+     * @param Request   $request
+     *
+     * @return Response
      */
-    public function resetPasswordAction()
+    public function resetPasswordAction(UserQuery $userQuery, ?User $user, Request $request): Response
     {
+        $form = $userQuery->resetPassword($request, $user);
+        if (!$form) {
+            // Redirect to home
+            return $this->redirectToRoute('ST_registration');
+        }
+
+        // The form is passed to the view, so that it can display the form all by itself
+        return $this->render('User/reset_password.html.twig', ['form' => $form]);
     }
 }
