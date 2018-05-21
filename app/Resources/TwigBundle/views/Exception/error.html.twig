@@ -1,0 +1,21 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}SnowTricks::An Error Occurred::{{ status_code }}{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-5">
+
+        <h1>Oops! An Error Occurred</h1>
+        <h2>The server returned a "{{ status_code }} {{ status_text }}".</h2>
+
+        <div>
+            <h3>{{ exception.message }}</h3>
+            <p>Something is broken. Please e-mail us at [email] and let us know what you were doing when this error occurred. We will fix
+            it as soon as possible. Sorry for any inconvenience caused.
+            </p>
+            
+        </div>
+    </div>
+
+{% endblock %}

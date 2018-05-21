@@ -1,0 +1,22 @@
+{# app/Resources/TwigBundle/views/Exception/error404.html.twig #}
+
+{% extends "AppBundle::layout.html.twig" %}
+
+{% block title %}SnowTricks::An Error Occurred: {{ status_text }}{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-5">
+
+        <img src="{{ asset(constant('AppBundle\\Entity\\Image::DEFAULT_ERROR')) }}" class="img-fluid st-h400 mx-auto d-block">
+       
+        <h1>Désolé, la page que vous demandez est introuvable.</h1>
+        <h2>Le serveur à retourné "{{ status_code }} {{ status_text }}".</h2>
+
+        <div>
+            La page que vous avez demandée n’a pas été trouvée.
+            Il se peut que le lien que vous avez utilisé soit rompu ou que vous ayez tapé l’adresse (URL) incorrectement.
+        </div>
+    </div>
+
+{% endblock %}

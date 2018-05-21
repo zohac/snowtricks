@@ -1,12 +1,9 @@
 <?php
 
-// src/AppBundle/Service/User/Update.php
-
 namespace AppBundle\Service\User;
 
 use AppBundle\Entity\User;
-use AppBundle\Form\User\UpdateType;
-use Symfony\Component\Form\FormView;
+use AppBundle\Form\User\ResetPasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -14,12 +11,12 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * Update a user.
+ * Class managing password replacement.
  */
-class Update
+class ResetPassword
 {
     /**
-     * @var UserPasswordEncoderInterface
+     * @var RegistrationMailer
      */
     private $passwordEncoder;
 
@@ -59,38 +56,49 @@ class Update
     }
 
     /**
-     * Update a user.
+     * Undocumented function.
      *
-     * @param User $user
+     * @param Request   $request
+     * @param User|null $user
      */
-    public function update(Request $request, User $user): ?FormView
+    public function reset(Request $request, ?User $user)
     {
-        // 1) We create the form
-        $form = $this->formFactory->create(UpdateType::class, $user);
+        // If the user doesn't exist
+        if (!$user) {
+            throw new \LogicException(
+                sprintf('L\'utilisateur n\'existe pas! Avez vous bien suivi le lien envoyé par email!')
+            );
+        }
+
+        // 1) Creat the form
+        $form = $this->formFactory->create(ResetPasswordType::class, $user);
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($user->getPlainPassword()) {
-                $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()));
-            }
-            // 3) save the User!
+            // Reset the password
+            $password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+
+            // Set the token to null
+            $user->setToken(null);
+
+            // save the User!
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            // 4) Add a flash message
             $this->flashBag->add(
-                'update_user',
+                'reset_password',
                 [
-                    'type' => 'info',
-                    'title' => 'Vos infos sont bien misent à jour.',
+                    'type' => 'success',
+                    'title' => 'Votre mot de passe est mis à jour.',
                     'message' => '',
                 ]
             );
 
-            return null;
+            return;
         }
-
+        // Return the view
         return $form->createView();
     }
 }
