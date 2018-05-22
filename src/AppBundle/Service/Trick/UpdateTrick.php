@@ -12,9 +12,9 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * Add a new Trick.
+ * Update a Trick.
  */
-class Add
+class UpdateTrick
 {
     /**
      * @var EntityManager
@@ -30,43 +30,53 @@ class Add
      * @var FormFactory
      */
     private $formFactory;
-    
+
+    /**
+     * The slug.
+     *
+     * @var string
+     */
+    private $slugger;
+
     /**
      * Constructor.
      *
      * @param ObjectManager        $entityManager
      * @param SessionInterface     $session
      * @param FormFactoryInterface $formFactory
+     * @param Slugger              $Slugger
      */
     public function __construct(
         ObjectManager $entityManager,
         SessionInterface $session,
-        FormFactoryInterface $formFactory
+        FormFactoryInterface $formFactory,
+        Slugger $slugger
     ) {
         $this->entityManager = $entityManager;
         $this->flashBag = $session->getFlashBag();
         $this->formFactory = $formFactory;
+        $this->slugger = $slugger;
     }
 
     /**
-     * Add a trick in DB.
+     * Update a trick in DB.
      *
      * @param Request $request
      * @param User    $user
+     * @param Trick   $trick
      *
      * @return FormView|null
      */
-    public function add(Request $request, User $user): ?FormView
+    public function update(Request $request, User $user, Trick $trick): ?FormView
     {
         // 1) build the form
-        $trick = new Trick();
         $form = $this->formFactory->create(AddType::class, $trick);
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Add...
-            $trick->setUser($user);
+            $trick->setModifiedBy($user);
 
             // 5) save the Trick
             $this->entityManager->persist($trick);
@@ -74,10 +84,10 @@ class Add
 
             // Add a flash message
             $this->flashBag->add(
-                'add_trick',
+                'update_trick',
                 [
                     'type' => 'success',
-                    'title' => 'Nouveau trick bien enregistré!',
+                    'title' => 'Le trick est bien mis à jour!',
                     'message' => '',
                 ]
             );
