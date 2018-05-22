@@ -52,9 +52,9 @@ class Trick
     private $slug;
 
     /**
-     * @var \stdClass
+     * @var string
      *
-     * @ORM\Column(name="content", type="object")
+     * @ORM\Column(name="content", type="text", nullable=true)
      */
     private $content;
 
@@ -170,7 +170,7 @@ class Trick
     /**
      * Set content.
      *
-     * @param \stdClass $content
+     * @param string $content
      *
      * @return Trick
      */
@@ -184,7 +184,7 @@ class Trick
     /**
      * Get content.
      *
-     * @return \stdClass
+     * @return string
      */
     public function getContent()
     {
@@ -194,7 +194,7 @@ class Trick
     /**
      * Set dateModified.
      *
-     * @param \stdClass|null $dateModified
+     * @param \DateTime|null $dateModified
      *
      * @return Trick
      */
@@ -208,7 +208,7 @@ class Trick
     /**
      * Get dateModified.
      *
-     * @return \stdClass|null
+     * @return \DateTime|null
      */
     public function getDateModified()
     {
