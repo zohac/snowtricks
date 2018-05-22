@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Trick;
+
 /**
  * TrickRepository.
  *
@@ -10,4 +12,22 @@ namespace AppBundle\Repository;
  */
 class TrickRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Return a trick with all associated entities.
+     *
+     * @param string $slug
+     *
+     * @return Trick|null
+     */
+    public function findWithAllEntities(string $slug): ?Trick
+    {
+        return $this->createQueryBuilder('t')
+            ->leftJoin('t.user', 'u')
+            ->addSelect('u')
+            ->andWhere('t.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use AppBundle\Service\Slugger\Slugger;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -11,6 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table(name="trick")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TrickRepository")
+ * @ORM\HasLifecycleCallbacks()
  *
  * @UniqueEntity(fields="title", message="Le titre est déjà utilisé.")
  */
@@ -237,5 +239,23 @@ class Trick
     public function getModifiedBy()
     {
         return $this->modifiedBy;
+    }
+
+    /**
+     * @ORM\preUpdate
+     */
+    public function updateDate()
+    {
+        $this->setDateModified(new \Datetime('NOW'));
+    }
+
+    /**
+     * @ORM\PreFlush
+     */
+    public function addSlug()
+    {
+        $slugger = new Slugger();
+        $slug = $slugger->slugify($this->getTitle());
+        $this->setSlug($slug);
     }
 }
