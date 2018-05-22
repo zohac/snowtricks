@@ -32,13 +32,6 @@ class UpdateTrick
     private $formFactory;
 
     /**
-     * The slug.
-     *
-     * @var string
-     */
-    private $slugger;
-
-    /**
      * Constructor.
      *
      * @param ObjectManager        $entityManager
@@ -49,13 +42,11 @@ class UpdateTrick
     public function __construct(
         ObjectManager $entityManager,
         SessionInterface $session,
-        FormFactoryInterface $formFactory,
-        Slugger $slugger
+        FormFactoryInterface $formFactory
     ) {
         $this->entityManager = $entityManager;
         $this->flashBag = $session->getFlashBag();
         $this->formFactory = $formFactory;
-        $this->slugger = $slugger;
     }
 
     /**

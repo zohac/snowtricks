@@ -6,6 +6,7 @@ use AppBundle\Entity\Trick;
 use AppBundle\Service\Trick\Add;
 use AppBundle\Service\Trick\UpdateTrick;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -78,8 +79,12 @@ class TrickController extends Controller
      *
      * @Route("/", name="ST_index")
      */
-    public function listAction()
+    public function listAction(ObjectManager $entityManager): Response
     {
-        return $this->render('layout.html.twig');
+        // We recover all the tricks
+        $listOfTricks = $entityManager->getRepository(Trick::class)->findAll();
+
+        // Return the view
+        return $this->render('Trick/index.html.twig', ['listOfTricks' => $listOfTricks]);
     }
 }
