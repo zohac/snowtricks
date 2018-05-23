@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class Add
 {
     /**
-     * @var EntityManager
+     * @var ObjectManager
      */
     private $entityManager;
 

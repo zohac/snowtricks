@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class UpdateTrick
 {
     /**
-     * @var EntityManager
+     * @var ObjectManager
      */
     private $entityManager;
 
@@ -37,7 +37,6 @@ class UpdateTrick
      * @param ObjectManager        $entityManager
      * @param SessionInterface     $session
      * @param FormFactoryInterface $formFactory
-     * @param Slugger              $Slugger
      */
     public function __construct(
         ObjectManager $entityManager,
