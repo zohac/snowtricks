@@ -1,0 +1,52 @@
+{# src/AppBundle/Resources/views/Tricks/details.html.twig #}
+
+{% extends "layout.html.twig" %}
+
+{% block title %}SnowTricks::Detail{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="card mb-5 mt-5">
+        <div class="st-title-overlay">
+            <div class="col align-self-center st-card-title">
+                <h1 class="text-center text-uppercase font-weight-bold">{{ trick.title }}</h1>
+            </div>
+            <div class="row">
+                {% if is_granted("ROLE_USER") %}
+                <div class="card-buttons">
+                    <a href="{{ path('ST_admin_trick_update', {'slug': trick.slug}) }}">
+                        <i class="fas fa-pencil-alt" title="Update"></i>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card-header text-center">
+            <p class="card-text">{{ trick.content }}</p>
+
+            <div class="row">
+                <div class="col-sm">
+                    <i title="Auteur" class="fas fa-user"></i>
+                    <span class="badge badge-secondary">{{ trick.user.username }}</span>
+                </div>
+                    
+                {% if trick.dateModified %}
+                <div class="col-sm">
+                    <i title="Modifié le" class="far fa-calendar-alt"></i>
+                    <span class="badge badge-secondary">{{ trick.dateModified|date("d/m/Y") }}</span> par <span class="badge badge-secondary">{{ trick.modifiedBy.username }}</span>
+                </div>
+                {% else %}
+                <div class="col-sm">
+                        <i title="Créé le" class="far fa-calendar"></i>
+                        <span class="badge badge-secondary">{{ trick.date|date("d/m/Y") }}</span> par <span class="badge badge-secondary">{{ trick.user.username }}</span>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

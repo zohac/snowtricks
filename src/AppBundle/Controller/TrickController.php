@@ -78,6 +78,9 @@ class TrickController extends Controller
      * Home page.
      *
      * @Route("/", name="ST_index")
+     *
+     * @param ObjectManager $entityManager
+     * @return Response
      */
     public function listAction(ObjectManager $entityManager): Response
     {
@@ -86,5 +89,17 @@ class TrickController extends Controller
 
         // Return the view
         return $this->render('Trick/index.html.twig', ['listOfTricks' => $listOfTricks]);
+    }
+
+    /**
+     * Home page.
+     *
+     * @Route("/trick/show/{slug}", name="ST_trick_show")
+     * @Entity("trick", expr="repository.FindWithAllEntities(slug)")
+     */
+    public function showAction(Trick $trick): Response
+    {
+        // Return the view
+        return $this->render('Trick/show.html.twig', ['trick' => $trick]);
     }
 }

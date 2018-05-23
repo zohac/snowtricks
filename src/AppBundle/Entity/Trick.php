@@ -242,7 +242,7 @@ class Trick
     }
 
     /**
-     * @ORM\preUpdate
+     * @ORM\PreUpdate
      */
     public function updateDate()
     {
