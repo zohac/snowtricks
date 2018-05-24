@@ -21,7 +21,12 @@ class TrickController extends Controller
     /**
      * Add a new trick.
      *
-     * @Route("/trick/add", name="ST_trick_add")
+     * @Route("/trick/add", name="ST_trick_add",
+     *      options={"menu": {
+     *          "id": "user",
+     *          "name": "Ajouter un Trick",
+     *          "order": 1
+     *      }})
      * @Security("has_role('ROLE_USER')")
      *
      * @param Request            $request

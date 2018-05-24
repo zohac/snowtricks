@@ -258,4 +258,28 @@ class Trick
         $slug = $slugger->slugify($this->getTitle());
         $this->setSlug($slug);
     }
+
+    /**
+     * Get the value of date.
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set the value of date.
+     *
+     * @param \DateTime $date
+     *
+     * @return self
+     */
+    public function setDate(\DateTime $date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
 }

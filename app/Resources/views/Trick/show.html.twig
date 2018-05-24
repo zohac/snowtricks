@@ -15,7 +15,7 @@
             <div class="row">
                 {% if is_granted("ROLE_USER") %}
                 <div class="card-buttons">
-                    <a href="{{ path('ST_admin_trick_update', {'slug': trick.slug}) }}">
+                    <a href="{{ path('ST_trick_update', {'slug': trick.slug}) }}">
                         <i class="fas fa-pencil-alt" title="Update"></i>
                     </a>
                 </div>

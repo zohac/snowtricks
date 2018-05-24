@@ -1,0 +1,13 @@
+{# src/AppBundle/Resources/views/Menu/user.html.twig #}
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        
+        Bonjour {{ app.user.username }}
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+    {% for value in menu.user %}
+        <a class="dropdown-item" href="{{ path(value.path) }}">{{ value.name }}</a>
+    {% endfor %}
+    </div>
+</li>
