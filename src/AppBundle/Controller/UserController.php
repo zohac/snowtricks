@@ -29,7 +29,12 @@ class UserController extends Controller implements UserSubscripterController
     /**
      * Register a new user.
      *
-     * @Route("/registration", name="ST_registration")
+     * @Route("/registration", name="ST_registration",
+     *      options={"menu": {
+     *          "id": "main",
+     *          "name": "Inscription",
+     *          "order": 3
+     *      }})
      *
      * @param Request      $request
      * @param Registration $register
@@ -70,7 +75,12 @@ class UserController extends Controller implements UserSubscripterController
     /**
      * The login form.
      *
-     * @Route("/login", name="ST_login")
+     * @Route("/login", name="ST_login",
+     *      options={"menu": {
+     *          "id": "main",
+     *          "name": "Connexion",
+     *          "order": 2
+     *      }})
      *
      * @param AuthenticationUtils $authUtils
      *
@@ -95,7 +105,11 @@ class UserController extends Controller implements UserSubscripterController
     }
 
     /**
-     * @Route("/logout", name="ST_logout")
+     * @Route("/logout", name="ST_logout",
+     *      options={"menu": {
+     *          "id": "user",
+     *          "name": "Déconnexion",
+     *      }})
      */
     public function logoutAction()
     {
@@ -104,7 +118,12 @@ class UserController extends Controller implements UserSubscripterController
     /**
      * Update the user info.
      *
-     * @Route("/user/update", name="ST_user_update")
+     * @Route("/user/update", name="ST_user_update",
+     *      options={"menu": {
+     *          "id": "user",
+     *          "name": "Mon compte",
+     *          "order": 2
+     *      }})
      * @Security("has_role('ROLE_USER')")
      *
      * @param Request            $request
