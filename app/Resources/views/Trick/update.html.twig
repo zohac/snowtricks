@@ -26,6 +26,36 @@
                     {{ form_widget(form.content) }}
                 </div>
 
+                <fieldset>
+                    <div class="form-group">
+                        {{ form_label(form.categories, "Groupe") }}
+    
+                        {# store the prototype on the data-prototype attribute #}
+                        <ul id="add_categories" class="form-list"
+                            data-prototype="{{ form_widget(form.categories.vars.prototype)|e }}"
+                            data-widget-tags="{{ '<li class="row"></li>'|e }}">
+                        {% for category in form.categories %}
+                            <li class="row">
+                                <button 
+                                    type='button'
+                                    class='btn btn-danger btn-xs mr-3'
+                                    onclick='removeFile($(this));'>
+                                        <i class='fa fa-times' aria-hidden='true'></i>
+                                </button>
+                                {{ form_errors(category) }}
+                                {{ form_widget(category) }}
+                            </li>
+                        {% endfor %}
+                        </ul>
+    
+                        <a href="#" class="add-another-collection-widget" data-list="#add_categories">
+                            <button class="btn btn-primary">
+                                <i class='fa fa-plus'></i> Ajouter un groupe
+                            </button>
+                        </a>
+                    </div>
+                </fieldset>
+
                 {# Automatic generation of fields not yet written.
                     In this example, it would be the CSRF field (automatically managed by Symfony !)
                     and all hidden fields. #}
@@ -37,4 +67,10 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('js/st-add-collection-widget.js') }}" type="text/javascript"></script>
 {% endblock %}

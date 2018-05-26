@@ -61,3 +61,18 @@ body {
 .st-form-error {
     list-style: none;
 }
+
+fieldset {
+    border: 1px solid #ced4da;
+    border-radius: 3px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.form-list {
+    list-style-type: none;
+}
+
+.form-list li {
+    padding-bottom: 5px;
+}
