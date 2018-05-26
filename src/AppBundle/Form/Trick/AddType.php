@@ -6,10 +6,12 @@ namespace AppBundle\Form\Trick;
 
 use AppBundle\Entity\Trick;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 /**
  * Add or update a trick.
@@ -31,6 +33,19 @@ class AddType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('content', TextareaType::class)
+            ->add('categories', CollectionType::class, [
+                'entry_type' => EntityType::class,
+                'entry_options' => [
+                    'class' => 'AppBundle:Category',
+                    'choice_label' => 'name',
+                    'attr' => ['class' => 'custom-select col-xl-3 col-lg-4 col-md-5 col-8'],
+                ],
+                'allow_add' => true,
+                'prototype' => true,
+                'allow_delete' => true,
+                'label' => false,
+                'required' => true,
+            ])
             ;
     }
 
