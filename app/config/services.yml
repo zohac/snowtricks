@@ -42,3 +42,9 @@ services:
     AppBundle\Listener\MenuListener:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest' }
+
+#
+# Fixtures services
+#
+    AppBundle\DataFixtures\ORM\LoadCategory:
+        tags: ['doctrine.fixture.orm']
