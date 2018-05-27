@@ -92,7 +92,7 @@ class Trick
     private $categories;
 
     /**
-     * @var Image
+     * @var Pictures
      *
      * @ORM\OneToMany(
      *      targetEntity="AppBundle\Entity\Picture",
@@ -111,6 +111,7 @@ class Trick
     {
         $this->date = new \Datetime('NOW');
         $this->categories = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
     }
 
     /**
@@ -352,6 +353,9 @@ class Trick
      */
     public function addPicture(\AppBundle\Entity\Picture $picture)
     {
+        // Bidirectional Ownership
+        $picture->setTrick($this);
+        
         $this->pictures[] = $picture;
 
         return $this;
