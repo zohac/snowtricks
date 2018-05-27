@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Comment
+ * Comment.
  *
  * @ORM\Table(name="comment")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CommentRepository")
@@ -51,7 +51,6 @@ class Comment
      */
     private $date;
 
-
     /**
      * Get id.
      *
@@ -61,8 +60,6 @@ class Comment
     {
         return $this->id;
     }
-
-   
 
     /**
      * Set trick.

@@ -76,3 +76,7 @@ fieldset {
 .form-list li {
     padding-bottom: 5px;
 }
+
+.st-comment {
+    height: 37.6px;
+}

@@ -3,9 +3,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Trick;
+use AppBundle\Entity\Comment;
 use AppBundle\Service\Trick\Add;
+use AppBundle\Form\Comment\CommentType;
 use AppBundle\Service\Trick\DeleteTrick;
 use AppBundle\Service\Trick\UpdateTrick;
+use AppBundle\Service\Comment\AddComment;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -100,19 +103,59 @@ class TrickController extends Controller
     }
 
     /**
-     * Home page.
+     * Show a single trick.
      *
      * @Route("/trick/show/{slug}", name="ST_trick_show")
      * @Entity("trick", expr="repository.FindWithAllEntities(slug)")
      *
-     * @param Trick $trick
+     * @param Request       $request
+     * @param Trick         $trick
+     * @param AddComment    $addComment
+     * @param ObjectManager $entityManager
      *
      * @return Response
      */
-    public function showAction(Trick $trick): Response
-    {
+    public function showAction(
+        Request $request,
+        Trick $trick,
+        AddComment $addComment,
+        ObjectManager $entityManager
+    ): Response {
+        // Build the form
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+
+        // 2) handle the submit (will only happen on POST)
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $addComment->add($trick, $comment);
+
+            // Adding a Flash Message
+            $this->addFlash(
+                'add_comment',
+                [
+                    'type' => 'success',
+                    'title' => 'Nouveau commentaire bien enregistré!',
+                    'message' => '',
+                ]
+            );
+            // Redirect to trick
+            return $this->redirectToRoute('ST_trick_show', ['slug' => $trick->getSlug()]);
+        }
+        // Get the form and the list of tricks
+        $listOfComment = $entityManager
+            ->getRepository(Comment::class)
+            ->findWithAllEntities($trick);
+
         // Return the view
-        return $this->render('Trick/show.html.twig', ['trick' => $trick]);
+        return $this->render(
+            'Trick/show.html.twig',
+            [
+                'trick' => $trick,
+                'listOfComment' => $listOfComment,
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**

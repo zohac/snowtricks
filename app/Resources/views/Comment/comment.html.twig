@@ -1,0 +1,21 @@
+{# src/AppBundle/Resources/views/Comment/comment.html.twig #}
+
+{% if listOfComment %}
+    <div class="card-footer">
+        <div id="comments" class="row justify-content-center">
+        {% for comment in listOfComment %}
+            <div class="row col-md-8 col-12 mb-2">
+                <div class="col-10">
+                <div class="card">
+                    <div class="card-header text-muted">
+                        Par {{ comment.user.username }} - Le {{ comment.date|date("d/m/Y") }}
+                    </div>
+                    <div class="card-body">
+                        {{ comment.content }}
+                    </div>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+{% endif %}
