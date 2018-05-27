@@ -91,6 +91,22 @@ class Trick
      */
     private $categories;
 
+    /**
+     * @var Image
+     *
+     * @ORM\OneToMany(
+     *      targetEntity="AppBundle\Entity\Picture",
+     *      mappedBy="trick",
+     *      cascade={"persist"},
+     *      orphanRemoval=true
+     * )
+     * @Assert\Valid
+     */
+    private $pictures;
+
+    /**
+     * Constructor.
+     */
     public function __construct()
     {
         $this->date = new \Datetime('NOW');
@@ -325,5 +341,39 @@ class Trick
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Add picture.
+     *
+     * @param \AppBundle\Entity\Picture $picture
+     *
+     * @return Trick
+     */
+    public function addPicture(\AppBundle\Entity\Picture $picture)
+    {
+        $this->pictures[] = $picture;
+
+        return $this;
+    }
+
+    /**
+     * Remove picture.
+     *
+     * @param \AppBundle\Entity\Picture $picture
+     */
+    public function removePicture(\AppBundle\Entity\Picture $picture)
+    {
+        $this->pictures->removeElement($picture);
+    }
+
+    /**
+     * Get pictures.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPictures()
+    {
+        return $this->pictures;
     }
 }
