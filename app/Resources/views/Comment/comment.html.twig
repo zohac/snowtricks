@@ -10,6 +10,13 @@
                     <div class="card-header text-muted">
                         Par {{ comment.user.username }} - Le {{ comment.date|date("d/m/Y") }}
                         {% if is_granted("ROLE_USER") %}
+
+                        {% if app.user == comment.user %}
+                            <a href="{{ path('ST_comment_update', {'id': comment.id}) }}">
+                                <i class="fas fa-pencil-alt" title="Update"></i>
+                            </a>
+                        {% endif %}
+
                             <a  class="delete"
                                 data-title="{{ comment.content }}"
                                 data-path="{{ path('ST_comment_delete', {'id': comment.id, 'token': csrf_token(comment.id)}) }}"

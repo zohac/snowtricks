@@ -1,0 +1,32 @@
+{# App/Resources/views/Comment/update.html.twig #}
+
+{% extends "layout.html.twig" %}
+
+{% block title %}SnowTricks::Update Comment{% endblock %}
+
+{% block body %}
+
+        <div class="card-body">
+            <div class="row justify-content-center">
+                <form class="form-inline col-md-8 col-12 align-self-center" method="POST">
+                    {# General errors in the form. #}
+                    {{ form_errors(form) }}
+
+                    <div class="form-group col-xl-8 col-lg-7 col-md-12">
+                        {{ form_errors(form.content) }}
+                        {{ form_widget(form.content, {'attr': {'class': 'form-control col-sm-12'}}) }}
+                    </div>
+
+                    {#  Automatic generation of fields not yet written.
+                        In this example, it would be the CSRF field (automatically managed by Symfony !)
+                        and all hidden fields. #}
+                    {{ form_rest(form) }}
+
+                    <div class="form-group col-xl-4 col-lg-5 col-md-12">
+                        <button type="save" class="btn btn-primary col-sm-12">Mettre à jour.</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+{% endblock %}
