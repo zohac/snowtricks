@@ -9,6 +9,14 @@
                 <div class="card">
                     <div class="card-header text-muted">
                         Par {{ comment.user.username }} - Le {{ comment.date|date("d/m/Y") }}
+                        {% if is_granted("ROLE_USER") %}
+                            <a  class="delete"
+                                data-title="{{ comment.content }}"
+                                data-path="{{ path('ST_comment_delete', {'id': comment.id, 'token': csrf_token(comment.id)}) }}"
+                                data-type="commentaire">
+                                <i class="fas fa-trash" title="Delete"></i>
+                            </a>
+                        {% endif %}
                     </div>
                     <div class="card-body">
                         {{ comment.content }}
@@ -18,4 +26,5 @@
             </div>
         {% endfor %}
         </div>
+    </div>
 {% endif %}
