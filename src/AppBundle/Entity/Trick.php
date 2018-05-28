@@ -380,4 +380,22 @@ class Trick
     {
         return $this->pictures;
     }
+
+    /**
+     * Retrieves the address of the highlighted image.
+     *
+     * @return string the path
+     */
+    public function getHeadLinePicturePath(): string
+    {
+        $path = Picture::DEFAULT_TRICK;
+        foreach ($this->pictures as $picture) {
+            if ($picture->isHeadLinePicture()) {
+                return $picture->getPath();
+            }
+            $path = $picture->getPath();
+        }
+
+        return $path;
+    }
 }

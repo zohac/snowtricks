@@ -31,6 +31,8 @@ class PictureType extends AbstractType
         // The entity fields are added to our form.
         $builder
             ->add('file', FileType::class, [
+                'label' => 'Choisir une image',
+                'label_attr' => ['class' => 'custom-file-label'],
                 'required' => true,
                 'constraints' => [new File()],
                 'attr' => [
@@ -39,10 +41,13 @@ class PictureType extends AbstractType
                     'accept' => '.png, .jpg, .jpeg',
                 ],
             ])
-            ->add('headlinePicture', CheckboxType::class, array(
-                'required' => false,
-                'attr' => ['class' => ''],
-            ));
+            ->add('headlinePicture', CheckboxType::class, [
+                    'label' => 'Image mise en avant',
+                    'label_attr' => ['class' => 'form-check-label'],
+                    'required' => false,
+                    'attr' => ['class' => ''],
+                ]
+            );
     }
 
     /**
