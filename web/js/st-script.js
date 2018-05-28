@@ -71,7 +71,7 @@
         $("#load-comments").on('click', function() {
             loadCommentAjax(this);
         });
-
+*/
     //
     // Media display
     //
@@ -84,6 +84,6 @@
         media.on('show.bs.collapse', function () {
             media.removeClass("d-none d-sm-block");
         });
-*/
+
     });
 }));

@@ -13,7 +13,7 @@
     // Listen for the jQuery ready event on the document
     $(function() {
         // The DOM is ready!
-/*
+
         //
         // Scroll down to #tricks
         //
@@ -22,7 +22,7 @@
                 scrollTop: $('#tricks').offset().top
             }, 500, 'linear');
         });
-*/
+
         //
         // Modal window for trick removal
         //

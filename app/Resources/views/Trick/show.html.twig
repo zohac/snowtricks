@@ -6,9 +6,14 @@
 
 {% block body %}
 
+<div class="full-header blur" style="background-image:url({{ asset(trick.getHeadlinePicturePath) }})"></div>
+
 <div class="container">
     <div class="card mb-5 mt-5">
         <div class="st-title-overlay">
+            <div class="st-s100">
+                <img class="card-img-top img-fluid" src="{{ asset(trick.getHeadlinePicturePath) }}" alt="Image mise en avant">
+            </div>
             <div class="col align-self-center st-card-title">
                 <h1 class="text-center text-uppercase font-weight-bold">{{ trick.title }}</h1>
             </div>
@@ -18,12 +23,42 @@
                     <a href="{{ path('ST_trick_update', {'slug': trick.slug}) }}">
                         <i class="fas fa-pencil-alt" title="Update"></i>
                     </a>
+                    <a  class="delete"
+                        data-title="{{ trick.title }}"
+                        data-path="{{ path('ST_trick_delete', {'slug': trick.slug, 'token': csrf_token(trick.slug)}) }}"
+                        data-type="trick">
+                        <i class="fas fa-trash" title="Delete"></i>
+                    </a>
                 </div>
                 {% endif %}
             </div>
         </div>
         
         <div class="card-header text-center">
+            
+                <div class="container">
+                    <div id="media" class="d-none d-sm-block">
+                        <div class="row">
+    
+                        {% for picture in trick.pictures %}
+                            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+                                <img class="img-fluid" src="{{ asset(picture.path) }}" alt="">
+                            </div>
+                        {% endfor %}
+    
+                        </div>
+                    </div>
+                    <div class="d-block d-sm-none">
+                        <button id="media-display"
+                                class="btn btn-primary"
+                                data-toggle="collapse"
+                                href="#media"
+                                role="button"
+                                aria-expanded="false"
+                                aria-controls="media">Afficher les médias</button>
+                    </div>
+                </div>
+
             <p class="card-text">{{ trick.content }}</p>
 
             <div class="row">

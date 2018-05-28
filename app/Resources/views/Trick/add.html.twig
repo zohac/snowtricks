@@ -11,7 +11,7 @@
 	<div class="container hv-body">
 		<div class="col-12">
             <h3>Création d'un trick</h3>
-            <form action="{{ path('ST_trick_add') }}" class="needs-validation" method="POST" enctype="multipart/form-data">
+            <form class="needs-validation" method="POST" enctype="multipart/form-data">
 
                 {# General errors in the form. #}
                 {{ form_errors(form) }}
@@ -30,7 +30,7 @@
                     <div class="form-group">
                         {{ form_label(form.categories, "Groupe") }}
                         {{ form_errors(form.categories) }}
-    
+
                         {# store the prototype on the data-prototype attribute #}
                         <ul id="add_categories" class="form-list"
                             data-prototype="{{ form_widget(form.categories.vars.prototype)|e }}"
@@ -48,7 +48,7 @@
                             </li>
                         {% endfor %}
                         </ul>
-    
+                
                         <a href="#" class="add-another-collection-widget" data-list="#add_categories">
                             <button class="btn btn-primary">
                                 <i class='fa fa-plus'></i> Ajouter un groupe
@@ -56,6 +56,7 @@
                         </a>
                     </div>
                 </fieldset>
+
                 <fieldset>
                     <div class="form-group">
                         {{ form_label(form.pictures, "Des images à ajouter?") }}
@@ -79,7 +80,7 @@
                                     <div class="col-10">
                                         {{ form_widget(picture.children.file) }}
                                         
-                                        {{ form_label(picture.children.headlinePicture, "Images mise en avant?") }}
+                                        {{ form_label(picture.children.headlinePicture) }}
                                         {{ form_widget(picture.children.headlinePicture) }}
                                     </div>
                                 </div>
@@ -95,10 +96,7 @@
                     </div>
                 </fieldset>
 
-                {# Automatic generation of fields not yet written.
-                    In this example, it would be the CSRF field (automatically managed by Symfony !)
-                    and all hidden fields. #}
-                {{ form_rest(form) }}
+                {{ form_widget(form._token) }}
 
                 <button id="saveTrick" type="submit" class="btn btn-primary">Enregistrer</button>
 
