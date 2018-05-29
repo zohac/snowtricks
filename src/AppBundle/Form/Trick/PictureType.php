@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints\File;
  */
 class PictureType extends AbstractType
 {
-    /** 
+    /**
      * Construct the form.
      *
      * @param FormBuilderInterface $builder
@@ -46,8 +46,7 @@ class PictureType extends AbstractType
                     'label_attr' => ['class' => 'form-check-label'],
                     'required' => false,
                     'attr' => ['class' => ''],
-                ]
-            );
+                ]);
     }
 
     /**

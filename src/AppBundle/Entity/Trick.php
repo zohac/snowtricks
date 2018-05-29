@@ -355,7 +355,7 @@ class Trick
     {
         // Bidirectional Ownership
         $picture->setTrick($this);
-        
+
         $this->pictures[] = $picture;
 
         return $this;
