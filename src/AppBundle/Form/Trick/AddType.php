@@ -46,7 +46,18 @@ class AddType extends AbstractType
                 'label' => false,
                 'required' => true,
             ])
-            ;
+            ->add('pictures', CollectionType::class, [
+                'entry_type' => PictureType::class,
+                'entry_options' => [
+                    'attr' => ['class' => 'col-10'],
+                ],
+                'prototype' => true,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'required' => false,
+                'label' => false,
+            ]);
     }
 
     /**

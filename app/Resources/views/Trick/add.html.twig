@@ -11,7 +11,7 @@
 	<div class="container hv-body">
 		<div class="col-12">
             <h3>Création d'un trick</h3>
-            <form action="{{ path('ST_trick_add') }}" class="needs-validation" method="POST">
+            <form class="needs-validation" method="POST" enctype="multipart/form-data">
 
                 {# General errors in the form. #}
                 {{ form_errors(form) }}
@@ -29,7 +29,8 @@
                 <fieldset>
                     <div class="form-group">
                         {{ form_label(form.categories, "Groupe") }}
-    
+                        {{ form_errors(form.categories) }}
+
                         {# store the prototype on the data-prototype attribute #}
                         <ul id="add_categories" class="form-list"
                             data-prototype="{{ form_widget(form.categories.vars.prototype)|e }}"
@@ -47,7 +48,7 @@
                             </li>
                         {% endfor %}
                         </ul>
-    
+                
                         <a href="#" class="add-another-collection-widget" data-list="#add_categories">
                             <button class="btn btn-primary">
                                 <i class='fa fa-plus'></i> Ajouter un groupe
@@ -56,10 +57,46 @@
                     </div>
                 </fieldset>
 
-                {# Automatic generation of fields not yet written.
-                    In this example, it would be the CSRF field (automatically managed by Symfony !)
-                    and all hidden fields. #}
-                {{ form_rest(form) }}
+                <fieldset>
+                    <div class="form-group">
+                        {{ form_label(form.pictures, "Des images à ajouter?") }}
+                        {{ form_errors(form.pictures) }}
+    
+                        {# store the prototype on the data-prototype attribute #}
+                        <ul id="add_image" class="form-list"
+                            data-prototype="{{ form_widget(form.pictures.vars.prototype)|e }}"
+                            data-widget-tags="{{ '<li class="row"></li>'|e }}">
+                        {% for picture in form.pictures %}
+                            <li class="row deleteOnLoad">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <button 
+                                            type='button'
+                                            class='btn btn-danger btn-xs mr-3 st-media-button'
+                                            onclick='removeFile($(this));'>
+                                                <i class='fa fa-times' aria-hidden='true'></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-10">
+                                        {{ form_widget(picture.children.file) }}
+                                        
+                                        {{ form_label(picture.children.headlinePicture) }}
+                                        {{ form_widget(picture.children.headlinePicture) }}
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                        </ul>
+    
+                        <a href="#" class="add-another-collection-widget" data-list="#add_image">
+                            <button class="btn btn-primary">
+                                <i class='fa fa-plus'></i> Ajouter une image
+                            </button>
+                        </a>
+                    </div>
+                </fieldset>
+
+                {{ form_widget(form._token) }}
 
                 <button id="saveTrick" type="submit" class="btn btn-primary">Enregistrer</button>
 

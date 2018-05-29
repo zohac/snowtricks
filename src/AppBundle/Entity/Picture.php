@@ -19,6 +19,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Picture
 {
+    const DEFAULT_USER = 'images/user.svg';
+    const DEFAULT_TRICK = 'images/default.jpg';
+    const DEFAULT_HOME = 'images/default.jpg';
+    const DEFAULT_ERROR = 'images/error.jpg';
+    const LOGO = 'images/logo.png';
+
     /**
      * @var int
      *
@@ -157,6 +163,16 @@ class Picture
      * @return bool|null
      */
     public function getHeadLinePicture()
+    {
+        return $this->headLinePicture;
+    }
+
+    /**
+     * Is headlinePicture.
+     *
+     * @return bool
+     */
+    public function isHeadLinePicture()
     {
         return $this->headLinePicture;
     }

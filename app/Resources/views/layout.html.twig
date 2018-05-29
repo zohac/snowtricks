@@ -26,9 +26,9 @@
     {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-light bg-grey">
         <div class="container">
-            <a class="navbar-brand" href="{{ path('ST_index') }}">
-               SnowTricks
-            </a>
+                <a class="navbar-brand" href="{{ path('ST_index') }}">
+                        <img src="{{ asset(constant('AppBundle\\Entity\\Picture::LOGO')) }}"/>SnowTricks
+                    </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -39,6 +39,7 @@
     {% endblock %}
 
     {# Flash messages defined by the bundle controllers are displayed. #}
+    <div class="st-message">
     {% for keys, messages in app.session.flashbag.all() %}
         {% for message in messages %}
         <div class="container mt-3 alert alert-{{ message.type }} alert-dismissible fade show" role="alert">
@@ -49,15 +50,20 @@
         </div>
         {% endfor %}
     {% endfor %}
+    </div>
 
     {% block body %} {% endblock %}
 
     {% block footer %}
-    <footer class="footer bg-grey">
+    <div class="clearfix pt-1"></div>
+    <footer class="footer bg-grey mt-5">
         <div class="container">
             <span class="text-muted">SnowTricks &copy; 2017-2018</span>
         </div>
     </footer>
+    <div id="returnOnTop" title="Retour en haut">
+        <i class="fas fa-arrow-up fa-2x text-center"></i>
+    </div>
     {% endblock %}
 
 
@@ -72,6 +78,9 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+    <script src="{{ asset('js/returnOnTop.js') }}" type="text/javascript"></script>
+    
     {% endblock %}
 
 </body>
