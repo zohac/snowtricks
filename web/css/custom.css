@@ -197,14 +197,21 @@ fieldset {
 /* ------------- Trick/update.html.twig -------- */
 /* --------------------------------------------- */
 
-.st-media-button {
-    height: 100%;
-}
-
 .form-list {
     list-style-type: none;
 }
 
 .form-list li {
     padding-bottom: 5px;
+}
+
+.st-input-thumbnail {
+    width: 150px;
+}
+
+.st-message {
+    position: absolute;
+    top: 70px;
+    z-index: 100;
+    width: 100%;
 }

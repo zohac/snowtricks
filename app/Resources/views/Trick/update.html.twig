@@ -25,7 +25,7 @@
                     {{ form_label(form.content, "Description") }}
                     {{ form_widget(form.content) }}
                 </div>
-
+                
                 <fieldset>
                     <div class="form-group">
                         {{ form_label(form.categories, "Groupe") }}
@@ -67,24 +67,20 @@
                             data-widget-tags="{{ '<li class="row"></li>'|e }}">
                         {% for picture in form.pictures %}
                             <li class="row deleteOnLoad">
-                                <div class="row">
-                                    <div class="row">
-                                        <button 
-                                            type='button'
-                                            class='btn btn-danger btn-xs mr-3 st-media-button'
-                                            onclick='removeFile($(this));'>
-                                                <i class='fa fa-times' aria-hidden='true'></i>
-                                        </button>
-                                    </div>
-                                    {{ form_errors(picture) }}
-                                    <div class="col-10">
-                                        <img src="{{ asset(picture.vars.data.path) }}" class="img-fluid" style="width: 150px;">
+                                <button 
+                                    type='button'
+                                    class='btn btn-danger btn-xs mr-3 st-media-button'
+                                    onclick='removeFile($(this));'>
+                                        <i class='fa fa-times' aria-hidden='true'></i>
+                                </button>
+                                {{ form_errors(picture) }}
+                                <div class="col-10">
+                                    <img src="{{ asset(picture.vars.data.path) }}" class="img-fluid" style="width: 150px;">
 
-                                        {{ form_widget(picture.children.file) }}
-                                        
-                                        {{ form_label(picture.children.headlinePicture) }}
-                                        {{ form_widget(picture.children.headlinePicture) }}
-                                    </div>
+                                    {{ form_widget(picture.children.file, {'attr': {'class': 'd-none'}}) }}
+                                    
+                                    {{ form_label(picture.children.headlinePicture) }}
+                                    {{ form_widget(picture.children.headlinePicture) }}
                                 </div>
                             </li>
                         {% endfor %}

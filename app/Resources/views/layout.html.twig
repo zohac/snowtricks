@@ -39,6 +39,7 @@
     {% endblock %}
 
     {# Flash messages defined by the bundle controllers are displayed. #}
+    <div class="st-message">
     {% for keys, messages in app.session.flashbag.all() %}
         {% for message in messages %}
         <div class="container mt-3 alert alert-{{ message.type }} alert-dismissible fade show" role="alert">
@@ -49,6 +50,7 @@
         </div>
         {% endfor %}
     {% endfor %}
+    </div>
 
     {% block body %} {% endblock %}
 
