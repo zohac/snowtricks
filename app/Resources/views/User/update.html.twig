@@ -10,16 +10,37 @@
 
 	<div class="container hv-body">
 		<div class="col-lg-6 col-md-9 col-12">
-            <form action="{{ path('ST_user_update') }}" method="POST">
+            <form action="{{ path('ST_user_update') }}" method="POST" enctype="multipart/form-data">
 
                 {# General errors in the form. #}
                 {{ form_errors(form) }}
+                <div class="row">
 
-                <h3>Mon compte utilisateur</h3>
+                    <div class="col-md-4 col-12">
+                        {% if app.user.avatar %}
+                        <img src="{{ asset(app.user.avatar.path) }}" class="img-fluid">
+                        {% else %}
+                        <img src="{{ asset(constant('AppBundle\\Entity\\Picture::DEFAULT_USER')) }}" class="img-fluid">
+                        {% endif %}
 
-                <div class="form-group">
-                    {{ form_label(form.username, "Pseudo") }}
-                    {{ form_widget(form.username) }}
+                        <div class="form-group">
+                                {# Génération du label. #}
+                                {{ form_label(form.avatar) }}
+                                {# Affichage des erreurs pour ce champ précis. #}
+                                {{ form_errors(form.avatar) }}
+                                {# Génération de l'input. #}
+                                {{ form_widget(form.avatar, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                    </div>
+                
+                    <div class="col-md-8 col-12">
+                        <h3>Mon compte utilisateur</h3>
+
+                        <div class="form-group">
+                            {{ form_label(form.username, "Pseudo") }}
+                            {{ form_widget(form.username) }}
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">

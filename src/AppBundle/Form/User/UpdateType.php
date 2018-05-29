@@ -31,6 +31,7 @@ class UpdateType extends AbstractType
 
         // The entity fields are added to our form.
         $builder
+            ->add('avatar', AvatarType::class, ['label' => false])
             ->add('username', TextType::class)
             ->add('email', EmailType::class)
             ->add('plainPassword', RepeatedType::class, [

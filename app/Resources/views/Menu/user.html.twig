@@ -3,6 +3,12 @@
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         
+        {% if app.user.avatar %}
+        <img class="circle" src="{{ asset(app.user.avatar.path) }}">
+        {% else %}
+        <img class="circle" src="{{  asset(constant('AppBundle\\Entity\\Picture::DEFAULT_USER')) }}">
+        {% endif %}
+
         Bonjour {{ app.user.username }}
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">

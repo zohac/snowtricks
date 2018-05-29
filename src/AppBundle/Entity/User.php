@@ -103,6 +103,15 @@ class User implements UserInterface
     private $salt;
 
     /**
+     * @var Picture
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Picture", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     * @Assert\Valid
+     */
+    private $avatar;
+
+    /**
      * Get id.
      *
      * @return int
@@ -333,5 +342,29 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * Set avatar.
+     *
+     * @param \AppBundle\Entity\Picture $avatar
+     *
+     * @return User
+     */
+    public function setAvatar(\AppBundle\Entity\Picture $avatar)
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * Get avatar.
+     *
+     * @return \AppBundle\Entity\Picture
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
     }
 }
