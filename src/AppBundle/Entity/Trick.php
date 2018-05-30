@@ -105,6 +105,14 @@ class Trick
     private $pictures;
 
     /**
+     * @var Video
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Video", mappedBy="trick", cascade={"persist"}, orphanRemoval=true)
+     * @Assert\Valid
+     */
+    private $videos;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -112,6 +120,7 @@ class Trick
         $this->date = new \Datetime('NOW');
         $this->categories = new ArrayCollection();
         $this->pictures = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     /**
@@ -397,5 +406,43 @@ class Trick
         }
 
         return $path;
+    }
+
+    /**
+     * Add video.
+     *
+     * @param \AppBundle\Entity\Video $video
+     *
+     * @return Trick
+     */
+    public function addVideo(\AppBundle\Entity\Video $video)
+    {
+        // Bidirectional Ownership
+        $video->setTrick($this);
+
+        $this->videos[] = $video;
+
+        return $this;
+    }
+
+    /**
+     * Remove video.
+     *
+     * @param \AppBundle\Entity\Video $video
+     */
+    public function removeVideo(\AppBundle\Entity\Video $video)
+    {
+        $this->videos->removeElement($video);
+        $video->setTrick(null);
+    }
+
+    /**
+     * Get videos.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVideos()
+    {
+        return $this->videos;
     }
 }

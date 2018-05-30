@@ -234,3 +234,14 @@ fieldset {
     color: rgba(0,0,0,.5);
     border-radius: 50%;
 }
+
+/* --------------------------------------------- */
+/* ------------ Trick/show.html.twig ----------- */
+/* --------------------------------------------- */
+
+.st-thumbnail {
+    height: 100px;
+    width: 100% !important;
+    background-size: cover;
+    background-position: 100%;
+}

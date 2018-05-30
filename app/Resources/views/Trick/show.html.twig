@@ -45,6 +45,16 @@
                                 <img class="img-fluid" src="{{ asset(picture.path) }}" alt="">
                             </div>
                         {% endfor %}
+
+                        {% for video in trick.videos %}
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+                            <a href="#" class="st-video-modal" data-iframe="{{ video.iframe|raw }}">
+                                <span class="fa-layers fa-fw st-thumbnail"  style="background-image:url({{ video.thumbnail }})">
+                                    <i class="fas fa-play-circle fa-3x"></i>
+                                </span>  
+                            </a>
+                        </div>
+                        {% endfor %}
     
                         </div>
                     </div>
@@ -98,6 +108,19 @@
 
 
 {% block footer %}
+<div class="modal" id="videoModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body st-modal-body">
+                <div></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal" id="deleteModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

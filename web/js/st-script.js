@@ -47,7 +47,7 @@
             var path = $(this).data('path');
             document.location.href = path;
         });
-/*
+
     //
     // Modal window for video
     //
@@ -71,7 +71,7 @@
         $("#load-comments").on('click', function() {
             loadCommentAjax(this);
         });
-*/
+
     //
     // Media display
     //
