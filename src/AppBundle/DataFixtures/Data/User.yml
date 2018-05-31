@@ -1,0 +1,31 @@
+0 :
+    username : simon
+    email : email@test.com
+    password : 1
+    roles : { 0 : ROLE_USER }
+    dateRegistration : '2018-03-08 22:38:53'
+    avatar: 5acb9d0d394b9
+1 :
+    username : john
+    email : email2@test.com
+    password : 1
+    roles : { 0 : ROLE_USER }
+    dateRegistration : '2018-03-08 23:02:59'
+2 :
+    username : shaun
+    email : email3@test.com
+    password : 1
+    roles : { 0 : ROLE_USER }
+    dateRegistration : '2018-03-10 23:02:59'
+3 :
+    username : MrWhite
+    email : email4@test.com
+    password : 1
+    roles : { 0 : ROLE_USER }
+    dateRegistration : '2018-03-15 23:02:59'
+4 :
+    username : smith
+    email : email5@test.com
+    password : 1
+    roles : { 0 : ROLE_USER }
+    dateRegistration : '2018-04-17 23:02:59'

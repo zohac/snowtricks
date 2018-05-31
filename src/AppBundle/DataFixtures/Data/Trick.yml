@@ -1,0 +1,153 @@
+0 :
+    user : simon
+    title : 'cab 1260 stalefish flatspin'
+    slug : cab-1260-stalefish-flatspin
+    content : "Normalement, un trick est décrit par sa direction de rotation (frontside ou backside) et par le fait que le rider le débute normalement (regular) ou à l'envers (switch). Cependant, il existe une exception. Si le rider saute en switch et tourne en frontside, ce n'est pas un switch frontside mais un 'cab'. Dans le cas ou on est goofy (le pied droit en avant), et qu'on arrive sur le jump, en switch et tourne en frontside, on fait donc un cab. Il grabe en stalefish et fait trois rotations et demie, c'est donc un cab 1260 stalefish. Pendant ce temps, comme la tête ne tourne jamais sous la planche et que l'on tend une jambe à l'extérieur (tweak) les juges noteront deux choses. Que c'est un flat spin et que c'est très très stylé."
+    date : '2018-03-08 14:02:00'
+    category : ['rotation']
+    image : ['5ad5fa2f9d61c', '5ad65454a17df', '5ad65470b961b', '5ad65470ba51f']
+    video : ['https://www.youtube.com/watch?v=SQyTWk7OxSI', 'https://vimeo.com/83896648', 'https://www.dailymotion.com/video/x6hefs5']
+1 :
+    user : john
+    title : 'backside 1440 triple cork'
+    slug : backside-1440-triple-cork
+    content : "Le 'triple cork' est un terme que vous allez beaucoup entendre. Il représente le nec plus ultra du snowboard en ce moment. Un cork, le diminutif pour 'corkscrew' (tire-bouchon), décrit le mouvement du corps tandis qu'il tourne simultanément sur les axes horizontaux et verticaux. Si on ride en regular et tourne en backside, exécutant quatre rotations incluant trois flips sur un axe vertical. Le grab est un mute, qui est le grab par défaut pour ce trick. C'est un mouvement extrêmement difficile et Mark McMorris l'a plaqué pour la première fois de l'histoire en compétition aux X Games 2012."
+    date : '2018-03-17 11:27:00'
+    category : ['rotation']
+    image : ['5ad60585c0f38']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+2 :
+    user : shaun
+    title : 'backside blunt 270'
+    slug : backside-blunt-270
+    content : "Le blunt est un autre trick qui tire ses origines du skateboard, où le truck arrière du skateur passe au-dessus de l'obstacle et grinde sur les roues. Les planches de snow n'ont ni trucks ni roues, mais le nom est tout de même utilisé. Le rider slide sur le rail avec son poids sur le pied arrière, puis tourne à 270° tandis qu'il quitte le rail et revient en position normale. Silje Norendal maitrise à la perfection ce petit trick habile."
+    date : '2018-03-17 11:32:00'
+    category : ['rotation']
+    image : ['5ad605dbcd127']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+3 :
+    user : MrWhite
+    title : 'ollie'
+    slug : ollie
+    content : "Un ollie est la figure de base du snowboard. Il s'agit d'un saut effectué avec la planche."
+    date : '2018-03-17 11:35:00'
+    category : ['saut']
+    image : ['5ad60634075f7']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+4 :
+    user : smith
+    title : 'nollie'
+    slug : nollie
+    content : "Le nom nollie est une forme contractée de « nose ollie », une appellation indiquant bien qu'il s'agit d'un ollie effectué avec l'avant de la planche. Le nom de la position est donc dérivé du nom du trick (et pas l'inverse). Effectuer un nollie présente une double difficulté. Premièrement, taper le nose sur le sol peut se révéler une manœuvre périlleuse si le mouvement n'est pas assez rapide. Ensuite, il faut gratter la planche avec le pied arrière, ce qui n'est pas une évidence (on parlera parfois de mauvais pied)."
+    date : '2018-03-17 11:40:00'
+    category : ['saut']
+    image : ['5ad60708923dd']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+5 :
+    user : simon
+    title : 'frontside nose-rolls'
+    slug : frontside-nose-rolls
+    content : "Une rotation du haut du corps et un appui solide sur la planche."
+    date : '2018-03-17 11:45:00'
+    category : ['rotation']
+    image : ['5ad60cd5aa8f3']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+6 :
+    user : john
+    title : 'backside triple cork 1440'
+    slug : backside-triple-cork-1440
+    content : "En langage snowboard, un cork est une rotation horizontale plus ou moins désaxée, selon un mouvement d'épaules effectué juste au moment du saut. Le tout premier Triple Cork a été plaqué par Mark McMorris en 2011, lequel a récidivé lors des Winter X Games 2012... avant de se faire voler la vedette par Torstein Horgmo, lors de ce même championnat. Le Norvégien réalisa son propre Backside Triple Cork 1440 et obtint la note parfaite de 50/50."
+    date : '2018-03-17 12:30:00'
+    category : ['rotation']
+    image : ['5ad618a844937']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+7 :
+    user : smith
+    title : 'method air'
+    slug : method-air
+    content : "Cette figure qui consiste à attraper sa planche d'une main et le tourner perpendiculairement au sol – est un classique \"old school\". Il n'empêche qu'il est indémodable, avec de vrais ambassadeurs comme Jamie Lynn ou la star Terje Haakonsen. En 2007, ce dernier a même battu le record du monde du \"air\" le plus haut en s'élevant à 9,8 mètres au-dessus du kick (sommet d'un mur d'une rampe ou autre structure de saut)."
+    date : '2018-03-17 12:30:00'
+    category : ['rotation', 'grab']
+    image : ['5ad61cec35c48']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+8 :
+    user : simon
+    title : 'double backflip one foot'
+    slug : double-backflip-one-foot
+    content : "Cette figure qui consiste à attraper sa planche d'une main et le tourner perpendiculairement au sol – est un classique \"old school\". Il n'empêche qu'il est indémodable, avec de vrais ambassadeurs comme Jamie Lynn ou la star Terje Haakonsen. En 2007, ce dernier a même battu le record du monde du \"air\" le plus haut en s'élevant à 9,8 mètres au-dessus du kick (sommet d'un mur d'une rampe ou autre structure de saut)."
+    date : '2018-03-17 12:30:00'
+    category : ['rotation', 'grab']
+    image : ['5ad61d257078e']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+9 :
+    user : shaun
+    title : 'double mc twist 1260'
+    slug : double-mc-twist-1260
+    content: "Le Mc Twist est un flip (rotation verticale) agrémenté d'une vrille. Un saut très périlleux réservé aux professionnels. Le champion précoce Shaun White s'est illustré par un Double Mc Twist 1260 lors de sa session de Half-Pipe aux Jeux Olympiques de Vancouver en 2010. Nul doute que c'est cette figure qui lui a valu de remporter la médaille d'or."
+    date : '2018-03-17 12:30:00'
+    category : ['flip', 'grab']
+    image : ['5ad61de2539a3']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+10 :
+    user : shaun
+    title : 'tripods'
+    slug : tripods
+    content: "Un trick fondamental pour passer le temps sur une piste \r\n\r\n“Balance un gros carve sur les orteils en remontant la pente. Quand tu commences à manquer de vitesse, mets ton poids sur ton pied arrière. Quand tu t’arrêtes complètement, transfère ton poids sur ton pied avant et pose délicatement tes mains sur le sol.”"
+    date : '2018-03-17 12:30:00'
+    category : ['grab']
+    image : ['5ad61fcf99941']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+11 :
+    user : simon
+    title : 'nollie backside 180s'
+    slug : nollie-backside-180s
+    content: "Les nollies backside 180 ne sont pas vraiment des tricks de butter mais ils sont très utiles pour apprendre à faire des tricks plus techniques. En plus, la sensation est excellente.\r\n\r\nLe conseil de Ryan : “Place-toi sur un léger carve sur la carre front, puis, alors que pousse sur le nose pour envoyer un nollie, maintient la pression sur la carre frontside. Quand tu redescends, il faut atterrir sur la carre frontside pour éviter de faire une faute de carre.”"
+    date : '2018-03-17 12:30:00'
+    category : ['rotation']
+    image : ['5ad620d8a9061']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+12 :
+    user : smith
+    title : 'frontside pretzels'
+    slug : frontside-pretzels
+    content: "Les Pretzels, c’est quand tu pivotes dans la direction opposée à la rotation initiale et c’est un concept qui peut se transposer sur les rails quand tu le maîtrise bien sur la neige.\r\n\r\n“Tu devras très probablement mettre un petit coup de hanche pour finir la rotation sur 720 degrés.”"
+    date : '2018-03-17 12:30:00'
+    category : ['rotation']
+    image : ['5ad6237965bda']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+13 :
+    user : smith
+    title : 'frontside nose-roll 540s'
+    slug : frontside-nose-roll-540s
+    content: "Frontside Nose-roll 540's\r\n\r\n “A partir d’un léger carve sur les talons, tu vas presser le nose de la planche sur les talons et puis basculer sur les orteils on pointant les orteils au moment du 180, puis tu reviens sur les talons au quand tu atteins les 360 degrés.”"
+    date : '2018-03-17 12:30:00'
+    category : ['rotation']
+    image : ['5ad62594e81ec']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+14 :
+    user : MrWhite
+    title : 'mute'
+    slug : mute
+    content: "Il faut d'abord faire un saut, un simple ollie par exemple. Bien plier les jambes une fois en l'air pour se regrouper, et aller chercher la planche avec la main. Attention il ne faut pas que le buste se casse en deux pour aller chercher la board : ce sont bien les genoux qui remontent pour amener la board vers la main. Pour effectuer un Mute : la main avant grabbe la carre frontside entre les pieds."
+    date : '2018-03-17 12:44:00'
+    category : ['grab', 'saut']
+    image : ['5ad6260d529ab']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+15 :
+    user : MrWhite
+    title : 'melon'
+    slug : melon
+    content: "Il faut d'abord faire un saut, un simple ollie par exemple. Bien plier les jambes une fois en l'air pour se regrouper, et aller chercher la planche avec la main. Attention il ne faut pas que le buste se casse en deux pour aller chercher la board : ce sont bien les genoux qui remontent pour amener la board vers la main. Pour effectuer un Melon : la main avant grabbe la carre bakside entre les talons. En désaxant le corps et la board cela peut faire un Method ou un Backside Air."
+    date : '2018-03-17 12:46:00'
+    category : ['grab', 'saut']
+    image : ['5ad62651818f8']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']
+16 :
+    user : simon
+    title : 'indy'
+    slug : indy
+    content: "Il faut d'abord faire un saut, un simple ollie par exemple. Bien plier les jambes une fois en l'air pour se regrouper, et aller chercher la planche avec la main. Attention il ne faut pas que le buste se casse en deux pour aller chercher la board : ce sont bien les genoux qui remontent pour amener la board vers la main. Pour effectuer un Indy : la main arrière vient graber la carre frontside entre les pieds. Sur un saut droit c’est un Indy Grab, sur un hip ou un quarter en front c’est un frontside indy ou frontside grab alors que sur un saut en back (3.6 back par exemple) ça sera un backside Indy."
+    date : '2018-03-17 13:37:00'
+    category : ['grab', 'saut']
+    image : ['5ad62698bec8a']
+    video : ['https://www.youtube.com/watch?v=V9xuy-rVj9w', 'https://www.dailymotion.com/video/x6hefs5']

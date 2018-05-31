@@ -46,5 +46,17 @@ services:
 #
 # Fixtures services
 #
+    AppBundle\DataFixtures\ORM\LoadUser:
+        autowire: true
+        arguments:
+          - "@security.password_encoder"
+        tags: ['doctrine.fixture.orm', 'controller.service_arguments']
+
+    AppBundle\DataFixtures\ORM\LoadTrick:
+        tags: ['doctrine.fixture.orm']
+
+    AppBundle\DataFixtures\ORM\LoadComment:
+        tags: ['doctrine.fixture.orm']
+        
     AppBundle\DataFixtures\ORM\LoadCategory:
         tags: ['doctrine.fixture.orm']
