@@ -26,7 +26,7 @@ class CommentRepositoryTest extends KernelTestCase
             ->get('doctrine')
             ->getManager();
 
-        $this->trick =  $this->entityManager
+        $this->trick = $this->entityManager
             ->getRepository(Trick::class)
             ->findOneBySlug('backside-1440-triple-cork')
         ;
