@@ -96,7 +96,7 @@ class TrickController extends Controller
     public function listAction(ObjectManager $entityManager): Response
     {
         // We recover all the tricks
-        $listOfTricks = $entityManager->getRepository(Trick::class)->findAll();
+        $listOfTricks = $entityManager->getRepository(Trick::class)->findAllWithAllEntities();
 
         // Return the view
         return $this->render('Trick/index.html.twig', ['listOfTricks' => $listOfTricks]);
