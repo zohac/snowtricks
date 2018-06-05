@@ -54,6 +54,14 @@
             </div>
         {% endfor %}
         </div>
+        <div class="row">
+            <div class="mx-auto">
+                <button type="button" id="load-tricks" class="btn btn-secondary" data-index="1">Charger</button>
+                <button type="button" id="load-wait" class="btn btn-secondary d-none">
+                    <i class="fas fa-spinner fa-pulse fa-2x"></i>
+                </button>
+            </div>
+        </div>
     </div>
 
 {% endblock %}
@@ -85,6 +93,51 @@
 
 {% block javascripts %}
     {{ parent() }}
+
+    <script>
+        $(document).ready(function() {
+            // Infinite scroll
+            var deviceAgent = navigator.userAgent.toLowerCase();
+            var agentID = deviceAgent.match(/(iphone|ipod|ipad)/);
+            var ajaxReady = true;
+        
+            // Each time the user scrolls
+            $(window).scroll(function() {
+                // On teste si ajaxready vaut false, auquel cas on stoppe la fonction
+                if ( ajaxReady == false) return;
+        
+                // End of the document reached?
+                if(($(window).scrollTop() + $(window).height()) + 150 > $(document).height()
+                || agentID && ($(window).scrollTop() + $(window).height()) + 150 > $(document).height()) {
+                    // lorsqu'on commence un traitement, on met ajaxready à false
+                    ajaxReady = false;
+        
+                    var index = $("#load-tricks").data("index");
+                    // Button animation
+                    $("#load-tricks").addClass("d-none");
+                    $("#load-wait").removeClass("d-none");
+                
+                    $.ajax({
+                        url: "{{ path('ST_get_trick_ajax') }}",
+                        method: "post",
+                        data: {index: index}
+                    }).done(function(data){
+                        $("#load-wait").addClass("d-none");
+        
+                        if (data.length == 0) return;
+        
+                        $("#tricks").append(data);
+                        $("#load-tricks").data("index",index+1);
+                
+                        // Button animation
+                        $("#load-tricks").removeClass("d-none");
+        
+                        ajaxReady = true;
+                    });
+                }
+            });
+        });
+    </script>
 
     <script src="{{ asset('js/st-index-script.js') }}" type="text/javascript"></script>
 {% endblock %}

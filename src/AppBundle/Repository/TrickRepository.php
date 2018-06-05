@@ -13,6 +13,27 @@ use AppBundle\Entity\Trick;
 class TrickRepository extends \Doctrine\ORM\EntityRepository
 {
     /**
+     * Return the list of trick with all associated entities.
+     *
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return array
+     */
+    public function findAllWithAllEntities(int $limit = 12, int $offset = 0): array
+    {
+        // Recovers the current user via the token sent by email.
+        $response = $this->createQueryBuilder('t')
+            ->leftJoin('t.pictures', 'p')
+            ->addSelect('p')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return array_slice($response, $offset, $limit);
+    }
+
+    /**
      * Return a trick with all associated entities.
      *
      * @param string $slug
