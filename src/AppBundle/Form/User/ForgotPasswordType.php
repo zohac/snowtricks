@@ -7,7 +7,6 @@ namespace AppBundle\Form\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 /**
@@ -29,8 +28,7 @@ class ForgotPasswordType extends AbstractType
         // The entity fields are added to our form.
         $builder->add('emailRecovery', EmailType::class, [
             'required' => true,
-            'constraints' => [new Email()]
+            'constraints' => [new Email()],
         ]);
     }
-
 }

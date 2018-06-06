@@ -105,13 +105,15 @@ class ForgotPassword
 
             return null;
         }
+
         return $form->createView();
     }
 
     /**
-     * Find a user with his email
+     * Find a user with his email.
      *
      * @param string $email
+     *
      * @return User
      */
     public function getUser(string $email): User
@@ -126,6 +128,7 @@ class ForgotPassword
                 sprintf('L\'utilisateur n\'existe pas! Etes vous sur de l\'email envoyé!')
             );
         }
+
         return $user;
     }
 }

@@ -12,7 +12,6 @@ use AppBundle\Service\User\ResetPassword;
 use AppBundle\Service\User\ForgotPassword;
 use AppBundle\EventSubscriber\UserSubscriber;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -153,7 +152,7 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function forgotPasswordAction( Request $request, ForgotPassword $forgotPassword): Response
+    public function forgotPasswordAction(Request $request, ForgotPassword $forgotPassword): Response
     {
         if ($form = $forgotPassword->getForm($request)) {
             return $this->render('User/forgot_password.html.twig', ['form' => $form]);
