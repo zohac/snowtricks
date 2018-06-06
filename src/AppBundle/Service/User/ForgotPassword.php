@@ -63,21 +63,17 @@ class ForgotPassword
      *
      * @param User $user
      */
-    public function sendToken(Request $request, ?User $user): ?FormView
+    public function getForm(Request $request): ?FormView
     {
-        // If the user doesn't exist
-        if (!$user) {
-            throw new \LogicException(
-                sprintf('L\'utilisateur n\'existe pas! Avez vous bien suivi le lien envoyé par email!')
-            );
-        }
-
         // Build the form
-        $form = $this->formFactory->create(ForgotPasswordType::class, $user);
+        $form = $this->formFactory->create(ForgotPasswordType::class);
 
         // handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $user = $this->getUser($data['emailRecovery']);
+
             // 3) Set a token for ressetting password
             $user->setToken(hash('sha256', serialize($user).microtime()));
 
@@ -109,7 +105,27 @@ class ForgotPassword
 
             return null;
         }
-
         return $form->createView();
+    }
+
+    /**
+     * Find a user with his email
+     *
+     * @param string $email
+     * @return User
+     */
+    public function getUser(string $email): User
+    {
+        // Get the user
+        $user = $this->entityManager
+            ->getRepository(User::class)
+            ->findOneByEmail($email);
+
+        if (!$user) {
+            throw new \LogicException(
+                sprintf('L\'utilisateur n\'existe pas! Etes vous sur de l\'email envoyé!')
+            );
+        }
+        return $user;
     }
 }

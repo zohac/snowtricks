@@ -12,6 +12,7 @@ use AppBundle\Service\User\ResetPassword;
 use AppBundle\Service\User\ForgotPassword;
 use AppBundle\EventSubscriber\UserSubscriber;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,7 +25,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 /**
  * Class allowing the management of users.
  */
-class UserController extends Controller implements UserSubscripterController
+class UserController extends Controller
 {
     /**
      * Register a new user.
@@ -47,7 +48,7 @@ class UserController extends Controller implements UserSubscripterController
             return $this->render('User/registration.html.twig', ['form' => $form]);
         }
         // Redirect to home
-        return $this->redirectToRoute('ST_registration');
+        return $this->redirectToRoute('ST_index');
     }
 
     /**
@@ -138,7 +139,7 @@ class UserController extends Controller implements UserSubscripterController
             return $this->render('User/update.html.twig', ['form' => $form]);
         }
         // Redirect to home
-        return $this->redirectToRoute('ST_registration');
+        return $this->redirectToRoute('ST_index');
     }
 
     /**
@@ -152,18 +153,13 @@ class UserController extends Controller implements UserSubscripterController
      *
      * @return Response
      */
-    public function forgotPasswordAction(
-        Request $request,
-        ForgotPassword $forgotPassword,
-        UserSubscriber $UserSubscriber
-    ): Response {
-        $user = $UserSubscriber->getUser();
-
-        if ($form = $forgotPassword->sendToken($request, $user)) {
+    public function forgotPasswordAction( Request $request, ForgotPassword $forgotPassword): Response
+    {
+        if ($form = $forgotPassword->getForm($request)) {
             return $this->render('User/forgot_password.html.twig', ['form' => $form]);
         }
         // Redirect to home
-        return $this->redirectToRoute('ST_registration');
+        return $this->redirectToRoute('ST_index');
     }
 
     /**
@@ -185,6 +181,6 @@ class UserController extends Controller implements UserSubscripterController
             return $this->render('User/reset_password.html.twig', ['form' => $form]);
         }
         // Redirect to home
-        return $this->redirectToRoute('ST_registration');
+        return $this->redirectToRoute('ST_login');
     }
 }
