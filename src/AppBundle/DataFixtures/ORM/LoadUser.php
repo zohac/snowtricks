@@ -33,7 +33,7 @@ class LoadUser extends AbstractFixture implements OrderedFixtureInterface
             if (isset($userData['avatar'])) {
                 $image = new Picture();
                 $image->setName($userData['avatar']);
-                $image->setPath('uploads/picture/'.$userData['avatar'].'.jpeg');
+                $image->setPath('uploads/pictures/'.$userData['avatar'].'.jpeg');
 
                 $user->setAvatar($image);
             }
