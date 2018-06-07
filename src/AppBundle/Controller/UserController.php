@@ -69,7 +69,7 @@ class UserController extends Controller
         $register->validate($user);
 
         // Redirect to home
-        return $this->redirectToRoute('ST_registration');
+        return $this->redirectToRoute('ST_login');
     }
 
     /**

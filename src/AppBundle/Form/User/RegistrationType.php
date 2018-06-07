@@ -38,14 +38,4 @@ class RegistrationType extends AbstractType
                 'invalid_message' => 'Les champs du mot de passe doivent correspondre.',
             ]);
     }
-
-    /**
-     * The options.
-     *
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(['data_class' => User::class]);
-    }
 }
