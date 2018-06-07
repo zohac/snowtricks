@@ -25,17 +25,24 @@ class AddComment
      * @param ObjectManager $entityManager
      * @param UserInterface $user
      */
-    public function __construct(
-        ObjectManager $entityManager,
-        TokenStorageInterface $tokenStorage
-    ) {
+    public function __construct(ObjectManager $entityManager, TokenStorageInterface $tokenStorage)
+    {
         $this->entityManager = $entityManager;
         $this->user = $tokenStorage->getToken()->getUser();
     }
 
-    public function add(Trick $trick, Comment $comment)
+    /**
+     * Add new comment
+     *
+     * @param Trick $trick
+     * @param string $content
+     * @return void
+     */
+    public function add(Trick $trick, string $content)
     {
         // Add a new comment
+        $comment = new Comment();
+        $comment->setContent($content);
         $comment->setTrick($trick);
         $comment->setUser($this->user);
         $comment->setDate(new \Datetime('NOW'));

@@ -122,13 +122,13 @@ class TrickController extends Controller
         ObjectManager $entityManager
     ): Response {
         // Build the form
-        $comment = new Comment();
-        $form = $this->createForm(CommentType::class, $comment);
+        $form = $this->createForm(CommentType::class);
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $addComment->add($trick, $comment);
+            $data = $form->getData();
+            $addComment->add($trick, $data['content']);
 
             // Adding a Flash Message
             $this->addFlash(
@@ -143,9 +143,7 @@ class TrickController extends Controller
             return $this->redirectToRoute('ST_trick_show', ['slug' => $trick->getSlug()]);
         }
         // Get the form and the list of tricks
-        $listOfComment = $entityManager
-            ->getRepository(Comment::class)
-            ->findWithAllEntities($trick);
+        $listOfComment = $entityManager->getRepository(Comment::class)->findWithAllEntities($trick);
 
         // Return the view
         return $this->render(

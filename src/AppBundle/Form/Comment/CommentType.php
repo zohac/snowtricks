@@ -6,9 +6,10 @@ namespace AppBundle\Form\Comment;
 
 use AppBundle\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  * Add or update a comment.
@@ -28,19 +29,11 @@ class CommentType extends AbstractType
 
         // The entity fields are added to our form.
         $builder
-            ->add('content', TextareaType::class)
-        ;
-    }
-
-    /**
-     * The option.
-     *
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => Comment::class,
-        ));
+            ->add('content', TextareaType::class, [
+                'constraints' => [new Type([
+                    'type'    => 'string',
+                    'message' => 'The value {{ value }} is not a valid {{ type }}.',
+                ])],
+            ]);
     }
 }
