@@ -52,7 +52,7 @@ class CommentController extends Controller
                 'type' => 'success',
                 'title' => 'Le commentaire est bien supprimé!',
                 'message' => '',
-            ];;
+            ];
         }
         // Adding the Flash Message
         $this->addFlash($type, $message);

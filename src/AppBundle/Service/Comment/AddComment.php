@@ -32,11 +32,10 @@ class AddComment
     }
 
     /**
-     * Add new comment
+     * Add new comment.
      *
-     * @param Trick $trick
+     * @param Trick  $trick
      * @param string $content
-     * @return void
      */
     public function add(Trick $trick, string $content)
     {
