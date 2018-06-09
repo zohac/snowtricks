@@ -71,6 +71,7 @@ class Update
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            // change password
             if ($user->getPlainPassword()) {
                 $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()));
             }
