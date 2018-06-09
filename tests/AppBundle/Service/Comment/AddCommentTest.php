@@ -39,7 +39,7 @@ class AddCommentTest extends TestCase
     public function testCreateComment()
     {
         $trick = new Trick();
-        $comment = new Comment();
+        $comment = 'A great comment!';
 
         $AddComment = new AddComment($this->objectManager, $this->tokenStorageInterface);
         $AddComment->add($trick, $comment);

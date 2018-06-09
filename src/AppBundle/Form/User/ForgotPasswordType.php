@@ -30,8 +30,9 @@ class ForgotPasswordType extends AbstractType
         $builder->add('emailRecovery', EmailType::class, [
             'required' => true,
             'constraints' => [
-                new Email()],
+                new Email(),
                 new NotBlank(),
+            ],
         ]);
     }
 }
