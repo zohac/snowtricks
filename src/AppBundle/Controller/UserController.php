@@ -6,11 +6,9 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
 use AppBundle\Service\User\Update;
-use AppBundle\Service\User\UserQuery;
 use AppBundle\Service\User\Registration;
 use AppBundle\Service\User\ResetPassword;
 use AppBundle\Service\User\ForgotPassword;
-use AppBundle\EventSubscriber\UserSubscriber;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -148,7 +146,6 @@ class UserController extends Controller
      *
      * @param Request        $request
      * @param ForgotPassword $forgotPassword
-     * @param UserSubscriber $UserSubscriber
      *
      * @return Response
      */
@@ -167,9 +164,9 @@ class UserController extends Controller
      * @Route("/password/reset/{token}", name="ST_reset_password")
      * @Entity("user", expr="repository.getUserWithToken(token)")
      *
-     * @param UserQuery $userQuery
-     * @param User|null $user
-     * @param Request   $request
+     * @param ResetPassword $resetPassword
+     * @param User|null     $user
+     * @param Request       $request
      *
      * @return Response
      */
