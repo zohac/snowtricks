@@ -5,6 +5,11 @@
         <div id="comments" class="row justify-content-center">
         {% for comment in listOfComment %}
             <div class="row col-md-8 col-12 mb-2">
+            {% if comment.user.avatar %}
+                <img class="align-self-center circle-2x" src="{{ asset(comment.user.avatar.path) }}" alt="avatar">
+            {% else %}
+                <img class="align-self-center circle-2x" src="{{  asset(constant('AppBundle\\Entity\\Picture::DEFAULT_USER')) }}" alt="avatar">
+            {% endif %}
                 <div class="col-10">
                 <div class="card">
                     <div class="card-header text-muted">
