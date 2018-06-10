@@ -121,39 +121,31 @@ class TrickController extends Controller
         AddComment $addComment,
         ObjectManager $entityManager
     ): Response {
-        // Build the form
-        $form = $this->createForm(CommentType::class);
+        if ($formView = $addComment->add($request, $trick)) {
+            // Get the form and the list of tricks
+            $listOfComment = $entityManager->getRepository(Comment::class)->findWithAllEntities($trick);
 
-        // 2) handle the submit (will only happen on POST)
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $addComment->add($trick, $data['content']);
-
-            // Adding a Flash Message
-            $this->addFlash(
-                'add_comment',
+            // Return the view
+            return $this->render(
+                'Trick/show.html.twig',
                 [
-                    'type' => 'success',
-                    'title' => 'Nouveau commentaire bien enregistré!',
-                    'message' => '',
+                    'trick' => $trick,
+                    'listOfComment' => $listOfComment,
+                    'form' => $formView,
                 ]
             );
-            // Redirect to trick
-            return $this->redirectToRoute('ST_trick_show', ['slug' => $trick->getSlug()]);
         }
-        // Get the form and the list of tricks
-        $listOfComment = $entityManager->getRepository(Comment::class)->findWithAllEntities($trick);
-
-        // Return the view
-        return $this->render(
-            'Trick/show.html.twig',
+        // Adding a Flash Message
+        $this->addFlash(
+            'add_comment',
             [
-                'trick' => $trick,
-                'listOfComment' => $listOfComment,
-                'form' => $form->createView(),
+                'type' => 'success',
+                'title' => 'Nouveau commentaire bien enregistré!',
+                'message' => '',
             ]
         );
+        // Redirect to trick
+        return $this->redirectToRoute('ST_trick_show', ['slug' => $trick->getSlug()]);
     }
 
     /**
