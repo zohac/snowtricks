@@ -77,14 +77,19 @@ class Registration
     public function registration(Request $request): ?FormView
     {
         // 1) build the form
-        $user = new User();
-        $form = $this->formFactory->create(RegistrationType::class, $user);
+        $form = $this->formFactory->create(RegistrationType::class);
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $user = new User();
+            $user->setUsername($data['username']);
+            $user->setEmail($data['email']);
+
             // 1) Encode the password
-            $password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
+            $password = $this->passwordEncoder->encodePassword($user, $data['plainPassword']);
             $user->setPassword($password);
             // 2) Set a token for registration
             $user->setToken(hash('sha256', serialize($user).microtime()));

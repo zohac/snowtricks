@@ -48,7 +48,11 @@ class CommentController extends Controller
             $entityManager->remove($comment);
             $entityManager->flush();
             // Changing the Flash Message
-            $message = c;
+            $message = [
+                'type' => 'success',
+                'title' => 'Le commentaire est bien supprimé!',
+                'message' => '',
+            ];
         }
         // Adding the Flash Message
         $this->addFlash($type, $message);

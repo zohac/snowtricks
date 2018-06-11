@@ -63,53 +63,78 @@ class ForgotPassword
      *
      * @param User $user
      */
-    public function sendToken(Request $request, ?User $user): ?FormView
+    public function getForm(Request $request): ?FormView
     {
-        // If the user doesn't exist
-        if (!$user) {
-            throw new \LogicException(
-                sprintf('L\'utilisateur n\'existe pas! Avez vous bien suivi le lien envoyé par email!')
-            );
-        }
-
         // Build the form
-        $form = $this->formFactory->create(ForgotPasswordType::class, $user);
+        $form = $this->formFactory->create(ForgotPasswordType::class);
 
         // handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // 3) Set a token for ressetting password
-            $user->setToken(hash('sha256', serialize($user).microtime()));
+            $data = $form->getData();
+            //If the user exist
+            if ($user = $this->getUser($data['emailRecovery'])) {
+                // 3) Set a token for ressetting password
+                $user->setToken(hash('sha256', serialize($user).microtime()));
 
-            // 5) save the User!
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
+                // 5) save the User!
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
 
-            // 6) Sending an email
-            if ($this->mailer->sendForgotPassword($user)) {
+                // 6) Sending an email
+                if ($this->mailer->sendForgotPassword($user)) {
+                    $this->flashBag->add(
+                        'forgot_password_email_send_success',
+                        [
+                            'type' => 'info',
+                            'title' => 'Nous vous avons envoyé un e-mail pour réinitialiser votre mot de passe.',
+                            'message' => '',
+                        ]
+                    );
+
+                    return null;
+                }
                 $this->flashBag->add(
-                    'forgot_password_email_send_success',
+                    'forgot_password_email_send_error',
                     [
-                        'type' => 'info',
-                        'title' => 'Nous vous avons envoyé un e-mail pour réinitialiser votre mot de passe.',
-                        'message' => '',
+                        'type' => 'danger',
+                        'title' => 'Une erreur c\'est produit lors de l\'envoie du mail!',
+                        'message' => 'Nous n\'avons pu vous envoyer un lien pour récupérer votre mot de passe.',
                     ]
                 );
 
                 return null;
             }
             $this->flashBag->add(
-                'forgot_password_email_send_error',
+                'forgot_password_user_not_exist',
                 [
                     'type' => 'danger',
-                    'title' => 'Une erreur c\'est produit lors de l\'envoie du mail!',
-                    'message' => 'Nous n\'avons pu vous envoyer un lien pour récupérer votre mot de passe.',
+                    'title' => 'Aucun utilisateur avec cette adresse email.',
+                    'message' => '',
                 ]
             );
 
             return null;
+            
         }
 
         return $form->createView();
+    }
+
+    /**
+     * Find a user with his email.
+     *
+     * @param string $email
+     *
+     * @return User
+     */
+    public function getUser(string $email): ?User
+    {
+        // Get the user
+        $user = $this->entityManager
+            ->getRepository(User::class)
+            ->findOneByEmail($email);
+
+        return $user;
     }
 }

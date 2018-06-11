@@ -6,10 +6,11 @@ namespace AppBundle\Form\User;
 
 use AppBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * The form for changing the password.
@@ -31,18 +32,15 @@ class ResetPasswordType extends AbstractType
         $builder
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
+                'invalid_message' => 'Les champs du mot de passe doivent correspondre.',
+                'constraints' => [
+                    new Length(['max' => 4096]),
+                    new Regex([
+                        'pattern' => '/^[a-zA-Z0-9]{6,}$/',
+                        'message' => 'Le mot de passe doit comporter au moins 6 caractères,
+                        minuscule, majuscule et numérique.',
+                    ]),
+                ],
             ]);
-    }
-
-    /**
-     * The options.
-     *
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => User::class,
-        ));
     }
 }

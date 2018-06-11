@@ -16,7 +16,6 @@ class UserTest extends TestCase
         $user = new User();
         $user->setUsername('zohac');
         $user->setEmail('zohac@test.com');
-        $user->setEmailRecovery('zohac@test.com');
         $user->setPassword('aGreatPassword');
         $user->setPlainPassword('aGreatPassword');
         $user->setRoles(['ROLE_USER']);
@@ -28,7 +27,6 @@ class UserTest extends TestCase
 
         $this->assertEquals('zohac', $user->getUsername());
         $this->assertEquals('zohac@test.com', $user->getEmail());
-        $this->assertEquals('zohac@test.com', $user->getEmailRecovery());
         $this->assertEquals('aGreatPassword', $user->getPassword());
         $this->assertEquals('aGreatPassword', $user->getPlainPassword());
         $this->assertEquals(['ROLE_USER'], $user->getRoles());

@@ -71,13 +71,15 @@ class ResetPassword
         }
 
         // 1) Creat the form
-        $form = $this->formFactory->create(ResetPasswordType::class, $user);
+        $form = $this->formFactory->create(ResetPasswordType::class);
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
             // Reset the password
-            $password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
+            $password = $this->passwordEncoder->encodePassword($user, $data['plainPassword']);
             $user->setPassword($password);
 
             // Set the token to null

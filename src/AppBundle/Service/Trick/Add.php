@@ -59,13 +59,28 @@ class Add
     public function add(Request $request, User $user): ?FormView
     {
         // 1) build the form
-        $trick = new Trick();
-        $form = $this->formFactory->create(AddType::class, $trick);
+        $form = $this->formFactory->create(AddType::class);
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
             // Add...
+            $trick = new Trick();
+            $trick->setTitle($data['title']);
+            $trick->setContent($data['content']);
+
+            foreach ($data['categories'] as $category) {
+                //var_dump($category); die;
+                $trick->addCategory($category);
+            }
+            foreach ($data['pictures'] as $picture) {
+                $trick->addPicture($picture);
+            }
+            foreach ($data['videos'] as $video) {
+                $trick->addVideo($video);
+            }
+
             $trick->setUser($user);
 
             // 5) save the Trick

@@ -61,12 +61,4 @@ class Category
     {
         return $this->name;
     }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function updateDate()
-    {
-        $this->setDate(new \Datetime('NOW'));
-    }
 }

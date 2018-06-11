@@ -1,5 +1,7 @@
 <?php
 
+// Non-functional test
+
 namespace tests\AppBundle\Service\Trick;
 
 use AppBundle\Entity\User;
