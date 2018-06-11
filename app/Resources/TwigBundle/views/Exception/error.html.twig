@@ -6,6 +6,8 @@
 
     <div class="container mt-5">
 
+        <img src="{{ asset(constant('AppBundle\\Entity\\Picture::DEFAULT_ERROR')) }}" class="img-fluid st-h400 mx-auto d-block">
+
         <h1>Oops! An Error Occurred</h1>
         <h2>The server returned a "{{ status_code }} {{ status_text }}".</h2>
 
