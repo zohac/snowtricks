@@ -2,10 +2,19 @@
 # https://symfony.com/doc/current/security.html
 security:
 
+    role_hierarchy:
+        # Admin inherits user rights
+        ROLE_ADMIN:       [ROLE_USER]
+        
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-        in_memory:
-            memory: ~
+        main:
+            entity:
+                class:      AppBundle\Entity\User
+                property:   username
+    
+    encoders:
+        AppBundle\Entity\User: bcrypt
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -14,11 +23,14 @@ security:
             security: false
 
         main:
-            anonymous: ~
-            # activate different ways to authenticate
-
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
+            pattern:    ^/
+            anonymous:  true
+            provider:   main
+            form_login:
+                login_path: /login
+                check_path: /login_check
+                csrf_token_generator: security.csrf.token_manager
+            logout_on_user_change: true
+            logout:
+                path:       /logout
+                target:     /

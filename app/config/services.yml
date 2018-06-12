@@ -33,3 +33,30 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+    AppBundle\Listener\LoginListener:
+        public: true
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+
+
+    AppBundle\Listener\MenuListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest' }
+
+#
+# Fixtures services
+#
+    AppBundle\DataFixtures\ORM\LoadUser:
+        autowire: true
+        arguments:
+          - "@security.password_encoder"
+        tags: ['doctrine.fixture.orm', 'controller.service_arguments']
+
+    AppBundle\DataFixtures\ORM\LoadTrick:
+        tags: ['doctrine.fixture.orm']
+
+    AppBundle\DataFixtures\ORM\LoadComment:
+        tags: ['doctrine.fixture.orm']
+        
+    AppBundle\DataFixtures\ORM\LoadCategory:
+        tags: ['doctrine.fixture.orm']

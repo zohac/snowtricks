@@ -1,0 +1,42 @@
+{# src/AppBundle/Resources/views/Comment/comment.html.twig #}
+
+{% if listOfComment %}
+    <div class="card-footer">
+        <div id="comments" class="row justify-content-center">
+        {% for comment in listOfComment %}
+            <div class="row col-md-8 col-12 mb-2">
+            {% if comment.user.avatar %}
+                <img class="align-self-center circle-2x" src="{{ asset(comment.user.avatar.path) }}" alt="avatar">
+            {% else %}
+                <img class="align-self-center circle-2x" src="{{  asset(constant('AppBundle\\Entity\\Picture::DEFAULT_USER')) }}" alt="avatar">
+            {% endif %}
+                <div class="col-10">
+                <div class="card">
+                    <div class="card-header text-muted">
+                        Par {{ comment.user.username }} - Le {{ comment.date|date("d/m/Y") }}
+                        {% if is_granted("ROLE_USER") %}
+
+                        {% if app.user == comment.user %}
+                            <a href="{{ path('ST_comment_update', {'id': comment.id}) }}">
+                                <i class="fas fa-pencil-alt" title="Update"></i>
+                            </a>
+                        {% endif %}
+
+                            <a  class="delete"
+                                data-title="{{ comment.content }}"
+                                data-path="{{ path('ST_comment_delete', {'id': comment.id, 'token': csrf_token(comment.id)}) }}"
+                                data-type="commentaire">
+                                <i class="fas fa-trash" title="Delete"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        {{ comment.content }}
+                    </div>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+{% endif %}

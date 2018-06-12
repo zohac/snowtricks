@@ -1,0 +1,20 @@
+{# app/Resources/views/Menu/main.html.twig #}
+
+<div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    <ul class="navbar-nav">
+        <li class="nav-item{% if route == 'ST_index' %} active{% endif %}">
+            <a class="nav-link" href="{{ path('ST_index') }}">Home</a>
+        </li>
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+
+        {% include "Menu/user.html.twig" %}
+
+    {% else %}
+        {% for value in menu.main %}
+        <li class="nav-item{% if route == value.path %} active{% endif %}">
+            <a class="nav-link" href="{{ path(value.path) }}">{{ value.name }}</a>
+        </li>
+        {% endfor %}
+    {% endif %}
+    </ul>
+</div>

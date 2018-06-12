@@ -1,0 +1,143 @@
+{# src/AppBundle/Resources/views/Tricks/index.html.twig #}
+
+{% extends "layout.html.twig" %}
+
+{% block title %}SnowTricks::Accueil{% endblock %}
+
+{% block body %}
+
+    <header>
+        <div class="full-header" style="background-image:url({{ asset(constant('AppBundle\\Entity\\Picture::DEFAULT_HOME')) }})">
+            <div class="container">
+                <div class="row">
+                    <div class="col align-self-center">
+                        <h1 class="text-center text-uppercase font-weight-bold">Surf Over<br>Everything</h1>
+                    </div>
+                    <div id="goToTricks" title="Go to tricks!">
+                        <i class="fas fa-arrow-down fa-2x text-center"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="tricks" class="row">
+        {% for trick in listOfTricks %}
+            <div id="{{ trick.id }}" class="col-xl-3 col-lg-4 col-md-6 col-sm-12 pt-5">
+                <div class="card st-card-index">
+                    <div class="st-overflow">
+                        <img class="card-img-top" src="{{ asset(trick.getHeadLinePicturePath) }}" alt="Card image cap" >
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-8">
+                                <a href="{{ path('ST_trick_show', {'slug': trick.slug}) }}">
+                                    <h5 class="card-title">{{ trick.title }}</h5>
+                                </a>
+                            </div>
+                            {% if is_granted("ROLE_USER") %}
+                            <div class="col-2">
+                                <a href="{{ path('ST_trick_update', {'slug': trick.slug}) }}">
+                                    <i class="fas fa-pencil-alt" title="Update"></i>
+                                </a>
+                            </div>
+                            <div class="col-2">
+                                <a  class="delete" data-title="{{ trick.title }}" data-path="{{ path('ST_trick_delete', {'slug': trick.slug, 'token': csrf_token(trick.slug)}) }}">
+                                    <i class="fas fa-trash" title="Delete"></i>
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="row">
+            <div class="mx-auto">
+                <button type="button" id="load-tricks" class="btn btn-secondary" data-index="1">Charger</button>
+                <button type="button" id="load-wait" class="btn btn-secondary d-none">
+                    <i class="fas fa-spinner fa-pulse fa-2x"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <div class="modal" id="deleteModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Suppression d'un trick</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Voulez-vous vraiment supprimer ce trick ?</p>
+                    <h2></h2>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button id="deleteButton" type="button" class="btn btn-danger">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function() {
+            // Infinite scroll
+            var deviceAgent = navigator.userAgent.toLowerCase();
+            var agentID = deviceAgent.match(/(iphone|ipod|ipad)/);
+            var ajaxReady = true;
+        
+            // Each time the user scrolls
+            $(window).scroll(function() {
+                // On teste si ajaxready vaut false, auquel cas on stoppe la fonction
+                if ( ajaxReady == false) return;
+        
+                // End of the document reached?
+                if(($(window).scrollTop() + $(window).height()) + 150 > $(document).height()
+                || agentID && ($(window).scrollTop() + $(window).height()) + 150 > $(document).height()) {
+                    // lorsqu'on commence un traitement, on met ajaxready à false
+                    ajaxReady = false;
+        
+                    var index = $("#load-tricks").data("index");
+                    // Button animation
+                    $("#load-tricks").addClass("d-none");
+                    $("#load-wait").removeClass("d-none");
+                
+                    $.ajax({
+                        url: "{{ path('ST_get_trick_ajax') }}",
+                        method: "post",
+                        data: {index: index}
+                    }).done(function(data){
+                        $("#load-wait").addClass("d-none");
+        
+                        if (data.length == 0) return;
+        
+                        $("#tricks").append(data);
+                        $("#load-tricks").data("index",index+1);
+                
+                        // Button animation
+                        $("#load-tricks").removeClass("d-none");
+        
+                        ajaxReady = true;
+                    });
+                }
+            });
+        });
+    </script>
+
+    <script src="{{ asset('js/st-index-script.js') }}" type="text/javascript"></script>
+{% endblock %}

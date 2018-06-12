@@ -1,0 +1,85 @@
+{# src/AppBundle/Resources/views/User/update.html.twig #}
+
+{% extends "layout.html.twig" %}
+
+{% form_theme form 'Form/form_errors.html.twig' %}
+
+{% block title %}SnowTricks::Update{% endblock %}
+
+{% block body %}
+
+	<div class="container hv-body">
+		<div class="col-lg-6 col-md-9 col-12">
+            <form action="{{ path('ST_user_update') }}" method="POST" enctype="multipart/form-data">
+
+                {# General errors in the form. #}
+                {{ form_errors(form) }}
+                <div class="row">
+
+                    <div class="col-md-4 col-12">
+                        {% if app.user.avatar %}
+                        <img src="{{ asset(app.user.avatar.path) }}" class="img-fluid">
+                        {% else %}
+                        <img src="{{ asset(constant('AppBundle\\Entity\\Picture::DEFAULT_USER')) }}" class="img-fluid">
+                        {% endif %}
+
+                        <div class="form-group">
+                                {# Génération du label. #}
+                                {{ form_label(form.avatar) }}
+                                {# Affichage des erreurs pour ce champ précis. #}
+                                {{ form_errors(form.avatar) }}
+                                {# Génération de l'input. #}
+                                {{ form_widget(form.avatar, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                    </div>
+                
+                    <div class="col-md-8 col-12">
+                        <h3>Mon compte utilisateur</h3>
+
+                        <div class="form-group">
+                            {{ form_label(form.username, "Pseudo") }}
+                            {{ form_widget(form.username) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.email, "Email") }}
+                    {{ form_widget(form.email) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.plainPassword.first, "Mot de passe") }}
+                    {{ form_widget(form.plainPassword.first,
+                        {'attr': {
+                            'title': 'Le mot de passe doit comporter au moins 6 caractères, minuscule, majuscule et numérique.',
+                            'pattern': '[a-zA-Z0-9]{6,}'
+                        }})
+                    }}
+                        <small id="passwordHelpBlock" class="form-text text-muted">
+                            Le mot de passe doit comporter au moins 6 caractères, minuscule, majuscule et numérique.
+                        </small>
+                    {{ form_label(form.plainPassword.second, "Retapez votre mot de passe") }}
+                    {{ form_widget(form.plainPassword.second,
+                        {'attr': {
+                            'title': 'Le mot de passe doit comporter au moins 6 caractères, minuscule, majuscule et numérique.',
+                            'pattern': '[a-zA-Z0-9]{6,}'
+                        }})
+                    }}
+                </div>
+
+                {# Automatic generation of fields not yet written.
+                In this example, it would be the CSRF field (automatically managed by Symfony !)
+                and all hidden fields. #}
+                {{ form_rest(form) }}
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary col-12">
+                        Mettre à jour
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
