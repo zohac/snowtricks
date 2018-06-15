@@ -73,6 +73,7 @@ class AddComment
             // Redirect to trick
             return null;
         }
+
         return $form->createView();
     }
 }

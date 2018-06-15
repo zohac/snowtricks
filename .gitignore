@@ -7,6 +7,9 @@
 /web/bundles/
 /web/uploads/*
 
+#PHPUnit Test
+/web/test-coverage/*
+
 # PHP-CS-FIXER
 .php_cs.cache
 

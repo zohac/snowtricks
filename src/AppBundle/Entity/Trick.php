@@ -107,7 +107,12 @@ class Trick
     /**
      * @var Video
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Video", mappedBy="trick", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *      targetEntity="AppBundle\Entity\Video",
+     *      mappedBy="trick",
+     *      cascade={"persist"},
+     *      orphanRemoval=true
+     * )
      * @Assert\Valid
      */
     private $videos;
@@ -275,14 +280,6 @@ class Trick
     public function getModifiedBy()
     {
         return $this->modifiedBy;
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function updateDate()
-    {
-        $this->setDateModified(new \Datetime('NOW'));
     }
 
     /**

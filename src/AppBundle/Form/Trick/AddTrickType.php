@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -16,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 /**
  * Add or update a trick.
  */
-class AddType extends AbstractType
+class AddTrickType extends AbstractType
 {
     /**
      * Build the form.
@@ -74,5 +75,17 @@ class AddType extends AbstractType
                 'error_bubbling' => false,
             ])
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Trick::class,
+        ]);
     }
 }

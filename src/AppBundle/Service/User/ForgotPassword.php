@@ -115,7 +115,6 @@ class ForgotPassword
             );
 
             return null;
-            
         }
 
         return $form->createView();
