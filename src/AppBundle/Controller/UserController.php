@@ -7,7 +7,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use AppBundle\Service\User\Update;
 use AppBundle\Service\User\Registration;
+use AppBundle\Form\User\RegistrationType;
 use AppBundle\Service\User\ResetPassword;
+use AppBundle\Utils\User\UserTypeHandler;
 use AppBundle\Service\User\ForgotPassword;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,18 +36,25 @@ class UserController extends Controller
      *          "order": 3
      *      }})
      *
-     * @param Request      $request
-     * @param Registration $register
+     * @param Request         $request
+     * @param UserTypeHandler $handler
      *
      * @return Response
      */
-    public function registrationAction(Request $request, Registration $register): Response
+    public function registrationAction(Request $request, UserTypeHandler $handler): Response
     {
-        if ($form = $register->registration($request)) {
-            return $this->render('User/registration.html.twig', ['form' => $form]);
+        // Build the form
+        $form = $this->createForm(RegistrationType::class);
+
+        $form->handleRequest($request);
+        if ($handler->handle($form)) {
+            // Add a flash message
+            $this->addFlash('info', 'Vérifiez votre boîte email, pour confirmer votre inscription.');
+
+            return $this->redirectToRoute('ST_index');
         }
         // Redirect to home
-        return $this->redirectToRoute('ST_index');
+        return $this->render('User/registration.html.twig', ['form' => $form->createView()]);
     }
 
     /**
