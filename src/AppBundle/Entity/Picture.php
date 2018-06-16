@@ -75,12 +75,9 @@ class Picture
     /**
      * @var Trick
      *
-     * @ORM\ManyToOne(
-     *      targetEntity="AppBundle\Entity\Trick",
-     *      cascade={"persist"},
-     *      inversedBy="pictures"
-     * )
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Trick", inversedBy="pictures", cascade={"persist", "remove"})
+     *
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      * @Assert\Valid
      */
     private $trick;

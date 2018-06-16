@@ -25,7 +25,7 @@ class Comment
      * @var Trick
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Trick")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $trick;
 
@@ -33,7 +33,7 @@ class Comment
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $user;
 

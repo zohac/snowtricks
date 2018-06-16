@@ -152,21 +152,22 @@ class TrickController extends Controller
      *
      * @Security("has_role('ROLE_USER')")
      *
-     * @param Trick  $trick
-     * @param string $token
+     * @param Trick         $trick
+     * @param string        $token
+     * @param ObjectManager $entityManager
      *
      * @return Response
      */
-    public function deleteAction(Trick $trick, string $token): Response
+    public function deleteAction(Trick $trick, string $token, ObjectManager $entityManager): Response
     {
         // If the token is valid
         if ($this->isCsrfTokenValid($trick->getSlug(), $token)) {
-            $entityManager = $this->getDoctrine()->getManager();
+            // Remove the trick.
             $entityManager->remove($trick);
             $entityManager->flush();
 
             // Add a flash message
-            $this->flashBag->add('success', 'Le trick est bien supprimé!');
+            $this->addFlash('success', 'Le trick est bien supprimé!');
             // Redirect to home
             return $this->redirectToRoute('ST_index');
         }
