@@ -27,13 +27,35 @@ class CommentTypeHandler
      * Handle a form.
      *
      * @param FormInterface $form
+     * @param Trick         $trick
      *
      * @return bool
      */
     public function handle(FormInterface $form, Trick $trick): bool
     {
         if ($form->isSubmitted() && $form->isValid()) {
-            $form->getData()->setTrick($trick);
+            if ($trick) {
+                $form->getData()->setTrick($trick);
+            }
+            $this->entityManager->persist($form->getData());
+            $this->entityManager->flush();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Handle a form.
+     *
+     * @param FormInterface $form
+     *
+     * @return bool
+     */
+    public function handleForUpdate(FormInterface $form): bool
+    {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->persist($form->getData());
             $this->entityManager->flush();
 
