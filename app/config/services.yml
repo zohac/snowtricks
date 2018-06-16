@@ -43,6 +43,13 @@ services:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest' }
 
+    AppBundle\Listener\TrickListener:
+        arguments:
+            - "@security.token_storage"
+        tags:
+            - { name: 'doctrine.event_listener', event: 'prePersist' }
+            - { name: 'doctrine.event_listener', event: 'preUpdate' }
+
 #
 # Fixtures services
 #

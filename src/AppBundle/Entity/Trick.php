@@ -32,7 +32,7 @@ class Trick
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $user;
 
@@ -97,7 +97,7 @@ class Trick
      * @ORM\OneToMany(
      *      targetEntity="AppBundle\Entity\Picture",
      *      mappedBy="trick",
-     *      cascade={"persist"},
+     *      cascade={"persist", "remove"},
      *      orphanRemoval=true
      * )
      * @Assert\Valid
@@ -107,7 +107,12 @@ class Trick
     /**
      * @var Video
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Video", mappedBy="trick", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *      targetEntity="AppBundle\Entity\Video",
+     *      mappedBy="trick",
+     *      cascade={"persist"},
+     *      orphanRemoval=true
+     * )
      * @Assert\Valid
      */
     private $videos;
@@ -275,14 +280,6 @@ class Trick
     public function getModifiedBy()
     {
         return $this->modifiedBy;
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function updateDate()
-    {
-        $this->setDateModified(new \Datetime('NOW'));
     }
 
     /**
