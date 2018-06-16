@@ -52,6 +52,14 @@ class Comment
     private $date;
 
     /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->date = new \Datetime('NOW');
+    }
+
+    /**
      * Get id.
      *
      * @return int

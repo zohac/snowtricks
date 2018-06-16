@@ -49,6 +49,12 @@ services:
         tags:
             - { name: 'doctrine.event_listener', event: 'prePersist' }
             - { name: 'doctrine.event_listener', event: 'preUpdate' }
+    
+    AppBundle\Listener\CommentListener:
+        arguments:
+            - "@security.token_storage"
+        tags:
+            - { name: 'doctrine.event_listener', event: 'prePersist' }
 
 #
 # Fixtures services

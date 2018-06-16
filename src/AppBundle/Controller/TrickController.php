@@ -6,11 +6,12 @@ use AppBundle\Entity\Trick;
 use AppBundle\Entity\Comment;
 use AppBundle\Service\Trick\Add;
 use AppBundle\Form\Trick\AddTrickType;
-use AppBundle\Service\Comment\AddComment;
+use AppBundle\Form\Comment\CommentType;
 use AppBundle\Utils\Trick\TrickTypeHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Utils\Comment\CommentTypeHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -104,44 +105,42 @@ class TrickController extends Controller
      * @Route("/trick/show/{slug}", name="ST_trick_show")
      * @Entity("trick", expr="repository.FindWithAllEntities(slug)")
      *
-     * @param Request       $request
-     * @param Trick         $trick
-     * @param AddComment    $addComment
-     * @param ObjectManager $entityManager
+     * @param Request            $request
+     * @param Trick              $trick
+     * @param CommentTypeHandler $handler
+     * @param ObjectManager      $entityManager
      *
      * @return Response
      */
     public function showAction(
         Request $request,
         Trick $trick,
-        AddComment $addComment,
+        CommentTypeHandler $handler,
         ObjectManager $entityManager
     ): Response {
-        if ($formView = $addComment->add($request, $trick)) {
-            // Get the form and the list of tricks
-            $listOfComment = $entityManager->getRepository(Comment::class)->findWithAllEntities($trick);
+        // Build the form
+        $form = $this->createForm(CommentType::class);
 
-            // Return the view
-            return $this->render(
-                'Trick/show.html.twig',
-                [
-                    'trick' => $trick,
-                    'listOfComment' => $listOfComment,
-                    'form' => $formView,
-                ]
-            );
+        $form->handleRequest($request);
+        if ($handler->handle($form, $trick)) {
+            // Add a flash message
+            $this->addFlash('success', 'Nouveau commentaire bien enregistré!');
+            // Redirect to trick
+            return $this->redirectToRoute('ST_trick_show', ['slug' => $trick->getSlug()]);
         }
-        // Adding a Flash Message
-        $this->addFlash(
-            'add_comment',
+
+        // Get the form and the list of tricks
+        $listOfComment = $entityManager->getRepository(Comment::class)->findWithAllEntities($trick);
+
+        // Return the view
+        return $this->render(
+            'Trick/show.html.twig',
             [
-                'type' => 'success',
-                'title' => 'Nouveau commentaire bien enregistré!',
-                'message' => '',
+                'trick' => $trick,
+                'listOfComment' => $listOfComment,
+                'form' => $form->createView(),
             ]
         );
-        // Redirect to trick
-        return $this->redirectToRoute('ST_trick_show', ['slug' => $trick->getSlug()]);
     }
 
     /**
