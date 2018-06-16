@@ -8,6 +8,7 @@ use AppBundle\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
@@ -34,5 +35,17 @@ class CommentType extends AbstractType
                     'message' => 'The value {{ value }} is not a valid {{ type }}.',
                 ])],
             ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Comment::class,
+        ]);
     }
 }
