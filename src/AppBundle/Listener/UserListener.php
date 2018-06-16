@@ -116,24 +116,4 @@ class UserListener
             vous ne pourrez pas poster de Trick ou des commentaires.'
         );
     }
-
-    /**
-     * Added the author of the trick modification.
-     *
-     * @param LifecycleEventArgs $args
-     */
-    public function preUpdate(LifecycleEventArgs $args)
-    {
-        // We're getting the Trick.
-        $entity = $args->getEntity();
-
-        // only act on some "Trick" entity
-        if (!$entity instanceof User) {
-            return;
-        }
-
-        // Set the authenticated user and the date of the modification.
-        $entity->setModifiedBy($this->tokenStorage->getToken()->getUser());
-        $entity->setDateModified(new \Datetime('NOW'));
-    }
 }

@@ -6,7 +6,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
 use AppBundle\Service\User\Update;
-use AppBundle\Service\User\Registration;
+use AppBundle\Utils\User\Registration;
 use AppBundle\Form\User\RegistrationType;
 use AppBundle\Service\User\ResetPassword;
 use AppBundle\Utils\User\UserTypeHandler;
@@ -70,7 +70,7 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function registrationValidateAction(?User $user, Registration $register): Response
+    public function validateUserAction(?User $user, Registration $register): Response
     {
         // User registration
         $register->validate($user);

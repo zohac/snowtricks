@@ -21,6 +21,8 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getUserWithToken(string $token): ?User
     {
+        $token = $this->sanitizeToken($token);
+
         return $this->createQueryBuilder('u')
             ->where('u.token = :token')
             ->setParameter('token', $token)
@@ -44,5 +46,21 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    /**
+     * The token The token is a 64 character hexadecimal string.
+     *
+     * @param string $token
+     */
+    public function sanitizeToken(string $token)
+    {
+        if (preg_match('#^[0-9a-f]{64}$#', $token)) {
+            return $token;
+        }
+        // If the token isn't valide
+        throw new \LogicException(
+            sprintf('Le token fourni n\'est pas valide!')
+        );
     }
 }
