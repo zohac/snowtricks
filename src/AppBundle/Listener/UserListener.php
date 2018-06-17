@@ -7,10 +7,8 @@ use AppBundle\Entity\Picture;
 use AppBundle\Service\Email\UserMailer;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use AppBundle\Events\UserEmailChangedEvent;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class UserListener
@@ -19,11 +17,6 @@ class UserListener
      * @var TokenStorageInterface
      */
     private $tokenStorage;
-
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
 
     /**
      * @var UserMailer
@@ -43,17 +36,18 @@ class UserListener
     /**
      * Constructor.
      *
-     * @param TokenStorageInterface $tokenStorage
+     * @param TokenStorageInterface    $tokenStorage
+     * @param UserMailer               $mailer
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param SessionInterface         $session
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
-        UserPasswordEncoderInterface $passwordEncoder,
         UserMailer $mailer,
         EventDispatcherInterface $eventDispatcher,
         SessionInterface $session
     ) {
         $this->tokenStorage = $tokenStorage;
-        $this->passwordEncoder = $passwordEncoder;
         $this->mailer = $mailer;
         $this->eventDispatcher = $eventDispatcher;
         $this->flashBag = $session->getFlashBag();
@@ -74,14 +68,11 @@ class UserListener
             return;
         }
 
-        // 1) Encode the password
-        $password = $this->passwordEncoder->encodePassword($entity, $entity->getPlainPassword());
-        $entity->setPassword($password);
-        // 2) Set a token for registration
+        // 1) Set a token for registration
         $entity->setToken(hash('sha256', serialize($entity).microtime()));
-        // 3) Set Role
+        // 2) Set Role
         $entity->setRoles([]);
-        // 4) Set date of the registration.
+        // 3) Set date of the registration.
         $entity->setDateRegistration(new \Datetime('NOW'));
 
         $avatar = new Picture();
@@ -136,12 +127,6 @@ class UserListener
             return;
         }
 
-        // 3) Encode the password
-        if ($entity->getPlainPassword()) {
-            $password = $this->passwordEncoder->encodePassword($entity, $entity->getPlainPassword());
-            $entity->setPassword($password);
-        }
-
         // 4) If the email has changed
         if ($args->hasChangedField('email')) {
             // 5) Set a token for registration and change the role
@@ -153,9 +138,6 @@ class UserListener
                     'info',
                     'Vérifiez votre boîte mail, pour confirmer votre nouvel email.'
                 );
-                // 7) logout the user
-                $event = new UserEmailChangedEvent();
-                $this->eventDispatcher->dispatch(UserEmailChangedEvent::NAME, $event);
 
                 return;
             }
@@ -170,13 +152,13 @@ class UserListener
         }
 
         // 9) If the email has changed
-        if ($args->hasChangedField('token')) {
+        if ($args->hasChangedField('token') && $entity->getToken()) {
             // 10) Send an email
             if (!$this->mailer->sendForgotPassword($entity)) {
                 $this->flashBag->add(
                     'danger',
                     'Un email de confirmation n\'a pu vous être envoyé.
-                    Connectez vous à votre compte et vérifié votre adresse mail. 
+                    Connectez vous à votre compte et vérifié votre adresse mail.
                     Tant que votre adresse email ne seras pas vérifié,
                     vous ne pourrez pas poster de Trick ou des commentaires.'
                 );

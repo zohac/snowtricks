@@ -23,12 +23,21 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
     {
         $token = $this->sanitizeToken($token);
 
-        return $this->createQueryBuilder('u')
+        $user = $this->createQueryBuilder('u')
             ->where('u.token = :token')
             ->setParameter('token', $token)
             ->getQuery()
             ->getOneOrNullResult()
         ;
+
+        // If the user doesn't exist
+        if (!$user) {
+            throw new \LogicException(
+                sprintf('L\'utilisateur n\'existe pas! Avez-vous bien suivi le lien envoyé par email!')
+            );
+        }
+
+        return $user;
     }
 
     /**
