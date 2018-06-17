@@ -36,9 +36,9 @@ class CommentListener
             return;
         }
 
-        // We're getting the Trick.
+        // We're getting the comment.
         $entity = $args->getEntity();
-        // only act on some "Trick" entity
+        // only act on some "comment" entity
         if (!$entity instanceof Comment) {
             return;
         }
