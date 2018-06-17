@@ -62,6 +62,13 @@ services:
         tags:
             - { name: 'doctrine.event_listener', event: 'prePersist' }
             - { name: 'doctrine.event_listener', event: 'postPersist' }
+            - { name: 'doctrine.event_listener', event: 'preUpdate' }
+
+    AppBundle\Listener\UserEmailChangedListener:
+        arguments: 
+            - '@router'
+        tags:
+            - { name: 'kernel.event_listener', event: 'user.emailChanged', method: onUserEmailChanged, priority: -255 }
 
 #
 # Fixtures services

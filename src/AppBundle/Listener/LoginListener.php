@@ -35,12 +35,10 @@ class LoginListener
         $user = $event->getAuthenticationToken()->getUser();
         if (empty($user->getRoles())) {
             $this->flashBag->add(
-                'login_listener',
-                [
-                    'type' => 'info',
-                    'title' => 'Votre compte n\'est pas validé!',
-                    'message' => 'Voulez vous que l\'on vous renvoie un mail de confirmation?',
-                ]
+                'info',
+                'Votre compte n\'est pas validé!
+                Voulez vous que l\'on vous renvoie un mail de confirmation?
+                <a class="btn btn-primary" href="#" role="button">Renvoyez moi un mail</a>'
             );
         }
     }

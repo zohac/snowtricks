@@ -5,6 +5,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\User\UserType;
 use AppBundle\Service\User\Update;
 use AppBundle\Utils\User\Registration;
 use AppBundle\Form\User\RegistrationType;
@@ -139,13 +140,20 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function updateAction(Request $request, Update $updateUser, ?UserInterface $user): Response
+    public function updateAction(Request $request, UserTypeHandler $handler, ?UserInterface $user): Response
     {
-        if ($form = $updateUser->update($request, $user)) {
-            return $this->render('User/update.html.twig', ['form' => $form]);
+        // Build the form
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+        if ($handler->handle($form)) {
+            // Add a flash message
+            $this->addFlash('success', 'Vos infos sont bien misent à jour.');
+
+            return $this->redirectToRoute('ST_index');
         }
         // Redirect to home
-        return $this->redirectToRoute('ST_index');
+        return $this->render('User/update.html.twig', ['form' => $form->createView()]);
     }
 
     /**

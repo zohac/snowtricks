@@ -1,6 +1,6 @@
 <?php
 
-// src/AppBundle/Form/User/UpdateType.php
+// src/AppBundle/Form/User/UserType.php
 
 namespace AppBundle\Form\User;
 
@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -19,7 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 /**
  * Update a user info.
  */
-class UpdateType extends AbstractType
+class UserType extends AbstractType
 {
     /**
      * Build the form.
@@ -58,5 +59,17 @@ class UpdateType extends AbstractType
                 ],
             ])
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => User::class,
+        ]);
     }
 }
