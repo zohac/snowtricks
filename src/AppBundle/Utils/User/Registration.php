@@ -38,16 +38,10 @@ class Registration
     /**
      * User registration.
      *
-     * @param User|null $user
+     * @param User $user
      */
-    public function validate(?User $user)
+    public function validate(User $user)
     {
-        // If the user doesn't exist
-        if (!$user) {
-            throw new \LogicException(
-                sprintf('L\'utilisateur n\'existe pas! Avez-vous bien suivi le lien envoyé par email!')
-            );
-        }
         // If user exist, we record it
         $user->setToken(null);
         $user->setRoles(['ROLE_USER']);

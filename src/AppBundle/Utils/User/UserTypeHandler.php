@@ -4,6 +4,7 @@ namespace AppBundle\Utils\User;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserTypeHandler
 {
@@ -13,13 +14,19 @@ class UserTypeHandler
     private $entityManager;
 
     /**
+     * @var UserPasswordEncoderInterface
+     */
+    private $passwordEncoder;
+
+    /**
      * Constructor.
      *
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     /**
@@ -32,7 +39,14 @@ class UserTypeHandler
     public function handle(FormInterface $form): bool
     {
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($form->getData());
+            $user = $form->getData();
+            // 3) Encode the password
+            if ($user->getPlainPassword()) {
+                $password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($password);
+            }
+
+            $this->entityManager->persist($user);
             $this->entityManager->flush();
 
             return true;
