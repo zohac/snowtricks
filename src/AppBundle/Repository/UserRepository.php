@@ -40,6 +40,8 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getUserWithemailRecovery(string $emailRecovery): ?User
     {
+        $emailRecovery = $this->sanitizeEmail($emailRecovery);
+
         return $this->createQueryBuilder('u')
             ->where('u.email = :emailRecovery')
             ->setParameter('emailRecovery', $emailRecovery)
@@ -62,5 +64,15 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         throw new \LogicException(
             sprintf('Le token fourni n\'est pas valide!')
         );
+    }
+
+    /**
+     * Sanitize an email.
+     *
+     * @param string $email
+     */
+    public function sanitizeEmail(string $email)
+    {
+        return filter_var($email, FILTER_SANITIZE_EMAIL);
     }
 }

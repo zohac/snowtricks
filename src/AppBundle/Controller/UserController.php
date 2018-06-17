@@ -12,8 +12,10 @@ use AppBundle\Form\User\RegistrationType;
 use AppBundle\Service\User\ResetPassword;
 use AppBundle\Utils\User\UserTypeHandler;
 use AppBundle\Service\User\ForgotPassword;
+use AppBundle\Form\User\ForgotPasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Utils\User\ForgotPasswordTypeHandler;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -166,13 +168,20 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function forgotPasswordAction(Request $request, ForgotPassword $forgotPassword): Response
+    public function forgotPasswordAction(Request $request, ForgotPasswordTypeHandler $handler): Response
     {
-        if ($form = $forgotPassword->getForm($request)) {
-            return $this->render('User/forgot_password.html.twig', ['form' => $form]);
+        // Build the form
+        $form = $this->createForm(ForgotPasswordType::class);
+
+        $form->handleRequest($request);
+        if ($handler->handle($form)) {
+            // Add a flash message
+            $this->addFlash('info', 'Nous vous avons envoyé un e-mail pour réinitialiser votre mot de passe.');
+
+            return $this->redirectToRoute('ST_index');
         }
         // Redirect to home
-        return $this->redirectToRoute('ST_index');
+        return $this->render('User/forgot_password.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -189,6 +198,13 @@ class UserController extends Controller
      */
     public function resetPasswordAction(ResetPassword $resetPassword, ?User $user, Request $request): Response
     {
+        // If the user doesn't exist
+        if (!$user) {
+            throw new \LogicException(
+                sprintf('L\'utilisateur n\'existe pas! Avez vous bien suivi le lien envoyé par email!')
+            );
+        }
+
         if ($form = $resetPassword->reset($request, $user)) {
             // The form is passed to the view, so that it can display the form all by itself
             return $this->render('User/reset_password.html.twig', ['form' => $form]);

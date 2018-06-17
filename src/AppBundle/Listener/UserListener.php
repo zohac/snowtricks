@@ -156,6 +156,7 @@ class UserListener
                 // 7) logout the user
                 $event = new UserEmailChangedEvent();
                 $this->eventDispatcher->dispatch(UserEmailChangedEvent::NAME, $event);
+
                 return;
             }
             // 8) In case of error
@@ -166,6 +167,20 @@ class UserListener
                 Tant que votre adresse email ne seras pas vérifié,
                 vous ne pourrez pas poster de Trick ou des commentaires.'
             );
+        }
+
+        // 9) If the email has changed
+        if ($args->hasChangedField('token')) {
+            // 10) Send an email
+            if (!$this->mailer->sendForgotPassword($entity)) {
+                $this->flashBag->add(
+                    'danger',
+                    'Un email de confirmation n\'a pu vous être envoyé.
+                    Connectez vous à votre compte et vérifié votre adresse mail. 
+                    Tant que votre adresse email ne seras pas vérifié,
+                    vous ne pourrez pas poster de Trick ou des commentaires.'
+                );
+            }
         }
     }
 }

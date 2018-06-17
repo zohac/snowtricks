@@ -29,10 +29,8 @@ class Registration
      * @param ObjectManager    $entityManager
      * @param SessionInterface $session
      */
-    public function __construct(
-        ObjectManager $entityManager,
-        SessionInterface $session
-    ) {
+    public function __construct(ObjectManager $entityManager, SessionInterface $session)
+    {
         $this->entityManager = $entityManager;
         $this->flashBag = $session->getFlashBag();
     }

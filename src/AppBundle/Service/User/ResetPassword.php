@@ -63,13 +63,6 @@ class ResetPassword
      */
     public function reset(Request $request, ?User $user)
     {
-        // If the user doesn't exist
-        if (!$user) {
-            throw new \LogicException(
-                sprintf('L\'utilisateur n\'existe pas! Avez vous bien suivi le lien envoyé par email!')
-            );
-        }
-
         // 1) Creat the form
         $form = $this->formFactory->create(ResetPasswordType::class);
 
