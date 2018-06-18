@@ -38,7 +38,6 @@ services:
         tags:
             - { name: 'kernel.event_listener', event: 'security.interactive_login' }
 
-
     AppBundle\Listener\MenuListener:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest' }
