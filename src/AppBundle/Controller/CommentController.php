@@ -60,7 +60,6 @@ class CommentController extends Controller
      *
      * @Security("has_role('ROLE_USER')")
      *
-     * @param ObjectManager      $entityManager
      * @param Request            $request
      * @param CommentTypeHandler $handler
      * @param Comment            $comment
