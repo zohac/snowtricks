@@ -7,7 +7,7 @@ use AppBundle\Entity\Comment;
 use AppBundle\Service\Trick\Add;
 use AppBundle\Form\Trick\AddTrickType;
 use AppBundle\Form\Comment\CommentType;
-use AppBundle\Utils\Trick\TrickTypeHandler;
+use AppBundle\Utils\SnowtrickTypeHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,12 +31,12 @@ class TrickController extends Controller
      *      }})
      * @Security("has_role('ROLE_USER')")
      *
-     * @param Request          $request
-     * @param TrickTypeHandler $handler
+     * @param Request              $request
+     * @param SnowtrickTypeHandler $handler
      *
      * @return Response
      */
-    public function addAction(Request $request, TrickTypeHandler $handler): Response
+    public function addAction(Request $request, SnowtrickTypeHandler $handler): Response
     {
         // Build the form
         $form = $this->createForm(AddTrickType::class);
@@ -59,13 +59,13 @@ class TrickController extends Controller
      * @Entity("trick", expr="repository.FindWithAllEntities(slug)")
      * @Security("has_role('ROLE_USER')")
      *
-     * @param Request          $request
-     * @param Trick            $trick
-     * @param TrickTypeHandler $handler
+     * @param Request              $request
+     * @param Trick                $trick
+     * @param SnowtrickTypeHandler $handler
      *
      * @return Response
      */
-    public function updateAction(Request $request, Trick $trick, TrickTypeHandler $handler): Response
+    public function updateAction(Request $request, Trick $trick, SnowtrickTypeHandler $handler): Response
     {
         // Build the form
         $form = $this->createForm(AddTrickType::class, $trick);
