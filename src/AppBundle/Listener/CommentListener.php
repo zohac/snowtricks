@@ -2,7 +2,9 @@
 
 namespace AppBundle\Listener;
 
+use AppBundle\Entity\Trick;
 use AppBundle\Entity\Comment;
+use AppBundle\Events\AddCommentEvent;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -12,6 +14,11 @@ class CommentListener
      * @var TokenStorageInterface
      */
     private $tokenStorage;
+
+    /**
+     * @var Trick
+     */
+    private $trick;
 
     /**
      * Constructor.
@@ -44,6 +51,17 @@ class CommentListener
         }
 
         // Set the authenticated user
+        $entity->setTrick($this->trick);
         $entity->setUser($this->tokenStorage->getToken()->getUser());
+    }
+
+    /**
+     * Undocumented function.
+     *
+     * @param AddCommentEvent $event
+     */
+    public function onAddCommentEvent(AddCommentEvent $event)
+    {
+        $this->trick = $event->getTrick();
     }
 }

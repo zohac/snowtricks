@@ -5,11 +5,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Comment;
+use AppBundle\Utils\FormTypeHandler;
 use AppBundle\Form\Comment\CommentType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Utils\Comment\CommentTypeHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -60,15 +60,15 @@ class CommentController extends Controller
      *
      * @Security("has_role('ROLE_USER')")
      *
-     * @param Request            $request
-     * @param CommentTypeHandler $handler
-     * @param Comment            $comment
+     * @param Request         $request
+     * @param FormTypeHandler $handler
+     * @param Comment         $comment
      *
      * @return response
      */
     public function updateAction(
         Request $request,
-        CommentTypeHandler $handler,
+        FormTypeHandler $handler,
         Comment $comment
     ): response {
         // 1) Creating the form
@@ -76,7 +76,7 @@ class CommentController extends Controller
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
-        if ($handler->handleForUpdate($form)) {
+        if ($handler->handle($form)) {
             // Adding a Flash Message
             $this->addFlash('success', 'Le commentaire est bien mis à jour.');
 

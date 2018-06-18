@@ -5,7 +5,7 @@ namespace AppBundle\Utils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 
-class SnowtrickTypeHandler
+class FormTypeHandler
 {
     /**
      * @var EntityManagerInterface

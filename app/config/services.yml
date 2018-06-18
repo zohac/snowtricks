@@ -54,6 +54,7 @@ services:
             - "@security.token_storage"
         tags:
             - { name: 'doctrine.event_listener', event: 'prePersist' }
+            - { name: 'kernel.event_listener', event: 'comment.add', method: onAddCommentEvent }
     
     AppBundle\Listener\UserListener:
         arguments:
