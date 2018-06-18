@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Utils\Trick;
+namespace AppBundle\Utils;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 
-class TrickTypeHandler
+class FormTypeHandler
 {
     /**
      * @var EntityManagerInterface
