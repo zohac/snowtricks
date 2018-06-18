@@ -46,7 +46,7 @@ class CommentController extends Controller
             // Redirect to home
             return $this->redirectToRoute('ST_trick_show', ['slug' => $comment->getTrick()->getSlug()]);
         }
-        
+
         throw new \LogicException(
             sprintf('Une erreur est survenu lors de la suppression du commentaire!')
         );
@@ -60,7 +60,6 @@ class CommentController extends Controller
      *
      * @Security("has_role('ROLE_USER')")
      *
-     * @param ObjectManager      $entityManager
      * @param Request            $request
      * @param CommentTypeHandler $handler
      * @param Comment            $comment
@@ -68,7 +67,6 @@ class CommentController extends Controller
      * @return response
      */
     public function updateAction(
-        ObjectManager $entityManager,
         Request $request,
         CommentTypeHandler $handler,
         Comment $comment

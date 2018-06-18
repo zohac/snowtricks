@@ -4,13 +4,14 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\Entity\User;
+use AppBundle\Entity\Picture;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use AppBundle\Listener\UserListener;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use AppBundle\Entity\User;
-use AppBundle\Entity\Picture;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class LoadUser extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -26,6 +27,28 @@ class LoadUser extends AbstractFixture implements OrderedFixtureInterface
     {
         // Liste des noms de catégorie à ajouter
         $users = Yaml::parseFile('src/AppBundle/DataFixtures/Data/User.yml');
+
+        $listenerInst = null;
+        foreach ($manager->getEventManager()->getListeners() as $event => $listeners) {
+            foreach ($listeners as $hash => $listener) {
+                if ($listener instanceof UserListener) {
+                    $listenerInst = $listener;
+                    break 2;
+                }
+            }
+        }
+        $listenerInst || die('Listener is not registered in the event manager');
+        // then you can remove events you like:
+        $evm = $manager->getEventManager();
+        $evm->removeEventListener(
+            [
+                'prePersist',
+                'preUpdate',
+                'postPersist',
+                'postUpdate',
+            ],
+            $listenerInst
+        );
 
         foreach ($users as $userData) {
             $user = new User();

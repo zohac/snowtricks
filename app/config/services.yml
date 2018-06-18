@@ -38,7 +38,6 @@ services:
         tags:
             - { name: 'kernel.event_listener', event: 'security.interactive_login' }
 
-
     AppBundle\Listener\MenuListener:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest' }
@@ -55,6 +54,14 @@ services:
             - "@security.token_storage"
         tags:
             - { name: 'doctrine.event_listener', event: 'prePersist' }
+    
+    AppBundle\Listener\UserListener:
+        arguments:
+            - "@security.token_storage"
+        tags:
+            - { name: 'doctrine.event_listener', event: 'prePersist' }
+            - { name: 'doctrine.event_listener', event: 'postPersist' }
+            - { name: 'doctrine.event_listener', event: 'preUpdate' }
 
 #
 # Fixtures services

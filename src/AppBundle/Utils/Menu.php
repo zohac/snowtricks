@@ -2,7 +2,7 @@
 
 // src/AppBundle/Service/Menu/menu.php
 
-namespace AppBundle\Service\Menu;
+namespace AppBundle\Utils;
 
 use Symfony\Component\Routing\RouterInterface;
 
