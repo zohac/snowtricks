@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Service\Slugger;
+namespace AppBundle\Utils;
 
 class Slugger
 {
