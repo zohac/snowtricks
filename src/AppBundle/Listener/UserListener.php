@@ -4,11 +4,10 @@ namespace AppBundle\Listener;
 
 use AppBundle\Entity\User;
 use AppBundle\Entity\Picture;
-use AppBundle\Service\Email\UserMailer;
+use AppBundle\Events\ResetPasswordEvent;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class UserListener
@@ -19,14 +18,9 @@ class UserListener
     private $tokenStorage;
 
     /**
-     * @var UserMailer
+     * @var \Swift_Mailer
      */
     private $mailer;
-
-    /**
-     * @var EventDispatcher
-     */
-    private $eventDispatcher;
 
     /**
      * @var FlashBag
@@ -34,23 +28,28 @@ class UserListener
     private $flashBag;
 
     /**
+     * @var \Twig_Environment
+     */
+    private $twig;
+
+    /**
      * Constructor.
      *
-     * @param TokenStorageInterface    $tokenStorage
-     * @param UserMailer               $mailer
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param SessionInterface         $session
+     * @param TokenStorageInterface $tokenStorage
+     * @param SessionInterface      $session
+     * @param \Twig_Environment     $twig
+     * @param \Swift_Mailer         $mailer
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
-        UserMailer $mailer,
-        EventDispatcherInterface $eventDispatcher,
-        SessionInterface $session
+        SessionInterface $session,
+        \Twig_Environment $twig,
+        \Swift_Mailer $mailer
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->mailer = $mailer;
-        $this->eventDispatcher = $eventDispatcher;
         $this->flashBag = $session->getFlashBag();
+        $this->twig = $twig;
     }
 
     /**
@@ -97,19 +96,26 @@ class UserListener
         }
 
         // 3) Send a confirmation mail
-        if ($this->mailer->sendNewRegistration($entity)) {
-            $this->flashBag->add('info', 'Vérifiez votre email, pour confirmer votre inscription.');
+        $template = $this->twig->loadTemplate('Email/registration.twig');
+        $mail = (new \Swift_Message())
+            // Give the message a subject
+            ->setSubject($template->renderBlock('subject', []))
+            ->setBody($template->renderBlock('body_text', ['token' => $entity->getToken()]), 'text/plain')
+            // And optionally an alternative body
+            ->addPart($template->renderBlock('body_html', ['token' => $entity->getToken()]), 'text/html')
+            ->setTo($entity->getEmail())
+            ->setFrom('contact@snowtricks.com')
+        ;
 
-            return;
+        if (!$this->mailer->send($mail)) {
+            $this->flashBag->add(
+                'danger',
+                'Un email de confirmation n\'a pu vous être envoyé.
+                Connectez vous à votre compte et vérifié votre adresse mail. 
+                Tant que votre adresse email ne seras pas vérifié,
+                vous ne pourrez pas poster de Trick ou des commentaires.'
+            );
         }
-        // 4) In case of error
-        $this->flashBag->add(
-            'danger',
-            'Un email de confirmation n\'a pu vous être envoyé.
-            Connectez vous à votre compte et vérifié votre adresse mail. 
-            Tant que votre adresse email ne seras pas vérifié,
-            vous ne pourrez pas poster de Trick ou des commentaires.'
-        );
     }
 
     /**
@@ -127,13 +133,25 @@ class UserListener
             return;
         }
 
-        // 4) If the email has changed
+        // 3) If the email has changed
         if ($args->hasChangedField('email')) {
-            // 5) Set a token for registration and change the role
+            // 4) Set a token for registration and change the role
             $entity->setRoles([]);
             $entity->setToken(hash('sha256', serialize($entity).microtime()));
-            // 6) Send an email
-            if ($this->mailer->sendNewRegistration($entity)) {
+
+            // 5) Send an email
+            $template = $this->twig->loadTemplate('Email/change_email.twig');
+            $mail = (new \Swift_Message())
+                // Give the message a subject
+                ->setSubject($template->renderBlock('subject', []))
+                ->setBody($template->renderBlock('body_text', ['token' => $entity->getToken()]), 'text/plain')
+                // And optionally an alternative body
+                ->addPart($template->renderBlock('body_html', ['token' => $entity->getToken()]), 'text/html')
+                ->setTo($entity->getEmail())
+                ->setFrom('contact@snowtricks.com')
+            ;
+
+            if ($this->mailer->send($mail)) {
                 $this->flashBag->add(
                     'info',
                     'Vérifiez votre boîte mail, pour confirmer votre nouvel email.'
@@ -150,19 +168,38 @@ class UserListener
                 vous ne pourrez pas poster de Trick ou des commentaires.'
             );
         }
+    }
 
-        // 9) If the email has changed
-        if ($args->hasChangedField('token') && $entity->getToken()) {
-            // 10) Send an email
-            if (!$this->mailer->sendForgotPassword($entity)) {
-                $this->flashBag->add(
-                    'danger',
-                    'Un email de confirmation n\'a pu vous être envoyé.
-                    Connectez vous à votre compte et vérifié votre adresse mail.
-                    Tant que votre adresse email ne seras pas vérifié,
-                    vous ne pourrez pas poster de Trick ou des commentaires.'
-                );
-            }
+    /**
+     * Undocumented function.
+     *
+     * @param ResetPasswordEvent $event
+     */
+    public function onResetPassword(ResetPasswordEvent $event)
+    {
+        // 1) We're getting the User.
+        $user = $event->getUser();
+
+        // 2) Send an email
+        $template = $this->twig->loadTemplate('Email/reset_password.twig');
+        $mail = (new \Swift_Message())
+            // Give the message a subject
+            ->setSubject($template->renderBlock('subject', []))
+            ->setBody($template->renderBlock('body_text', ['token' => $user->getToken()]), 'text/plain')
+            // And optionally an alternative body
+            ->addPart($template->renderBlock('body_html', ['token' => $user->getToken()]), 'text/html')
+            ->setTo($user->getEmail())
+            ->setFrom('contact@snowtricks.com')
+        ;
+
+        if (!$this->mailer->send($mail)) {
+            $this->flashBag->add(
+                'danger',
+                'Un email de confirmation n\'a pu vous être envoyé.
+                Connectez vous à votre compte et vérifié votre adresse mail.
+                Tant que votre adresse email ne seras pas vérifié,
+                vous ne pourrez pas poster de Trick ou des commentaires.'
+            );
         }
     }
 }

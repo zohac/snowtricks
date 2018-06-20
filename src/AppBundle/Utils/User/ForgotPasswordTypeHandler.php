@@ -5,6 +5,7 @@ namespace AppBundle\Utils\User;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ForgotPasswordTypeHandler
@@ -20,14 +21,25 @@ class ForgotPasswordTypeHandler
     private $flashBag;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * Constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param EntityManagerInterface   $entityManager
+     * @param SessionInterface         $session
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(EntityManagerInterface $entityManager, SessionInterface $session)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        SessionInterface $session,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->entityManager = $entityManager;
         $this->flashBag = $session->getFlashBag();
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -45,6 +57,9 @@ class ForgotPasswordTypeHandler
 
             //If the user exist
             if ($user) {
+                // dispatcher
+                $this->eventDispatcher->dispatch(ResetPasswordEvent::NAME, new ResetPasswordEvent($user));
+
                 // 3) Set a token for ressetting password
                 $user->setToken(hash('sha256', serialize($user).microtime()));
 
