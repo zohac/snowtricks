@@ -65,6 +65,10 @@ class LoadUser extends AbstractFixture implements OrderedFixtureInterface
             $user->setRoles($userData['roles']);
             $user->setDateRegistration(new \DateTime($userData['dateRegistration']));
 
+            if (isset($userData['token'])) {
+                $user->setToken($userData['token']);
+            }
+
             $password = $this->encoder->encodePassword($user, $userData['password']);
             $user->setPassword($password);
 
