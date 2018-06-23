@@ -2,86 +2,144 @@
 
 namespace tests\AppBundle\Utils;
 
+use AppBundle\Entity\User;
 use Symfony\Component\Form\Form;
-use AppBundle\Form\User\UserType;
-use AppBundle\Utils\User\UserTypeHandler;
+use AppBundle\Repository\UserRepository;
+use AppBundle\Form\User\ForgotPasswordType;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Doctrine\Common\Persistence\ObjectManager;
+use AppBundle\Utils\User\ForgotPasswordTypeHandler;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Form\Extension\Core\CoreExtension;
 use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Context\ExecutionContextFactory;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Validator\Tests\Fixtures\FakeMetadataFactory;
 use Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class ForgotPasswordTypeHandlerTest extends TypeTestCase
 {
     /**
-     * @var \Doctrine\Common\Persistence\ObjectManager
+     * @var ObjectManager
      */
     private $entityManager;
 
     /**
-     * @var Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface
+     * @var Session
      */
-    private $passwordEncoder;
+    private $session;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
     protected function setUp()
     {
         parent::setUp();
 
         // Last, mock the EntityManager to return the mock of the repository
-        $this->entityManager = $this
-            ->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->entityManager = $this->createMock(ObjectManager::class);
 
-        $this->passwordEncoder = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface')
+        $this->session = new Session(new MockArraySessionStorage());
+
+        $this->eventDispatcher = $this
+            ->getMockBuilder(EventDispatcherInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     public function testHandleTrue()
     {
+        // Now, mock the repository so it returns the mock of the user
+        $userRepository = $this
+            ->getMockBuilder(UserRepository::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['findOneByEmail'])
+            ->getMock();
+        $userRepository
+            ->expects($this->once())
+            ->method('findOneByEmail')
+            ->willReturn(new User());
+
+        $this->entityManager->expects($this->any())
+            ->method('getRepository')
+            ->willReturn($userRepository);
+
         $formData = [
-            'username' => 'zohac',
-            'email' => 'zohac@test.fr',
-            'plainPassword' => [
-                'first' => 'aGreatPassword',
-                'second' => 'aGreatPassword',
-            ],
+            'emailRecovery' => 'email@test.com',
         ];
 
-        $form = $this->factory->create(UserType::class);
+        $form = $this->factory->create(ForgotPasswordType::class);
 
         // submit the data to the form directly
         $form->submit($formData);
 
-        $handler = new UserTypeHandler($this->entityManager, $this->passwordEncoder);
+        $handler = new ForgotPasswordTypeHandler(
+            $this->entityManager,
+            $this->session,
+            $this->eventDispatcher
+        );
 
         $this->assertTrue($handler->handle($form));
+    }
+
+    public function testHandleFashBecauseNoUser()
+    {
+        // Now, mock the repository so it returns the mock of the user
+        $userRepository = $this
+            ->getMockBuilder(UserRepository::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['findOneByEmail'])
+            ->getMock();
+        $userRepository
+            ->expects($this->once())
+            ->method('findOneByEmail')
+            ->willReturn(null);
+
+        $this->entityManager->expects($this->any())
+            ->method('getRepository')
+            ->willReturn($userRepository);
+
+        $formData = [
+            'emailRecovery' => 'email@test.com',
+        ];
+
+        $form = $this->factory->create(ForgotPasswordType::class);
+
+        // submit the data to the form directly
+        $form->submit($formData);
+
+        $handler = new ForgotPasswordTypeHandler(
+            $this->entityManager,
+            $this->session,
+            $this->eventDispatcher
+        );
+
+        $this->assertFalse($handler->handle($form));
     }
 
     public function testHandleFalse()
     {
         $formData = [
-            'username' => null,
-            'email' => 'zohac@test.fr',
-            'plainPassword' => [
-                'first' => 'aGreatPassword',
-                'second' => 'aGreatPassword',
-            ],
+            'emailRecovery' => null,
         ];
 
-        $form = $this->factory->create(UserType::class);
+        $form = $this->factory->create(ForgotPasswordType::class);
 
         // submit the data to the form directly
         $form->submit($formData);
 
-        $handler = new UserTypeHandler($this->entityManager, $this->passwordEncoder);
+        $handler = new ForgotPasswordTypeHandler(
+            $this->entityManager,
+            $this->session,
+            $this->eventDispatcher
+        );
 
         $this->assertFalse($handler->handle($form));
     }

@@ -49,7 +49,7 @@ class FormTypeHandlerTest extends TypeTestCase
         $handler = new FormTypeHandler($this->entityManager);
 
         $this->assertTrue($handler->handle($form));
-    }    
+    }
 
     public function testHandleFalse()
     {

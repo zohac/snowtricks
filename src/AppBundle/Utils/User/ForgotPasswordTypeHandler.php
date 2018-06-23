@@ -4,15 +4,15 @@ namespace AppBundle\Utils\User;
 
 use AppBundle\Entity\User;
 use AppBundle\Events\ResetPasswordEvent;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ForgotPasswordTypeHandler
 {
     /**
-     * @var EntityManagerInterface
+     * @var ObjectManager
      */
     private $entityManager;
 
@@ -29,12 +29,12 @@ class ForgotPasswordTypeHandler
     /**
      * Constructor.
      *
-     * @param EntityManagerInterface   $entityManager
+     * @param ObjectManager   $entityManager
      * @param SessionInterface         $session
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
-        EntityManagerInterface $entityManager,
+        ObjectManager $entityManager,
         SessionInterface $session,
         EventDispatcherInterface $eventDispatcher
     ) {
