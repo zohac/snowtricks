@@ -179,6 +179,7 @@ class UserListener
     {
         // 1) We're getting the User.
         $user = $event->getUser();
+        $user->setToken(hash('sha256', serialize($user).microtime()));
 
         // 2) Send an email
         $template = $this->twig->loadTemplate('Email/reset_password.twig');

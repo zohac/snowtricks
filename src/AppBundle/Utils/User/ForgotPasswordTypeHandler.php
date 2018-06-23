@@ -3,10 +3,11 @@
 namespace AppBundle\Utils\User;
 
 use AppBundle\Entity\User;
+use AppBundle\Events\ResetPasswordEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ForgotPasswordTypeHandler
 {
@@ -59,9 +60,6 @@ class ForgotPasswordTypeHandler
             if ($user) {
                 // dispatcher
                 $this->eventDispatcher->dispatch(ResetPasswordEvent::NAME, new ResetPasswordEvent($user));
-
-                // 3) Set a token for ressetting password
-                $user->setToken(hash('sha256', serialize($user).microtime()));
 
                 // 5) save the User!
                 $this->entityManager->persist($user);
