@@ -1,8 +1,8 @@
 <?php
 
-namespace tests\AppBundle\Service\Slugger;
+namespace tests\AppBundle\Utils\Slugger;
 
-use AppBundle\Service\Slugger\Slugger;
+use AppBundle\Utils\Slugger;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 
 class SluggerTest extends TestCase
