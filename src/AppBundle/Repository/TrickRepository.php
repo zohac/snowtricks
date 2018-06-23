@@ -42,6 +42,8 @@ class TrickRepository extends \Doctrine\ORM\EntityRepository
      */
     public function findWithAllEntities(string $slug): ?Trick
     {
+        $slug = $this->sanitizeSlug($slug);
+
         return $this->createQueryBuilder('t')
             ->leftJoin('t.user', 'u')
             ->addSelect('u')
@@ -50,5 +52,23 @@ class TrickRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    /**
+     * Validate a slug.
+     *
+     * @param string $slug
+     *
+     * @return string
+     */
+    public function sanitizeSlug(string $slug): string
+    {
+        if (preg_match('#^[A-Za-z0-9-]{1,}$#', $slug)) {
+            return $slug;
+        }
+        // If the slug isn't valide
+        throw new \LogicException(
+            sprintf('Le slug fourni n\'est pas valide!')
+        );
     }
 }
