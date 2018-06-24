@@ -77,23 +77,6 @@ class TrickListenerTest extends TestCase
         $this->assertContainsOnlyInstancesOf(User::class, [$this->trick->getUser()]);
     }
 
-    public function testPrePersistWithInvalidToken()
-    {
-        $this->tokenStorage = $this
-            ->getMockBuilder(TokenStorageInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getToken'])
-            ->getMockForAbstractClass();
-        $this->tokenStorage
-            ->expects($this->once())
-            ->method('getToken')
-            ->willReturn(null);
-
-        $event = new TrickListener($this->tokenStorage);
-
-        $event->prePersist($this->args);
-    }
-
     public function testPrePersistWithInvalidTrick()
     {
         $this->args = $this

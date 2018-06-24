@@ -38,12 +38,6 @@ class CommentListener
      */
     public function prePersist(LifecycleEventArgs $args)
     {
-        // If the user is not connected, the listener is exited.
-        // The case of fixtures
-        if (!$this->tokenStorage->getToken()) {
-            return;
-        }
-
         // We're getting the comment.
         $entity = $args->getEntity();
         // only act on some "comment" entity

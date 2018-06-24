@@ -30,12 +30,6 @@ class TrickListener
      */
     public function prePersist(LifecycleEventArgs $args)
     {
-        // If the user is not connected, the listener is exited.
-        // The case of fixtures
-        if (!$this->tokenStorage->getToken()) {
-            return;
-        }
-
         // We're getting the Trick.
         $entity = $args->getEntity();
 
