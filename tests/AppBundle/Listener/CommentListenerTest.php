@@ -15,6 +15,11 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class CommentListenerTest extends TestCase
 {
     /**
+     * @var TokenInterface
+     */
+    private $token;
+
+    /**
      * @var InteractiveLoginEvent
      */
     private $tokenStorage;
@@ -35,12 +40,16 @@ class CommentListenerTest extends TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->comment = new Comment();
 
-        $token = $this
+        $this->token = $this
             ->getMockBuilder(TokenInterface::class)
-            ->getMock();
-        $token
+            ->disableOriginalConstructor()
+            ->setMethods(['getUser'])
+            ->getMockForAbstractClass();
+        $this->token
             ->expects($this->once())
             ->method('getUser')
             ->willReturn(new User());
@@ -53,11 +62,7 @@ class CommentListenerTest extends TestCase
         $this->tokenStorage
             ->expects($this->any())
             ->method('getToken')
-            ->willReturn($this->returnValue($token));
-        $this->tokenStorage
-            ->expects($this->once())
-            ->method('getUser')
-            ->willReturn(new User());
+            ->willReturn($this->token);
 
         $this->args = $this
             ->getMockBuilder(LifecycleEventArgs::class)
@@ -72,11 +77,26 @@ class CommentListenerTest extends TestCase
         $this->commentEvent = new AddCommentEvent(new Trick());
     }
 
-    public function testSecurityInteractiveLogin()
+    public function testPrePersist()
     {
         $event = new CommentListener($this->tokenStorage);
 
         $event->onAddCommentEvent($this->commentEvent);
         $event->prePersist($this->args);
+
+        $this->assertContainsOnlyInstancesOf(Trick::class, [$this->comment->getTrick()]);
+        $this->assertContainsOnlyInstancesOf(User::class, [$this->comment->getUser()]);
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        // avoid memory leaks
+        $this->token = null;
+        $this->tokenStorage = null;
+        $this->args = null;
+        $this->comment = null;
+        $this->commentEvent = null;
     }
 }

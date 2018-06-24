@@ -5,10 +5,24 @@ namespace tests\AppBundle\Entity;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Trick;
 use AppBundle\Entity\Comment;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class CommentTest extends TestCase
+class CommentTest extends KernelTestCase
 {
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    private $entityManager;
+
+    protected function setUp()
+    {
+        $kernel = self::bootKernel();
+
+        $this->entityManager = $kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
+    }
+
     /**
      * Test the hydratation of the Entity.
      */
@@ -30,5 +44,18 @@ class CommentTest extends TestCase
         $this->assertEquals('test', $comment->getContent());
         $this->assertEquals($user, $comment->getUser());
         $this->assertEquals($trick, $comment->getTrick());
+    }
+
+    /**
+     * Test the hydratation of the Entity.
+     */
+    public function testIdComment()
+    {
+        $comment = $this->entityManager
+            ->getRepository(Comment::class)
+            ->findOneByContent('Un super commentaire!')
+        ;
+
+        $this->assertInternalType('int', $comment->getId());
     }
 }

@@ -13,11 +13,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class UserListener
 {
     /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
      * @var \Swift_Mailer
      */
     private $mailer;
@@ -35,21 +30,18 @@ class UserListener
     /**
      * Constructor.
      *
-     * @param TokenStorageInterface $tokenStorage
      * @param SessionInterface      $session
      * @param \Twig_Environment     $twig
      * @param \Swift_Mailer         $mailer
      */
     public function __construct(
-        TokenStorageInterface $tokenStorage,
         SessionInterface $session,
         \Twig_Environment $twig,
         \Swift_Mailer $mailer
     ) {
-        $this->tokenStorage = $tokenStorage;
-        $this->mailer = $mailer;
         $this->flashBag = $session->getFlashBag();
         $this->twig = $twig;
+        $this->mailer = $mailer;
     }
 
     /**
@@ -96,7 +88,7 @@ class UserListener
         }
 
         // 3) Send a confirmation mail
-        $template = $this->twig->loadTemplate('Email/registration.twig');
+        $template = $this->twig->load('Email/registration.twig');
         $mail = (new \Swift_Message())
             // Give the message a subject
             ->setSubject($template->renderBlock('subject', []))
@@ -140,7 +132,7 @@ class UserListener
             $entity->setToken(hash('sha256', serialize($entity).microtime()));
 
             // 5) Send an email
-            $template = $this->twig->loadTemplate('Email/change_email.twig');
+            $template = $this->twig->load('Email/change_email.twig');
             $mail = (new \Swift_Message())
                 // Give the message a subject
                 ->setSubject($template->renderBlock('subject', []))
@@ -182,7 +174,7 @@ class UserListener
         $user->setToken(hash('sha256', serialize($user).microtime()));
 
         // 2) Send an email
-        $template = $this->twig->loadTemplate('Email/reset_password.twig');
+        $template = $this->twig->load('Email/reset_password.twig');
         $mail = (new \Swift_Message())
             // Give the message a subject
             ->setSubject($template->renderBlock('subject', []))
