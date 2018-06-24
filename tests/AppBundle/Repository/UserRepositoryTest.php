@@ -21,7 +21,7 @@ class UserRepositoryTest extends KernelTestCase
             ->getManager();
     }
 
-    public function testUserWithemailRecovery()
+    public function testGetUserWithEmailRecovery()
     {
         $user = $this->entityManager
             ->getRepository(User::class)
@@ -29,6 +29,36 @@ class UserRepositoryTest extends KernelTestCase
         ;
 
         $this->assertContainsOnlyInstancesOf(User::class, [$user]);
+    }
+
+    public function testGetUserWithValidToken()
+    {
+        $user = $this->entityManager
+            ->getRepository(User::class)
+            ->getUserWithToken('ce9823958a3f4cf450af53e0091d81d60a78874b503c7f210e39b3b6d94b785f')
+        ;
+
+        $this->assertContainsOnlyInstancesOf(User::class, [$user]);
+    }
+
+    public function testGetUserWithInvalideToken()
+    {
+        $this->expectException(\LogicException::class);
+
+        $user = $this->entityManager
+            ->getRepository(User::class)
+            ->getUserWithToken('aaaaaaaaaaaaaaaaaaace9823958a3f4cf450af53e0091d81d60a78874b503c7')
+        ;
+    }
+
+    public function testGetUserWithAnatherInvalideToken()
+    {
+        $this->expectException(\LogicException::class);
+
+        $user = $this->entityManager
+            ->getRepository(User::class)
+            ->getUserWithToken('AnInvalideToken')
+        ;
     }
 
     protected function tearDown()

@@ -2,14 +2,14 @@
 
 namespace AppBundle\Utils\User;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserTypeHandler
 {
     /**
-     * @var EntityManagerInterface
+     * @var ObjectManager
      */
     private $entityManager;
 
@@ -21,9 +21,9 @@ class UserTypeHandler
     /**
      * Constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param ObjectManager $entityManager
      */
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(ObjectManager $entityManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
         $this->passwordEncoder = $passwordEncoder;

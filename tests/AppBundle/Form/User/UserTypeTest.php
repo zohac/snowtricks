@@ -4,12 +4,12 @@ namespace tests\AppBundle\Form\User;
 
 use AppBundle\Entity\User;
 use AppBundle\Entity\Picture;
-use AppBundle\Form\User\UpdateType;
+use AppBundle\Form\User\UserType;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 
-class UpdateTypeTest extends TypeTestCase
+class UserTypeTest extends TypeTestCase
 {
     public function testSubmitValidData()
     {
@@ -25,7 +25,7 @@ class UpdateTypeTest extends TypeTestCase
         ];
 
         // $objectToCompare will retrieve data from the form submission; pass it as the second argument
-        $form = $this->factory->create(UpdateType::class, $userToTest);
+        $form = $this->factory->create(UserType::class, $userToTest);
 
         $user = new User();
         $user->setUsername('zohac');

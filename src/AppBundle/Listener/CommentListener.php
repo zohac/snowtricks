@@ -5,6 +5,7 @@ namespace AppBundle\Listener;
 use AppBundle\Entity\Trick;
 use AppBundle\Entity\Comment;
 use AppBundle\Events\AddCommentEvent;
+use AppBundle\Listener\CommentListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 

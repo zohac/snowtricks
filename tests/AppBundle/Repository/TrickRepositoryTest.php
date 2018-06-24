@@ -31,6 +31,16 @@ class TrickRepositoryTest extends KernelTestCase
         $this->assertContainsOnlyInstancesOf(Trick::class, [$trick]);
     }
 
+    public function testFindWithBadSlug()
+    {
+        $this->expectException(\LogicException::class);
+
+        $trick = $this->entityManager
+            ->getRepository(Trick::class)
+            ->findWithAllEntities('BadSlug !')
+        ;
+    }
+
     protected function tearDown()
     {
         parent::tearDown();

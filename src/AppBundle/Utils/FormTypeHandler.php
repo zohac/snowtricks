@@ -2,22 +2,22 @@
 
 namespace AppBundle\Utils;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class FormTypeHandler
 {
     /**
-     * @var EntityManagerInterface
+     * @var ObjectManager
      */
     private $entityManager;
 
     /**
      * Constructor.
      *
-     * @param EntityManagerInterface $entityManager
+     * @param ObjectManager $entityManager
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(ObjectManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }

@@ -19,7 +19,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return User|null
      */
-    public function getUserWithToken(string $token): ?User
+    public function getUserWithToken(string $token): User
     {
         $token = $this->sanitizeToken($token);
 

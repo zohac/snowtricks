@@ -21,6 +21,7 @@ class TrickTest extends TestCase
         $image = new Picture();
         $image->setName('5ad5fa2f9d61c');
         $image->setPath('uploads/pictures/5ad5fa2f9d61c.jpeg');
+        $image->setHeadLinePicture(false);
         $trick->addPicture($image);
 
         $video = new Video();
@@ -43,6 +44,7 @@ class TrickTest extends TestCase
         $this->assertEquals('cab 1260 stalefish flatspin', $trick->getTitle());
         $this->assertEquals(new \DateTime('2018-03-08 14:02:00'), $trick->getDate());
         $this->assertEquals('test', $trick->getContent());
+        $this->assertEquals('uploads/pictures/5ad5fa2f9d61c.jpeg', $trick->getHeadLinePicturePath());
 
         foreach ($trick->getPictures() as $picture) {
             $this->assertEquals($image, $picture);
@@ -54,5 +56,26 @@ class TrickTest extends TestCase
             $this->assertEquals($category, $cat);
         }
         $this->assertEquals($user, $trick->getUser());
+
+        $trick->removeCategory($category);
+        $trick->removePicture($image);
+        $trick->removeVideo($video);
+
+        $this->assertEmpty($trick->getPictures());
+        $this->assertEmpty($trick->getVideos());
+        $this->assertEmpty($trick->getCategories());
+    }
+
+    /**
+     * Test the add Slug method.
+     */
+    public function testAddSlug()
+    {
+        $trick = new Trick();
+
+        $trick->setTitle('cab 1260 stalefish flatspin');
+        $trick->addSlug();
+
+        $this->assertEquals('cab-1260-stalefish-flatspin', $trick->getSlug());
     }
 }

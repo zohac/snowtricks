@@ -8,6 +8,7 @@ use AppBundle\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -30,10 +31,13 @@ class CommentType extends AbstractType
         // The entity fields are added to our form.
         $builder
             ->add('content', TextareaType::class, [
-                'constraints' => [new Type([
-                    'type' => 'string',
-                    'message' => 'The value {{ value }} is not a valid {{ type }}.',
-                ])],
+                'constraints' => [
+                    new Type([
+                        'type' => 'string',
+                        'message' => 'The value {{ value }} is not a valid {{ type }}.',
+                    ]),
+                    new NotBlank(),
+                ],
             ]);
     }
 
