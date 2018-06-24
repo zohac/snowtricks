@@ -8,7 +8,6 @@ use AppBundle\Events\ResetPasswordEvent;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class UserListener
 {
@@ -30,9 +29,9 @@ class UserListener
     /**
      * Constructor.
      *
-     * @param SessionInterface      $session
-     * @param \Twig_Environment     $twig
-     * @param \Swift_Mailer         $mailer
+     * @param SessionInterface  $session
+     * @param \Twig_Environment $twig
+     * @param \Swift_Mailer     $mailer
      */
     public function __construct(
         SessionInterface $session,

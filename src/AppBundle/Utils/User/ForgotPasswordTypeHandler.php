@@ -29,7 +29,7 @@ class ForgotPasswordTypeHandler
     /**
      * Constructor.
      *
-     * @param ObjectManager   $entityManager
+     * @param ObjectManager            $entityManager
      * @param SessionInterface         $session
      * @param EventDispatcherInterface $eventDispatcher
      */
