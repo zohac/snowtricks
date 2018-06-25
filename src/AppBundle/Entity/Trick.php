@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\HasLifecycleCallbacks()
  *
  * @UniqueEntity(fields="title", message="Le titre est déjà utilisé.")
+ * @UniqueEntity(fields="slug", message="Le slug est déjà utilisé.")
  */
 class Trick
 {
@@ -211,6 +212,16 @@ class Trick
     }
 
     /**
+     * @ORM\PreFlush
+     */
+    public function addSlug()
+    {
+        $slugger = new Slugger();
+        $slug = $slugger->slugify($this->getTitle());
+        $this->setSlug($slug);
+    }
+
+    /**
      * Set content.
      *
      * @param string $content
@@ -280,16 +291,6 @@ class Trick
     public function getModifiedBy()
     {
         return $this->modifiedBy;
-    }
-
-    /**
-     * @ORM\PreFlush
-     */
-    public function addSlug()
-    {
-        $slugger = new Slugger();
-        $slug = $slugger->slugify($this->getTitle());
-        $this->setSlug($slug);
     }
 
     /**

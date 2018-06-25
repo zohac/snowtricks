@@ -59,7 +59,7 @@ class User implements UserInterface
      *
      * @Assert\Length(max=4096)
      * @Assert\Regex(
-     *      pattern="/^[a-zA-Z0-9]{6,}$/",
+     *      pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}$/",
      *      message="Le mot de passe doit comporter au moins 6 caractères, minuscule, majuscule et numérique."
      * )
      */
@@ -85,6 +85,11 @@ class User implements UserInterface
      * @var string|null
      *
      * @ORM\Column(name="token", type="string", length=64, nullable=true, unique=true)
+     *
+     * @Assert\Regex(
+     *      pattern="#^[0-9a-f]{64}$#",
+     *      message="Le token n\'est pas valide."
+     * )
      */
     private $token;
 
@@ -98,6 +103,7 @@ class User implements UserInterface
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Picture", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
+     *
      * @Assert\Valid
      */
     private $avatar;

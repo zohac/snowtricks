@@ -33,6 +33,13 @@ class VideoType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'form-control'],
                 'error_bubbling' => true,
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '#^(http|https)://(www.youtube.com|www.dailymotion.com|vimeo.com)/#',
+                        'message' => 'L\'url n\'est pas valide. Sont seulement supportés les plateformes 
+                        youtube, dailymotion et vimeo.',
+                    ]),
+                ],
             ]);
     }
 
