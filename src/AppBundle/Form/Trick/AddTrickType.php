@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Regex;
+use AppBundle\Listener\AntiSqlInjectionFormListener;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -74,7 +75,7 @@ class AddTrickType extends AbstractType
                 'label' => false,
                 'error_bubbling' => false,
             ])
-        ;
+            ->addEventSubscriber(new AntiSqlInjectionFormListener());
     }
 
     /**

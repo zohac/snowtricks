@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Length;
+use AppBundle\Listener\AntiSqlInjectionFormListener;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -62,7 +63,8 @@ class RegistrationType extends AbstractType
                         minuscule, majuscule et numérique.',
                     ]),
                 ],
-            ]);
+            ])
+            ->addEventSubscriber(new AntiSqlInjectionFormListener());
     }
 
     /**
