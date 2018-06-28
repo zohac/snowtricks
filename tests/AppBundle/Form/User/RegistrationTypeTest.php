@@ -23,8 +23,8 @@ class RegistrationTypeTest extends TypeTestCase
             'username' => 'zohac',
             'email' => 'zohac@test.fr',
             'plainPassword' => [
-                'first' => 'aGreatPassword',
-                'second' => 'aGreatPassword',
+                'first' => '1GreatPassword',
+                'second' => '1GreatPassword',
             ],
         ];
 

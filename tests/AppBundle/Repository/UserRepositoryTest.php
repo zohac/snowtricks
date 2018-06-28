@@ -45,7 +45,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         $this->expectException(\LogicException::class);
 
-        $user = $this->entityManager
+        $this->entityManager
             ->getRepository(User::class)
             ->getUserWithToken('aaaaaaaaaaaaaaaaaaace9823958a3f4cf450af53e0091d81d60a78874b503c7')
         ;
@@ -55,7 +55,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         $this->expectException(\LogicException::class);
 
-        $user = $this->entityManager
+        $this->entityManager
             ->getRepository(User::class)
             ->getUserWithToken('AnInvalideToken')
         ;

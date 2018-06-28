@@ -28,8 +28,16 @@ class AntiSqlInjectionFormListener implements EventSubscriberInterface
 
         // do webservice validation here and
         foreach ($data as $key => $value) {
-            $data[$key] = trim(str_ireplace($sqlCommand, '', $value));
+            if (is_array($value)) {
+                foreach ($value as $subKey => $subValue) {
+                    $data[$key][$subKey] = trim(str_ireplace($sqlCommand, '', $subValue));
+                }
+            }
+            if (is_string($value)) {
+                $data[$key] = trim(str_ireplace($sqlCommand, '', $value));
+            }
         }
+        var_dump($data);
         // set new data
         $event->setData($data);
     }
