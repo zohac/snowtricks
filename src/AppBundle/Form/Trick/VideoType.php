@@ -6,9 +6,10 @@ namespace AppBundle\Form\Trick;
 
 use AppBundle\Entity\Video;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 /**
  * Sub form for addType.
@@ -33,6 +34,13 @@ class VideoType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'form-control'],
                 'error_bubbling' => true,
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '#^(http|https)://(www.youtube.com|www.dailymotion.com|vimeo.com)/#',
+                        'message' => 'L\'url n\'est pas valide. Sont seulement supportés les plateformes 
+                        youtube, dailymotion et vimeo.',
+                    ]),
+                ],
             ]);
     }
 

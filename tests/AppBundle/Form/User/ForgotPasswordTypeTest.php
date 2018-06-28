@@ -65,6 +65,30 @@ class ForgotPasswordTypeTest extends TypeTestCase
         }
     }
 
+    /**
+     * Test with invalid data.
+     */
+    public function testSubmitNullData()
+    {
+        $formData = [
+            'emailRecovery' => null,
+        ];
+
+        // $objectToCompare will retrieve data from the form submission; pass it as the second argument
+        $form = $this->factory->create(ForgotPasswordType::class);
+
+        // submit the data to the form directly
+        $form->submit($formData);
+        $this->assertFalse($form->isValid());
+
+        $view = $form->createView();
+        $children = $view->children;
+
+        foreach (array_keys($formData) as $key) {
+            $this->assertArrayHasKey($key, $children);
+        }
+    }
+
     public function getExtensions()
     {
         $extensions = parent::getExtensions();

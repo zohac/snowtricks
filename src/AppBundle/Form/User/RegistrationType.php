@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Length;
+use AppBundle\Listener\AntiSqlInjectionFormListener;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -36,7 +37,14 @@ class RegistrationType extends AbstractType
         // The entity fields are added to our form.
         $builder
             ->add('username', TextType::class, [
-                'constraints' => [new NotBlank()],
+                'constraints' => [
+                    new NotBlank(),
+                    new Regex([
+                        'pattern' => '/^[a-zA-Z0-9]{1,60}$/',
+                        'message' => 'Le pseudo utilisateur doit comporter 1 à 60 caractères,
+                        minuscule, majuscule et numérique.',
+                    ]),
+                ],
             ])
             ->add('email', EmailType::class, [
                 'constraints' => [
@@ -50,12 +58,13 @@ class RegistrationType extends AbstractType
                 'constraints' => [
                     new Length(['max' => 4096]),
                     new Regex([
-                        'pattern' => '/^[a-zA-Z0-9]{6,}$/',
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}$/',
                         'message' => 'Le mot de passe doit comporter au moins 6 caractères,
                         minuscule, majuscule et numérique.',
                     ]),
                 ],
-            ]);
+            ])
+            ->addEventSubscriber(new AntiSqlInjectionFormListener());
     }
 
     /**

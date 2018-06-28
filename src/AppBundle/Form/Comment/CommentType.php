@@ -8,6 +8,7 @@ use AppBundle\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Type;
+use AppBundle\Listener\AntiSqlInjectionFormListener;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -38,7 +39,8 @@ class CommentType extends AbstractType
                     ]),
                     new NotBlank(),
                 ],
-            ]);
+            ])
+            ->addEventSubscriber(new AntiSqlInjectionFormListener());
     }
 
     /**

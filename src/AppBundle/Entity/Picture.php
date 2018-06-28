@@ -52,6 +52,11 @@ class Picture
      * @var bool|null
      *
      * @ORM\Column(name="headLinePicture", type="boolean", nullable=true)
+     *
+     * @Assert\Type(
+     *     type="bool",
+     *     message="The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $headLinePicture;
 

@@ -63,6 +63,9 @@ services:
             - { name: 'doctrine.event_listener', event: 'preUpdate' }
             - { name: 'kernel.event_listener', event: 'user.resetPassword', method: onResetPassword }
 
+    AppBundle\Validator\AntiSqlInjectionValidator:
+        tags:
+            - { name: validator.constraint_validator, alias: ST_AntiSqlInjection }
 #
 # Fixtures services
 #
