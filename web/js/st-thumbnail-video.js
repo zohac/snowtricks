@@ -20,7 +20,9 @@
     
             //On récupère les valeurs de l'url dans un array
             if (match = thumbnailUrl.match(/(?:https?:\/{2})?(?:w{3}.)?youtu(?:be)?.(?:com|be)(?:\/watch\?v=|\/)([^s&]+)/)) {
-                thumbnailUrl = 'https://img.youtube.com/vi/' + match[1] + '/hqdefault.jpg';
+                var urlAux = thumbnailUrl.split('=');
+                var img_id = urlAux[1]
+                thumbnailUrl = 'https://img.youtube.com/vi/' + img_id + '/hqdefault.jpg';
                 videoClass.attr('src', thumbnailUrl);
             }
             if (match = thumbnailUrl.match(/(?:https?:\/{2})?(?:w{3}.dailymotion.com\/video\/)([^s&]+)/)) {

@@ -35,7 +35,7 @@ class TrickRepositoryTest extends KernelTestCase
     {
         $this->expectException(\LogicException::class);
 
-        $trick = $this->entityManager
+        $this->entityManager
             ->getRepository(Trick::class)
             ->findWithAllEntities('BadSlug !')
         ;

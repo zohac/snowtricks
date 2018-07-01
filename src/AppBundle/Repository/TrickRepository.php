@@ -26,6 +26,7 @@ class TrickRepository extends \Doctrine\ORM\EntityRepository
         $response = $this->createQueryBuilder('t')
             ->leftJoin('t.pictures', 'p')
             ->addSelect('p')
+            ->orderBy('t.id', 'DESC')
             ->getQuery()
             ->getResult()
         ;
