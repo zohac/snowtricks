@@ -7,12 +7,11 @@
 /web/bundles/
 /web/uploads/*
 
+#PHPUnit Test
+/web/test-coverage/*
+
 # PHP-CS-FIXER
 .php_cs.cache
 
-# PHP-CodeSniffer
-phpcs.xml
-
 # PHPmd
 phpmd.html
-phpmd.xml

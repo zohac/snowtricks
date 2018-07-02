@@ -5,12 +5,18 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\User\UserType;
 use AppBundle\Service\User\Update;
-use AppBundle\Service\User\Registration;
+use AppBundle\Utils\User\Registration;
+use AppBundle\Form\User\RegistrationType;
 use AppBundle\Service\User\ResetPassword;
+use AppBundle\Utils\User\UserTypeHandler;
+use AppBundle\Form\User\ResetPasswordType;
 use AppBundle\Service\User\ForgotPassword;
+use AppBundle\Form\User\ForgotPasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Utils\User\ForgotPasswordTypeHandler;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -34,18 +40,25 @@ class UserController extends Controller
      *          "order": 3
      *      }})
      *
-     * @param Request      $request
-     * @param Registration $register
+     * @param Request         $request
+     * @param UserTypeHandler $handler
      *
      * @return Response
      */
-    public function registrationAction(Request $request, Registration $register): Response
+    public function registrationAction(Request $request, UserTypeHandler $handler): Response
     {
-        if ($form = $register->registration($request)) {
-            return $this->render('User/registration.html.twig', ['form' => $form]);
+        // Build the form
+        $form = $this->createForm(RegistrationType::class);
+
+        $form->handleRequest($request);
+        if ($handler->handle($form)) {
+            // Add a flash message
+            $this->addFlash('info', 'Vérifiez votre boîte email, pour confirmer votre inscription.');
+
+            return $this->redirectToRoute('ST_index');
         }
         // Redirect to home
-        return $this->redirectToRoute('ST_index');
+        return $this->render('User/registration.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -56,12 +69,12 @@ class UserController extends Controller
      *
      * @Method({"GET"})
      *
-     * @param User|null    $user
+     * @param User         $user
      * @param Registration $register
      *
      * @return Response
      */
-    public function registrationValidateAction(?User $user, Registration $register): Response
+    public function validateUserAction(User $user, Registration $register): Response
     {
         // User registration
         $register->validate($user);
@@ -130,13 +143,20 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function updateAction(Request $request, Update $updateUser, ?UserInterface $user): Response
+    public function updateAction(Request $request, UserTypeHandler $handler, ?UserInterface $user): Response
     {
-        if ($form = $updateUser->update($request, $user)) {
-            return $this->render('User/update.html.twig', ['form' => $form]);
+        // Build the form
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+        if ($handler->handle($form)) {
+            // Add a flash message
+            $this->addFlash('success', 'Vos infos sont bien misent à jour.');
+
+            return $this->redirectToRoute('ST_index');
         }
         // Redirect to home
-        return $this->redirectToRoute('ST_index');
+        return $this->render('User/update.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -149,13 +169,20 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function forgotPasswordAction(Request $request, ForgotPassword $forgotPassword): Response
+    public function forgotPasswordAction(Request $request, ForgotPasswordTypeHandler $handler): Response
     {
-        if ($form = $forgotPassword->getForm($request)) {
-            return $this->render('User/forgot_password.html.twig', ['form' => $form]);
+        // Build the form
+        $form = $this->createForm(ForgotPasswordType::class);
+
+        $form->handleRequest($request);
+        if ($handler->handle($form)) {
+            // Add a flash message
+            $this->addFlash('info', 'Nous vous avons envoyé un e-mail pour réinitialiser votre mot de passe.');
+
+            return $this->redirectToRoute('ST_index');
         }
         // Redirect to home
-        return $this->redirectToRoute('ST_index');
+        return $this->render('User/forgot_password.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -170,13 +197,19 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function resetPasswordAction(ResetPassword $resetPassword, ?User $user, Request $request): Response
+    public function resetPasswordAction(Request $request, UserTypeHandler $handler, ?User $user): Response
     {
-        if ($form = $resetPassword->reset($request, $user)) {
-            // The form is passed to the view, so that it can display the form all by itself
-            return $this->render('User/reset_password.html.twig', ['form' => $form]);
+        // Build the form
+        $form = $this->createForm(ResetPasswordType::class, $user);
+
+        $form->handleRequest($request);
+        if ($handler->handle($form)) {
+            // Add a flash message
+            $this->addFlash('success', 'Votre mot de passe est bien mis à jour.');
+
+            return $this->redirectToRoute('ST_login');
         }
         // Redirect to home
-        return $this->redirectToRoute('ST_login');
+        return $this->render('User/reset_password.html.twig', ['form' => $form->createView()]);
     }
 }

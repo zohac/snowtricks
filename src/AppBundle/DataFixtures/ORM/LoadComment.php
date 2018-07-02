@@ -4,11 +4,12 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\Entity\Comment;
 use Symfony\Component\Yaml\Yaml;
+use AppBundle\Listener\CommentListener;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use AppBundle\Entity\Comment;
 
 class LoadComment extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -21,6 +22,29 @@ class LoadComment extends AbstractFixture implements OrderedFixtureInterface
 
         foreach ($tricks as $trick) {
             $comments = Yaml::parseFile('src/AppBundle/DataFixtures/Data/Comment.yml');
+
+            $listenerInst = null;
+            foreach ($manager->getEventManager()->getListeners() as $event => $listeners) {
+                foreach ($listeners as $hash => $listener) {
+                    if ($listener instanceof CommentListener) {
+                        $listenerInst = $listener;
+                        break 2;
+                    }
+                }
+            }
+            if ($listenerInst) {
+                // then you can remove events you like:
+                $evm = $manager->getEventManager();
+                $evm->removeEventListener(
+                    [
+                        'prePersist',
+                        'preUpdate',
+                        'postPersist',
+                        'postUpdate',
+                    ],
+                    $listenerInst
+                );
+            }
 
             foreach ($comments as $commentData) {
                 $author = $manager

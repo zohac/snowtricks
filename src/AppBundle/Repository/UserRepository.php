@@ -19,14 +19,25 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return User|null
      */
-    public function getUserWithToken(string $token): ?User
+    public function getUserWithToken(string $token): User
     {
-        return $this->createQueryBuilder('u')
+        $token = $this->sanitizeToken($token);
+
+        $user = $this->createQueryBuilder('u')
             ->where('u.token = :token')
             ->setParameter('token', $token)
             ->getQuery()
             ->getOneOrNullResult()
         ;
+
+        // If the user doesn't exist
+        if (!$user) {
+            throw new \LogicException(
+                sprintf('L\'utilisateur n\'existe pas! Avez-vous bien suivi le lien envoyé par email!')
+            );
+        }
+
+        return $user;
     }
 
     /**
@@ -38,11 +49,39 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getUserWithemailRecovery(string $emailRecovery): ?User
     {
+        $emailRecovery = $this->sanitizeEmail($emailRecovery);
+
         return $this->createQueryBuilder('u')
             ->where('u.email = :emailRecovery')
             ->setParameter('emailRecovery', $emailRecovery)
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    /**
+     * The token The token is a 64 character hexadecimal string.
+     *
+     * @param string $token
+     */
+    public function sanitizeToken(string $token)
+    {
+        if (preg_match('#^[0-9a-f]{64}$#', $token)) {
+            return $token;
+        }
+        // If the token isn't valide
+        throw new \LogicException(
+            sprintf('Le token fourni n\'est pas valide!')
+        );
+    }
+
+    /**
+     * Sanitize an email.
+     *
+     * @param string $email
+     */
+    public function sanitizeEmail(string $email)
+    {
+        return filter_var($email, FILTER_SANITIZE_EMAIL);
     }
 }

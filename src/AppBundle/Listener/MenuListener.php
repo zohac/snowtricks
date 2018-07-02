@@ -2,7 +2,7 @@
 
 namespace AppBundle\Listener;
 
-use AppBundle\Service\Menu\Menu;
+use AppBundle\Utils\Menu;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 class MenuListener

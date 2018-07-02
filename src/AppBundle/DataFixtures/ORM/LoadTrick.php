@@ -4,13 +4,14 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
-use Symfony\Component\Yaml\Yaml;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use AppBundle\Entity\Trick;
 use AppBundle\Entity\Video;
 use AppBundle\Entity\Picture;
+use Symfony\Component\Yaml\Yaml;
+use AppBundle\Listener\TrickListener;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 class LoadTrick extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -18,6 +19,26 @@ class LoadTrick extends AbstractFixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager)
     {
         $tricks = Yaml::parseFile('src/AppBundle/DataFixtures/Data/Trick.yml');
+
+        $listenerInst = null;
+        foreach ($manager->getEventManager()->getListeners() as $event => $listeners) {
+            foreach ($listeners as $hash => $listener) {
+                if ($listener instanceof TrickListener) {
+                    $listenerInst = $listener;
+                    break 2;
+                }
+            }
+        }
+        $listenerInst || die('Listener is not registered in the event manager');
+        // then you can remove events you like:
+        $evm = $manager->getEventManager();
+        $evm->removeEventListener(
+            [
+                'prePersist',
+                'preUpdate',
+            ],
+            $listenerInst
+        );
 
         foreach ($tricks as $trickData) {
             $user = $manager

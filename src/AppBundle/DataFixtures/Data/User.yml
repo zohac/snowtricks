@@ -4,12 +4,13 @@
     password : 1
     roles : { 0 : ROLE_USER }
     dateRegistration : '2018-03-08 22:38:53'
-    avatar: 5acb9d0d394b9
+    avatar: 5b1ff114e9894
 1 :
     username : john
     email : email2@test.com
     password : 1
-    roles : { 0 : ROLE_USER }
+    roles : { 0 : }
+    token : ce9823958a3f4cf450af53e0091d81d60a78874b503c7f210e39b3b6d94b785f
     dateRegistration : '2018-03-08 23:02:59'
 2 :
     username : shaun

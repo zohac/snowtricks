@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use AppBundle\Service\Slugger\Slugger;
+use AppBundle\Utils\Slugger;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\HasLifecycleCallbacks()
  *
  * @UniqueEntity(fields="title", message="Le titre est déjà utilisé.")
+ * @UniqueEntity(fields="slug", message="Le slug est déjà utilisé.")
  */
 class Trick
 {
@@ -32,7 +33,7 @@ class Trick
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $user;
 
@@ -97,7 +98,7 @@ class Trick
      * @ORM\OneToMany(
      *      targetEntity="AppBundle\Entity\Picture",
      *      mappedBy="trick",
-     *      cascade={"persist"},
+     *      cascade={"persist", "remove"},
      *      orphanRemoval=true
      * )
      * @Assert\Valid
@@ -107,7 +108,12 @@ class Trick
     /**
      * @var Video
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Video", mappedBy="trick", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *      targetEntity="AppBundle\Entity\Video",
+     *      mappedBy="trick",
+     *      cascade={"persist"},
+     *      orphanRemoval=true
+     * )
      * @Assert\Valid
      */
     private $videos;
@@ -206,6 +212,16 @@ class Trick
     }
 
     /**
+     * @ORM\PreFlush
+     */
+    public function addSlug()
+    {
+        $slugger = new Slugger();
+        $slug = $slugger->slugify($this->getTitle());
+        $this->setSlug($slug);
+    }
+
+    /**
      * Set content.
      *
      * @param string $content
@@ -275,24 +291,6 @@ class Trick
     public function getModifiedBy()
     {
         return $this->modifiedBy;
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function updateDate()
-    {
-        $this->setDateModified(new \Datetime('NOW'));
-    }
-
-    /**
-     * @ORM\PreFlush
-     */
-    public function addSlug()
-    {
-        $slugger = new Slugger();
-        $slug = $slugger->slugify($this->getTitle());
-        $this->setSlug($slug);
     }
 
     /**

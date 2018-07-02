@@ -1,0 +1,12 @@
+{% block subject %}
+    Changement d'email.
+{% endblock %}
+
+{% block body_html %}
+    <p>Veuillez suivre le lien pour confirmer votre nouvel email</p>
+    <a href="{{ absolute_url(path('ST_registration_check', { 'token': token })) }}">{{ absolute_url(path('ST_registration_check', { 'token': token })) }}</a>
+{% endblock %}
+
+{% block body_text %}
+    Veuillez suivre le lien pour confirmer votre nouvel email {{ absolute_url(path('ST_registration_check', { 'token': token })) }}
+{% endblock %}

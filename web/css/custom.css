@@ -27,6 +27,16 @@ body {
     height: 29px;
 }
 
+.st-message-container {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+}
+
+.st-message {
+    position: relative;
+}
+
 /*
  * center the element vertically and horizontally
  */
@@ -207,13 +217,6 @@ fieldset {
 
 .st-input-thumbnail {
     width: 150px;
-}
-
-.st-message {
-    position: absolute;
-    top: 70px;
-    z-index: 100;
-    width: 100%;
 }
 
 /* --------------------------------------------- */

@@ -39,6 +39,7 @@ class AjaxController extends Controller
      * Home page.
      *
      * @Route("/ajax/trick/get", name="ST_get_trick_ajax")
+     * @Method({"POST"})
      *
      * @param Request       $request
      * @param ObjectManager $entityManager

@@ -5,14 +5,13 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Trick;
 use AppBundle\Entity\Comment;
 use AppBundle\Service\Trick\Add;
+use AppBundle\Utils\FormTypeHandler;
+use AppBundle\Events\AddCommentEvent;
+use AppBundle\Form\Trick\AddTrickType;
 use AppBundle\Form\Comment\CommentType;
-use AppBundle\Service\Trick\DeleteTrick;
-use AppBundle\Service\Trick\UpdateTrick;
-use AppBundle\Service\Comment\AddComment;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -32,21 +31,25 @@ class TrickController extends Controller
      *      }})
      * @Security("has_role('ROLE_USER')")
      *
-     * @param Request            $request
-     * @param UserInterface|null $user
-     * @param Add                $addTrick
+     * @param Request         $request
+     * @param FormTypeHandler $handler
      *
      * @return Response
      */
-    public function addAction(Request $request, ?UserInterface $user, Add $addTrick): Response
+    public function addAction(Request $request, FormTypeHandler $handler): Response
     {
-        // Creating the form to add a Trick
-        if ($form = $addTrick->add($request, $user)) {
-            // If the trick wasn't added successfully, we render the form
-            return $this->render('Trick/add.html.twig', ['form' => $form]);
+        // Build the form
+        $form = $this->createForm(AddTrickType::class);
+
+        $form->handleRequest($request);
+        if ($handler->handle($form)) {
+            // Add a flash message
+            $this->addFlash('success', 'Nouveau trick bien enregistré!');
+
+            return $this->redirectToRoute('ST_index');
         }
         // Redirect to home
-        return $this->redirectToRoute('ST_index');
+        return $this->render('Trick/add.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -56,32 +59,26 @@ class TrickController extends Controller
      * @Entity("trick", expr="repository.FindWithAllEntities(slug)")
      * @Security("has_role('ROLE_USER')")
      *
-     * @param Request            $request
-     * @param UserInterface|null $user
-     * @param UpdateTrick        $updateTrick
-     * @param Trick              $trick
+     * @param Request         $request
+     * @param Trick           $trick
+     * @param FormTypeHandler $handler
      *
      * @return Response
      */
-    public function updateAction(
-        Request $request,
-        ?UserInterface $user,
-        UpdateTrick $updateTrick,
-        Trick $trick
-    ): Response {
-        // Creating the form to add a Trick
-        if ($form = $updateTrick->update($request, $user, $trick)) {
-            // If the trick wasn't added successfully, we render the form
-            return $this->render(
-                'Trick/update.html.twig',
-                [
-                    'form' => $form,
-                    'trick' => $trick,
-                ]
-            );
+    public function updateAction(Request $request, Trick $trick, FormTypeHandler $handler): Response
+    {
+        // Build the form
+        $form = $this->createForm(AddTrickType::class, $trick);
+
+        $form->handleRequest($request);
+        if ($handler->handle($form)) {
+            // Add a flash message
+            $this->addFlash('success', 'Le trick est bien mis à jour!');
+            // Redirect to home
+            return $this->redirectToRoute('ST_index');
         }
-        // Redirect to home
-        return $this->redirectToRoute('ST_index');
+        // If the trick wasn't added successfully, we render the form
+        return $this->render('Trick/update.html.twig', ['form' => $form->createView(), 'trick' => $trick]);
     }
 
     /**
@@ -108,44 +105,45 @@ class TrickController extends Controller
      * @Route("/trick/show/{slug}", name="ST_trick_show")
      * @Entity("trick", expr="repository.FindWithAllEntities(slug)")
      *
-     * @param Request       $request
-     * @param Trick         $trick
-     * @param AddComment    $addComment
-     * @param ObjectManager $entityManager
+     * @param Request         $request
+     * @param Trick           $trick
+     * @param FormTypeHandler $handler
+     * @param ObjectManager   $entityManager
      *
      * @return Response
      */
     public function showAction(
         Request $request,
         Trick $trick,
-        AddComment $addComment,
+        FormTypeHandler $handler,
         ObjectManager $entityManager
     ): Response {
-        if ($formView = $addComment->add($request, $trick)) {
-            // Get the form and the list of tricks
-            $listOfComment = $entityManager->getRepository(Comment::class)->findWithAllEntities($trick);
+        // Build the form
+        $form = $this->createForm(CommentType::class);
 
-            // Return the view
-            return $this->render(
-                'Trick/show.html.twig',
-                [
-                    'trick' => $trick,
-                    'listOfComment' => $listOfComment,
-                    'form' => $formView,
-                ]
-            );
+        //$dispatcher = $this->get('event_dispatcher');
+        $this->get('event_dispatcher')->dispatch(AddCommentEvent::NAME, new AddCommentEvent($trick));
+
+        $form->handleRequest($request);
+        if ($handler->handle($form)) {
+            // Add a flash message
+            $this->addFlash('success', 'Nouveau commentaire bien enregistré!');
+            // Redirect to trick
+            return $this->redirectToRoute('ST_trick_show', ['slug' => $trick->getSlug()]);
         }
-        // Adding a Flash Message
-        $this->addFlash(
-            'add_comment',
+
+        // Get the form and the list of tricks
+        $listOfComment = $entityManager->getRepository(Comment::class)->findWithAllEntities($trick);
+
+        // Return the view
+        return $this->render(
+            'Trick/show.html.twig',
             [
-                'type' => 'success',
-                'title' => 'Nouveau commentaire bien enregistré!',
-                'message' => '',
+                'trick' => $trick,
+                'listOfComment' => $listOfComment,
+                'form' => $form->createView(),
             ]
         );
-        // Redirect to trick
-        return $this->redirectToRoute('ST_trick_show', ['slug' => $trick->getSlug()]);
     }
 
     /**
@@ -156,17 +154,22 @@ class TrickController extends Controller
      *
      * @Security("has_role('ROLE_USER')")
      *
-     * @param Trick       $trick
-     * @param DeleteTrick $deleteTrick
+     * @param Trick         $trick
+     * @param string        $token
+     * @param ObjectManager $entityManager
      *
      * @return Response
      */
-    public function deleteAction(Trick $trick, DeleteTrick $deleteTrick, string $token): Response
+    public function deleteAction(Trick $trick, string $token, ObjectManager $entityManager): Response
     {
         // If the token is valid
         if ($this->isCsrfTokenValid($trick->getSlug(), $token)) {
-            // Delete the Trick
-            $deleteTrick->delete($trick);
+            // Remove the trick.
+            $entityManager->remove($trick);
+            $entityManager->flush();
+
+            // Add a flash message
+            $this->addFlash('success', 'Le trick est bien supprimé!');
             // Redirect to home
             return $this->redirectToRoute('ST_index');
         }

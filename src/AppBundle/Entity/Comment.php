@@ -25,7 +25,7 @@ class Comment
      * @var Trick
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Trick")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $trick;
 
@@ -33,7 +33,7 @@ class Comment
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $user;
 
@@ -50,6 +50,14 @@ class Comment
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->date = new \Datetime('NOW');
+    }
 
     /**
      * Get id.

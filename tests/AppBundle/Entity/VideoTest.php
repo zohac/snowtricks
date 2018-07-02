@@ -4,10 +4,24 @@ namespace tests\AppBundle\Entity;
 
 use AppBundle\Entity\Trick;
 use AppBundle\Entity\Video;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class VideoTest extends TestCase
+class VideoTest extends KernelTestCase
 {
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    private $entityManager;
+
+    protected function setUp()
+    {
+        $kernel = self::bootKernel();
+
+        $this->entityManager = $kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
+    }
+
     /**
      * Test the hydratation of the Entity.
      */
@@ -47,5 +61,30 @@ class VideoTest extends TestCase
 
         $this->assertContains('//www.dailymotion.com/embed/video/', $video->getIframe());
         $this->assertContains('https://www.dailymotion.com/thumbnail/', $video->getThumbnail());
+    }
+
+    /**
+     * Test the id of the Entity.
+     */
+    public function testIdVideo()
+    {
+        $video = $this->entityManager
+            ->getRepository(Video::class)
+            ->findOneByUrl('https://www.youtube.com/watch?v=SQyTWk7OxSI')
+        ;
+
+        $this->assertInternalType('int', $video->getId());
+    }
+
+    /**
+     * Test the hydratation of the Entity.
+     */
+    public function testGetIframeWithInvalidUrl()
+    {
+        $video = new Video();
+        $video->setUrl('AnInvalidUrl');
+
+        $this->assertNull($video->getIframe());
+        $this->assertNull($video->getThumbnail());
     }
 }

@@ -5,6 +5,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Comment;
+use AppBundle\Utils\FormTypeHandler;
 use AppBundle\Form\Comment\CommentType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -35,29 +36,20 @@ class CommentController extends Controller
      */
     public function deleteAction(ObjectManager $entityManager, Comment $comment, string $token): Response
     {
-        // Flash message initialization
-        $type = 'remove_comment';
-        $message = [
-            'type' => 'danger',
-            'title' => 'Une erreur c\'est produite!',
-            'message' => 'Le commentaire n\'a pu être supprimé!',
-        ];
         // If the token is valid
         if ($this->isCsrfTokenValid($comment->getId(), $token)) {
             // We're recording changes of the comment
             $entityManager->remove($comment);
             $entityManager->flush();
-            // Changing the Flash Message
-            $message = [
-                'type' => 'success',
-                'title' => 'Le commentaire est bien supprimé!',
-                'message' => '',
-            ];
+            // Adding the Flash Message
+            $this->addFlash('success', 'Le commentaire est bien supprimé!');
+            // Redirect to home
+            return $this->redirectToRoute('ST_trick_show', ['slug' => $comment->getTrick()->getSlug()]);
         }
-        // Adding the Flash Message
-        $this->addFlash($type, $message);
-        // Redirect to home
-        return $this->redirectToRoute('ST_trick_show', ['slug' => $comment->getTrick()->getSlug()]);
+
+        throw new \LogicException(
+            sprintf('Une erreur est survenu lors de la suppression du commentaire!')
+        );
     }
 
     /**
@@ -68,33 +60,25 @@ class CommentController extends Controller
      *
      * @Security("has_role('ROLE_USER')")
      *
-     * @param ObjectManager $entityManager
-     * @param Request       $request
-     * @param Comment       $comment
+     * @param Request         $request
+     * @param FormTypeHandler $handler
+     * @param Comment         $comment
      *
      * @return response
      */
-    public function updateAction(ObjectManager $entityManager, Request $request, Comment $comment): response
-    {
+    public function updateAction(
+        Request $request,
+        FormTypeHandler $handler,
+        Comment $comment
+    ): response {
         // 1) Creating the form
         $form = $this->createForm(CommentType::class, $comment);
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Save the comment
-            $entityManager->persist($comment);
-            $entityManager->flush();
-
+        if ($handler->handle($form)) {
             // Adding a Flash Message
-            $this->addFlash(
-                'update_comment',
-                [
-                    'type' => 'success',
-                    'title' => 'Le commentaire est bien mis à jour.',
-                    'message' => '',
-                ]
-            );
+            $this->addFlash('success', 'Le commentaire est bien mis à jour.');
 
             // Redirect to the trick detail
             return $this->redirectToRoute('ST_trick_show', ['slug' => $comment->getTrick()->getSlug()]);

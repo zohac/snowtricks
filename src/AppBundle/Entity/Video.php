@@ -106,10 +106,10 @@ class Video
 
     public function getYoutubeIframe()
     {
-        $video = explode('v=', $this->url);
+        parse_str(parse_url($this->url, PHP_URL_QUERY), $videoOptions);
 
         $iframe = "<iframe width='480' height='360' src='https://www.youtube.com/embed/";
-        $iframe .= $video[count($video) - 1];
+        $iframe .= $videoOptions['v'];
         $iframe .= "' frameborder='0' allow='autoplay; encrypted-media' allowfullscreen></iframe>";
 
         return $iframe;
@@ -140,39 +140,21 @@ class Video
     public function getThumbnail()
     {
         // Si c’est une url Youtube on execute la fonction correspondante
-        if (preg_match(
-            "#(?:https?:\/{2})?(?:w{3}.)?youtu(?:be)?.(?:com|be)(?:\/watch\?v=|\/)([^s&]+)#",
-            $this->url,
-            $match
-        )
-            ) {
-            $image = 'https://img.youtube.com/vi/'.$match[1].'/hqdefault.jpg';
-
-            return $image;
+        if (preg_match("#(?:https?:\/{2})?(?:w{3}.)?youtu(?:be)?.(?:com|be)(?:\/watch\?v=|\/)([^s&]+)#", $this->url)) {
+            parse_str(parse_url($this->url, PHP_URL_QUERY), $videoOptions);
+            $image = 'https://img.youtube.com/vi/'.$videoOptions['v'].'/hqdefault.jpg';
         }
         // Si c’est une url Dailymotion on execute la fonction correspondante
-        if (preg_match(
-            "#(?:https?:\/{2})?(?:w{3}.dailymotion.com\/video\/)([^s&]+)#",
-            $this->url,
-            $match
-        )
-            ) {
+        if (preg_match("#(?:https?:\/{2})?(?:w{3}.dailymotion.com\/video\/)([^s&]+)#", $this->url, $match)) {
             $image = 'https://www.dailymotion.com/thumbnail/150x120/video/'.$match[1].'';
-
-            return $image;
         }
         // Si c’est une url Vimeo on execute la fonction correspondante
-        if (preg_match(
-            "#(?:https?:\/{2})?(?:vimeo.com\/)([^s&]+)#",
-            $this->url,
-            $match
-        )
-            ) {
+        if (preg_match("#(?:https?:\/{2})?(?:vimeo.com\/)([^s&]+)#", $this->url, $match)) {
             $hash = unserialize(file_get_contents('https://vimeo.com/api/v2/video/'.$match[1].'.php'));
             $image = $hash[0]['thumbnail_small'];
-
-            return $image;
         }
+
+        return $image;
     }
 
     /**

@@ -37,7 +37,7 @@ class Picture
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=100, unique=true)
+     * @ORM\Column(name="name", type="string", length=100)
      */
     private $name;
 
@@ -52,6 +52,11 @@ class Picture
      * @var bool|null
      *
      * @ORM\Column(name="headLinePicture", type="boolean", nullable=true)
+     *
+     * @Assert\Type(
+     *     type="bool",
+     *     message="The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $headLinePicture;
 
@@ -75,12 +80,9 @@ class Picture
     /**
      * @var Trick
      *
-     * @ORM\ManyToOne(
-     *      targetEntity="AppBundle\Entity\Trick",
-     *      cascade={"persist"},
-     *      inversedBy="pictures"
-     * )
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Trick", inversedBy="pictures", cascade={"persist", "remove"})
+     *
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      * @Assert\Valid
      */
     private $trick;
