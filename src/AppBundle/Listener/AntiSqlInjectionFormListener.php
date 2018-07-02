@@ -15,6 +15,7 @@ class AntiSqlInjectionFormListener implements EventSubscriberInterface
         'ALTER TABLE',
         'CREATE TABLE',
         'INSERT INTO',
+        'DROP',
     ];
 
     public static function getSubscribedEvents()
