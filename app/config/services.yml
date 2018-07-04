@@ -58,9 +58,6 @@ services:
     
     AppBundle\Listener\UserListener:
         tags:
-            - { name: 'doctrine.event_listener', event: 'prePersist' }
-            - { name: 'doctrine.event_listener', event: 'postPersist' }
-            - { name: 'doctrine.event_listener', event: 'preUpdate' }
             - { name: 'kernel.event_listener', event: 'user.resetPassword', method: onResetPassword }
 
     AppBundle\Validator\AntiSqlInjectionValidator:
