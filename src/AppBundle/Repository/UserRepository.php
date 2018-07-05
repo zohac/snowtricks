@@ -43,17 +43,17 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
     /**
      * Recovers a user with email.
      *
-     * @param string $emailRecovery
+     * @param string $email
      *
      * @return User|null
      */
-    public function getUserWithemailRecovery(string $emailRecovery): ?User
+    public function getUserWithEmail(string $email): ?User
     {
-        $emailRecovery = $this->sanitizeEmail($emailRecovery);
+        $email = $this->sanitizeEmail($email);
 
         return $this->createQueryBuilder('u')
-            ->where('u.email = :emailRecovery')
-            ->setParameter('emailRecovery', $emailRecovery)
+            ->where('u.email = :email')
+            ->setParameter('email', $email)
             ->getQuery()
             ->getOneOrNullResult()
         ;

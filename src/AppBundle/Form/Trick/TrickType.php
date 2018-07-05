@@ -18,7 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 /**
  * Add or update a trick.
  */
-class AddTrickType extends AbstractType
+class TrickType extends AbstractType
 {
     /**
      * Build the form.

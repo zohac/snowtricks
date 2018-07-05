@@ -192,7 +192,10 @@ class UserController extends Controller
     /**
      * Reset a password.
      *
-     * @Route("/password/reset/{token}", name="ST_reset_password")
+     * @Route("/password/reset/{token}",
+     *      name="ST_reset_password",
+     *      requirements={"token"="[0-9a-f]{64}$"}
+     * )
      * @Entity("user", expr="repository.getUserWithToken(token)")
      *
      * @param ResetPassword $resetPassword

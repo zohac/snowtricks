@@ -18,6 +18,7 @@ class UserTypeHandler
      * @var UserPasswordEncoderInterface
      */
     private $passwordEncoder;
+
     /**
      * @var \Swift_Mailer
      */

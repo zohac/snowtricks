@@ -41,13 +41,6 @@ services:
     AppBundle\Listener\MenuListener:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest' }
-
-    AppBundle\Listener\TrickListener:
-        arguments:
-            - "@security.token_storage"
-        tags:
-            - { name: 'doctrine.event_listener', event: 'prePersist' }
-            - { name: 'doctrine.event_listener', event: 'preUpdate' }
     
     AppBundle\Listener\CommentListener:
         arguments:
@@ -55,10 +48,6 @@ services:
         tags:
             - { name: 'doctrine.event_listener', event: 'prePersist' }
             - { name: 'kernel.event_listener', event: 'comment.add', method: onAddCommentEvent }
-    
-    AppBundle\Listener\UserListener:
-        tags:
-            - { name: 'kernel.event_listener', event: 'user.resetPassword', method: onResetPassword }
 
     AppBundle\Validator\AntiSqlInjectionValidator:
         tags:
