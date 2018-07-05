@@ -6,9 +6,8 @@ use AppBundle\Entity\Trick;
 use AppBundle\Entity\Comment;
 use AppBundle\Service\Trick\Add;
 use AppBundle\Form\Trick\TrickType;
-use AppBundle\Utils\FormTypeHandler;
-use AppBundle\Events\AddCommentEvent;
 use AppBundle\Form\Comment\CommentType;
+use AppBundle\Utils\CommentTypeHandler;
 use AppBundle\Utils\Trick\TrickTypeHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -113,27 +112,24 @@ class TrickController extends Controller
      * )
      * @Entity("trick", expr="repository.FindWithAllEntities(slug)")
      *
-     * @param Request         $request
-     * @param Trick           $trick
-     * @param FormTypeHandler $handler
-     * @param ObjectManager   $entityManager
+     * @param Request            $request
+     * @param Trick              $trick
+     * @param CommentTypeHandler $handler
+     * @param ObjectManager      $entityManager
      *
      * @return Response
      */
     public function showAction(
         Request $request,
         Trick $trick,
-        FormTypeHandler $handler,
+        CommentTypeHandler $handler,
         ObjectManager $entityManager
     ): Response {
         // Build the form
         $form = $this->createForm(CommentType::class);
 
-        //$dispatcher = $this->get('event_dispatcher');
-        $this->get('event_dispatcher')->dispatch(AddCommentEvent::NAME, new AddCommentEvent($trick));
-
         $form->handleRequest($request);
-        if ($handler->handle($form)) {
+        if ($handler->handle($form, $trick)) {
             // Add a flash message
             $this->addFlash('success', 'Nouveau commentaire bien enregistré!');
             // Redirect to trick
