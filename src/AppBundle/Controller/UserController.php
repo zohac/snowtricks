@@ -16,6 +16,7 @@ use AppBundle\Service\User\ForgotPassword;
 use AppBundle\Form\User\ForgotPasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Utils\User\RegistrationTypeHandler;
 use AppBundle\Utils\User\ForgotPasswordTypeHandler;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -40,12 +41,12 @@ class UserController extends Controller
      *          "order": 3
      *      }})
      *
-     * @param Request         $request
-     * @param UserTypeHandler $handler
+     * @param Request                 $request
+     * @param RegistrationTypeHandler $handler
      *
      * @return Response
      */
-    public function registrationAction(Request $request, UserTypeHandler $handler): Response
+    public function registrationAction(Request $request, RegistrationTypeHandler $handler): Response
     {
         // Build the form
         $form = $this->createForm(RegistrationType::class);
@@ -64,7 +65,10 @@ class UserController extends Controller
     /**
      * Check the mail of a new user.
      *
-     * @Route("/registration/{token}", name="ST_registration_check")
+     * @Route("/registration/{token}",
+     *      name="ST_registration_check",
+     *      requirements={"token"="[0-9a-f]{64}$"}
+     * )
      * @Entity("user", expr="repository.getUserWithToken(token)")
      *
      * @Method({"GET"})
@@ -188,7 +192,10 @@ class UserController extends Controller
     /**
      * Reset a password.
      *
-     * @Route("/password/reset/{token}", name="ST_reset_password")
+     * @Route("/password/reset/{token}",
+     *      name="ST_reset_password",
+     *      requirements={"token"="[0-9a-f]{64}$"}
+     * )
      * @Entity("user", expr="repository.getUserWithToken(token)")
      *
      * @param ResetPassword $resetPassword

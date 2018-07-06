@@ -3,11 +3,9 @@
 namespace AppBundle\Utils\User;
 
 use AppBundle\Entity\User;
-use AppBundle\Events\ResetPasswordEvent;
 use Symfony\Component\Form\FormInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ForgotPasswordTypeHandler
 {
@@ -22,25 +20,33 @@ class ForgotPasswordTypeHandler
     private $flashBag;
 
     /**
-     * @var EventDispatcherInterface
+     * @var \Swift_Mailer
      */
-    private $eventDispatcher;
+    private $mailer;
+
+    /**
+     * @var \Twig_Environment
+     */
+    private $twig;
 
     /**
      * Constructor.
      *
-     * @param ObjectManager            $entityManager
-     * @param SessionInterface         $session
-     * @param EventDispatcherInterface $eventDispatcher
+     * @param ObjectManager     $entityManager
+     * @param SessionInterface  $session
+     * @param \Twig_Environment $twig
+     * @param \Swift_Mailer     $mailer
      */
     public function __construct(
         ObjectManager $entityManager,
         SessionInterface $session,
-        EventDispatcherInterface $eventDispatcher
+        \Twig_Environment $twig,
+        \Swift_Mailer $mailer
     ) {
         $this->entityManager = $entityManager;
         $this->flashBag = $session->getFlashBag();
-        $this->eventDispatcher = $eventDispatcher;
+        $this->twig = $twig;
+        $this->mailer = $mailer;
     }
 
     /**
@@ -53,15 +59,38 @@ class ForgotPasswordTypeHandler
     public function handle(FormInterface $form): bool
     {
         if ($form->isSubmitted() && $form->isValid()) {
+            // 1) Get the user
             $data = $form->getData();
-            $user = $this->entityManager->getRepository(User::class)->findOneByEmail($data['emailRecovery']);
+            $user = $this->entityManager->getRepository(User::class)->getUserWithEmail($data['emailRecovery']);
 
-            //If the user exist
+            // 2) If the user exist
             if ($user) {
-                // dispatcher
-                $this->eventDispatcher->dispatch(ResetPasswordEvent::NAME, new ResetPasswordEvent($user));
+                // 2.1) Set token
+                $user->setToken(hash('sha256', serialize($user).microtime()));
 
-                // 5) save the User!
+                // 2.2) Send an email
+                $template = $this->twig->load('Email/reset_password.twig');
+                $mail = (new \Swift_Message())
+                    // Give the message a subject
+                    ->setSubject($template->renderBlock('subject', []))
+                    ->setBody($template->renderBlock('body_text', ['token' => $user->getToken()]), 'text/plain')
+                    // And optionally an alternative body
+                    ->addPart($template->renderBlock('body_html', ['token' => $user->getToken()]), 'text/html')
+                    ->setTo($user->getEmail())
+                    ->setFrom('contact@snowtricks.com')
+                ;
+
+                if (!$this->mailer->send($mail)) {
+                    $this->flashBag->add(
+                        'danger',
+                        'Un email de confirmation n\'a pu vous être envoyé.
+                        Connectez vous à votre compte et vérifié votre adresse mail.
+                        Tant que votre adresse email ne seras pas vérifié,
+                        vous ne pourrez pas poster de Trick ou des commentaires.'
+                    );
+                }
+
+                // 2.3) save the User!
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 

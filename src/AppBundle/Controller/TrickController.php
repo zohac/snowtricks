@@ -5,13 +5,14 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Trick;
 use AppBundle\Entity\Comment;
 use AppBundle\Service\Trick\Add;
-use AppBundle\Utils\FormTypeHandler;
-use AppBundle\Events\AddCommentEvent;
-use AppBundle\Form\Trick\AddTrickType;
+use AppBundle\Form\Trick\TrickType;
 use AppBundle\Form\Comment\CommentType;
+use AppBundle\Utils\Comment\CommentTypeHandler;
+use AppBundle\Utils\Trick\TrickTypeHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Utils\Trick\UpdateTrickTypeHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -31,15 +32,15 @@ class TrickController extends Controller
      *      }})
      * @Security("has_role('ROLE_USER')")
      *
-     * @param Request         $request
-     * @param FormTypeHandler $handler
+     * @param Request          $request
+     * @param TrickTypeHandler $handler
      *
      * @return Response
      */
-    public function addAction(Request $request, FormTypeHandler $handler): Response
+    public function addAction(Request $request, TrickTypeHandler $handler): Response
     {
         // Build the form
-        $form = $this->createForm(AddTrickType::class);
+        $form = $this->createForm(TrickType::class);
 
         $form->handleRequest($request);
         if ($handler->handle($form)) {
@@ -55,20 +56,23 @@ class TrickController extends Controller
     /**
      * Update a trick.
      *
-     * @Route("/trick/update/{slug}", name="ST_trick_update")
+     * @Route("/trick/update/{slug}",
+     *      name="ST_trick_update",
+     *      requirements={"slug"="[a-zA-Z0-9\- ]+$"}
+     * )
      * @Entity("trick", expr="repository.FindWithAllEntities(slug)")
      * @Security("has_role('ROLE_USER')")
      *
-     * @param Request         $request
-     * @param Trick           $trick
-     * @param FormTypeHandler $handler
+     * @param Request                $request
+     * @param Trick                  $trick
+     * @param UpdateTrickTypeHandler $handler
      *
      * @return Response
      */
-    public function updateAction(Request $request, Trick $trick, FormTypeHandler $handler): Response
+    public function updateAction(Request $request, Trick $trick, UpdateTrickTypeHandler $handler): Response
     {
         // Build the form
-        $form = $this->createForm(AddTrickType::class, $trick);
+        $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
         if ($handler->handle($form)) {
@@ -102,30 +106,30 @@ class TrickController extends Controller
     /**
      * Show a single trick.
      *
-     * @Route("/trick/show/{slug}", name="ST_trick_show")
+     * @Route("/trick/show/{slug}",
+     *      name="ST_trick_show",
+     *      requirements={"slug"="[a-zA-Z0-9\- ]+$"}
+     * )
      * @Entity("trick", expr="repository.FindWithAllEntities(slug)")
      *
-     * @param Request         $request
-     * @param Trick           $trick
-     * @param FormTypeHandler $handler
-     * @param ObjectManager   $entityManager
+     * @param Request            $request
+     * @param Trick              $trick
+     * @param CommentTypeHandler $handler
+     * @param ObjectManager      $entityManager
      *
      * @return Response
      */
     public function showAction(
         Request $request,
         Trick $trick,
-        FormTypeHandler $handler,
+        CommentTypeHandler $handler,
         ObjectManager $entityManager
     ): Response {
         // Build the form
         $form = $this->createForm(CommentType::class);
 
-        //$dispatcher = $this->get('event_dispatcher');
-        $this->get('event_dispatcher')->dispatch(AddCommentEvent::NAME, new AddCommentEvent($trick));
-
         $form->handleRequest($request);
-        if ($handler->handle($form)) {
+        if ($handler->handle($form, $trick)) {
             // Add a flash message
             $this->addFlash('success', 'Nouveau commentaire bien enregistré!');
             // Redirect to trick
@@ -149,7 +153,10 @@ class TrickController extends Controller
     /**
      * Delete a trick.
      *
-     * @Route("/trick/delete/{slug}/{token}", name="ST_trick_delete")
+     * @Route("/trick/delete/{slug}/{token}",
+     *      name="ST_trick_delete",
+     *      requirements={"slug"="[a-zA-Z0-9\- ]+$"}
+     * )
      * @ParamConverter("trick", options={"mapping"={"slug"="slug"}})
      *
      * @Security("has_role('ROLE_USER')")

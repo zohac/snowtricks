@@ -1,11 +1,12 @@
 <?php
 
-namespace AppBundle\Utils;
+namespace AppBundle\Utils\Trick;
 
 use Symfony\Component\Form\FormInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class FormTypeHandler
+class TrickTypeHandler
 {
     /**
      * @var ObjectManager
@@ -13,13 +14,19 @@ class FormTypeHandler
     private $entityManager;
 
     /**
+     * @var TokenStorageInterface
+     */
+    private $tokenStorage;
+
+    /**
      * Constructor.
      *
      * @param ObjectManager $entityManager
      */
-    public function __construct(ObjectManager $entityManager)
+    public function __construct(ObjectManager $entityManager, TokenStorageInterface $tokenStorage)
     {
         $this->entityManager = $entityManager;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -32,7 +39,12 @@ class FormTypeHandler
     public function handle(FormInterface $form): bool
     {
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($form->getData());
+            $trick = $form->getData();
+
+            // Set the authenticated user
+            $trick->setUser($this->tokenStorage->getToken()->getUser());
+
+            $this->entityManager->persist($trick);
             $this->entityManager->flush();
 
             return true;

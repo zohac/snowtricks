@@ -5,7 +5,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Comment;
-use AppBundle\Utils\FormTypeHandler;
+use AppBundle\Utils\Comment\CommentTypeHandler;
 use AppBundle\Form\Comment\CommentType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -68,7 +68,7 @@ class CommentController extends Controller
      */
     public function updateAction(
         Request $request,
-        FormTypeHandler $handler,
+        CommentTypeHandler $handler,
         Comment $comment
     ): response {
         // 1) Creating the form
