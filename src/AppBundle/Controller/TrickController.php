@@ -7,7 +7,7 @@ use AppBundle\Entity\Comment;
 use AppBundle\Service\Trick\Add;
 use AppBundle\Form\Trick\TrickType;
 use AppBundle\Form\Comment\CommentType;
-use AppBundle\Utils\CommentTypeHandler;
+use AppBundle\Utils\Comment\CommentTypeHandler;
 use AppBundle\Utils\Trick\TrickTypeHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;

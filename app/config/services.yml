@@ -41,13 +41,6 @@ services:
     AppBundle\Listener\MenuListener:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest' }
-    
-    AppBundle\Listener\CommentListener:
-        arguments:
-            - "@security.token_storage"
-        tags:
-            - { name: 'doctrine.event_listener', event: 'prePersist' }
-            - { name: 'kernel.event_listener', event: 'comment.add', method: onAddCommentEvent }
 
     AppBundle\Validator\AntiSqlInjectionValidator:
         tags:

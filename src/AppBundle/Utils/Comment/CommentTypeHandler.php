@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Utils;
+namespace AppBundle\Utils\Comment;
 
 use AppBundle\Entity\Trick;
 use Symfony\Component\Form\FormInterface;
@@ -46,7 +46,7 @@ class CommentTypeHandler
             $comment->setTrick($trick);
             $comment->setUser($this->tokenStorage->getToken()->getUser());
 
-            $this->entityManager->persist();
+            $this->entityManager->persist($comment);
             $this->entityManager->flush();
 
             return true;
