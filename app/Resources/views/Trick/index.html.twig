@@ -122,11 +122,76 @@
                         method: "post",
                         data: {index: index}
                     }).done(function(data){
+                        console.log(data);
                         $("#load-wait").addClass("d-none");
         
                         if (data.length == 0) return;
-        
-                        $("#tricks").append(data);
+
+                        var response = "";
+                        
+                        $.each( data, function( i, trick ) {
+                            console.log (trick.id);
+                            response += "<div id=\"" + trick.id + "\" class=\"col-xl-3 col-lg-4 col-md-6 col-sm-12 pt-5\">\n";
+                            response += "   <div class=\"card st-card-index\">\n";
+                            response += "       <div class=\"st-overflow\">\n";
+
+                            path = "{{ asset(constant('AppBundle\\Entity\\Picture::DEFAULT_TRICK')) }}\n";
+
+                            if (trick.pictures.length > 0) {
+                                $.each( trick.pictures, function( j, picture ) {
+                                    if (picture.HeadLinePicture) {
+                                        path = picture.path;
+                                        return;
+                                    }
+                                    path = picture.path;
+                                });
+                            };
+
+                            response += "           <img class=\"card-img-top\" src=\"/" + path + "\" alt=\"Card image cap\" >\n";
+                            response += "       </div>\n";
+                            response += "       <div class=\"card-body\">\n";
+                            response += "           <div class=\"row\">\n";
+                            response += "               <div class=\"col-8\">\n";
+
+                            var trickPath = "{{ path('ST_trick_show', {'slug': 'ST-js-slug'}) }}";
+                            url = trickPath.replace("ST-js-slug", trick.slug);
+
+                            response += "                   <a href=\"" + url + "\" class=\"\">\n";
+                            response += "                       <h5 class=\"card-title\">" + trick.title + "</h5>\n";
+                            response += "                   </a>\n";
+                            response += "               </div>\n";
+
+                        {% if is_granted("ROLE_USER") %}
+                            
+                            var updateTrickPath = "{{ path('ST_trick_update', {'slug': 'ST-js-slug'}) }}";
+                            url = updateTrickPath.replace("ST-js-slug", trick.slug);
+
+                            response += "               <div class=\"col-2\">\n";
+                            response += "                   <a href=\"" + url + "\">\n";
+                            response += "                       <i class=\"fas fa-pencil-alt\" title=\"Update\"></i>\n";
+                            response += "                   </a>\n";
+                            response += "               </div>\n";
+
+                            var deleteTrickPath = "{{ path('ST_trick_delete', {'slug': 'ST-js-slug', 'token': 'ST-js-token'}) }}";
+                            url = deleteTrickPath
+                                .replace("ST-js-slug", trick.slug)
+                                .replace("ST-js-token", trick.user.token);
+
+                            response += "               <div class=\"col-2\">\n";
+                            response += "                   <a  class=\"delete\" data-title=\"" + trick.title + "\" data-path=\"" + url + "\">\n";
+                            response += "                       <i class=\"fas fa-trash\" title=\"Delete\"></i>\n";
+                            response += "                   </a>\n";
+                            response += "               </div>\n";
+
+                        {% endif %}
+                            
+                            response += "           </div>\n";
+                            response += "       </div>\n";
+                            response += "   </div>\n";
+                            response += "</div>\n";
+                        });
+
+                        $("#tricks").append(response);
                         $("#load-tricks").data("index",index+1);
                 
                         // Button animation
