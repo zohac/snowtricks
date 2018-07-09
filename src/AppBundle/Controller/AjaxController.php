@@ -50,7 +50,7 @@ class AjaxController extends Controller
      *
      * @return Response
      */
-    public function listAction(Request $request, ObjectManager $entityManager, \Twig_Environment $twig): JsonResponse
+    public function listAction(Request $request, ObjectManager $entityManager): JsonResponse
     {
         // Ajax request
         if ($request->isXMLHttpRequest()) {
