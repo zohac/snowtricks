@@ -1,7 +1,7 @@
 <div class="card-body">
     <div class="row justify-content-center">
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        <form class="form-inline col-md-8 col-12 align-self-center" method="POST">
+        {{ form_start(form, {'attr': {'class': 'form-inline col-md-8 col-12 align-self-center'}}) }}
 
             <div class="form-group col-xl-8 col-lg-7 col-md-12">
                 {{ form_widget(form.content, {'attr': {'class': 'form-control col-sm-12 st-comment'}}) }}
@@ -15,8 +15,8 @@
             <div class="form-group col-xl-4 col-lg-5 col-md-12">
                 <button type="save" class="btn btn-primary col-sm-12">Laisser un commentaire</button>
             </div>
-        
-        </form>
+
+        {{ form_end(form) }}            
     {% else %}
         <div class="col-12">
             Veuillez-vous <a href="{{ path('ST_login') }}">connecter</a> pour poster un commentaire.

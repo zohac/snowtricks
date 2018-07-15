@@ -11,8 +11,7 @@
 	<div class="container hv-body">
 		<div class="col-12">
             <h3>Création d'un trick</h3>
-            <form class="needs-validation" method="POST" enctype="multipart/form-data">
-
+            {{ form_start(form, {'enctype':'multipart/form-data', 'attr': {'class': 'needs-validation'}}) }}
                 {# General errors in the form. #}
                 {{ form_errors(form) }}
 
@@ -26,13 +25,14 @@
                     {{ form_widget(form.content) }}
                 </div>
 
-                <fieldset>
-                    <div class="form-group">
+                <fieldset class="form-group">
+                    <div id="trick_pictures">
                         {{ form_label(form.categories, "Groupe") }}
                         {{ form_errors(form.categories) }}
 
                         {# store the prototype on the data-prototype attribute #}
-                        <ul id="add_categories" class="form-list"
+                        <ul id="add_categories"
+                            class="form-list"
                             data-prototype="{{ form_widget(form.categories.vars.prototype)|e }}"
                             data-widget-tags="{{ '<li class="row"></li>'|e }}">
                         {% for category in form.categories %}
@@ -55,6 +55,7 @@
                             </button>
                         </a>
                     </div>
+                    {% do form.categories.setRendered %}
                 </fieldset>
 
                 <fieldset>
@@ -94,6 +95,7 @@
                             </button>
                         </a>
                     </div>
+                    {% do form.pictures.setRendered %}
                 </fieldset>
 
                 <fieldset>
@@ -135,13 +137,14 @@
                             </button>
                         </a>
                     </div>
+                    {% do form.videos.setRendered %}
                 </fieldset>
 
                 {{ form_widget(form._token) }}
 
                 <button id="saveTrick" type="submit" class="btn btn-primary">Enregistrer</button>
 
-            </form>
+            {{ form_end(form) }}
         </div>
     </div>
 

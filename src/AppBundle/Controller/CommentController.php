@@ -76,7 +76,7 @@ class CommentController extends Controller
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
-        if ($handler->handle($form)) {
+        if ($handler->handle($form, $comment->getTrick())) {
             // Adding a Flash Message
             $this->addFlash('success', 'Le commentaire est bien mis à jour.');
 

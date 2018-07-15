@@ -8,7 +8,7 @@
 
         <div class="card-body">
             <div class="row justify-content-center">
-                <form class="form-inline col-md-8 col-12 align-self-center" method="POST">
+                {{ form_start(form, {'attr': {'class': 'form-inline col-md-8 col-12 align-self-center'}}) }}
                     {# General errors in the form. #}
                     {{ form_errors(form) }}
 
@@ -25,7 +25,7 @@
                     <div class="form-group col-xl-4 col-lg-5 col-md-12">
                         <button type="save" class="btn btn-primary col-sm-12">Mettre à jour.</button>
                     </div>
-                </form>
+                {{ form_end(form) }}            
             </div>
         </div>
 
