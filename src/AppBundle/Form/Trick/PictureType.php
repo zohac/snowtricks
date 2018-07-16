@@ -49,15 +49,15 @@ class PictureType extends AbstractType
             ]);
     }
 
-    /**
+    /*
      * The options.
      *
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver)
+/*    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => Picture::class,
         ));
-    }
+    }*/
 }
