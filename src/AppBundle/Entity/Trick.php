@@ -408,6 +408,26 @@ class Trick
     }
 
     /**
+     * Retrieves the address of the highlighted image.
+     *
+     * @return string the path
+     */
+    public function getHeadLineThumbnailPath(): string
+    {
+        $path = Picture::DEFAULT_TRICK;
+        foreach ($this->pictures as $picture) {
+            if ($picture->isHeadLinePicture()) {
+                $path = $picture->getUploadDir().'/thumb_'.$picture->getName();
+
+                return $path;
+            }
+            $path = $picture->getUploadDir().'/thumb_'.$picture->getName();
+        }
+
+        return $path;
+    }
+
+    /**
      * Add video.
      *
      * @param \AppBundle\Entity\Video $video
