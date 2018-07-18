@@ -14,11 +14,6 @@ class ThumbnailGenerator
     private $desiredWidth = 576;
 
     /**
-     * @var [type]
-     */
-    private $imageSource;
-
-    /**
      * Generate a thumbnail.
      *
      * @param Picture $picture

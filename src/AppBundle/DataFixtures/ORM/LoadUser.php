@@ -28,28 +28,6 @@ class LoadUser extends AbstractFixture implements OrderedFixtureInterface
         // Liste des noms de catégorie à ajouter
         $users = Yaml::parseFile('src/AppBundle/DataFixtures/Data/User.yml');
 
-        $listenerInst = null;
-        foreach ($manager->getEventManager()->getListeners() as $event => $listeners) {
-            foreach ($listeners as $hash => $listener) {
-                if ($listener instanceof UserListener) {
-                    $listenerInst = $listener;
-                    break 2;
-                }
-            }
-        }
-        $listenerInst || die('Listener is not registered in the event manager');
-        // then you can remove events you like:
-        $evm = $manager->getEventManager();
-        $evm->removeEventListener(
-            [
-                'prePersist',
-                'preUpdate',
-                'postPersist',
-                'postUpdate',
-            ],
-            $listenerInst
-        );
-
         foreach ($users as $userData) {
             $user = new User();
 

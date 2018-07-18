@@ -73,6 +73,7 @@ class Trick
      * @var \DateTime|null
      *
      * @ORM\Column(name="dateModified", type="datetime", nullable=true)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $dateModified;
 
