@@ -8,37 +8,24 @@ use AppBundle\Entity\Trick;
 use AppBundle\Entity\Video;
 use AppBundle\Entity\Picture;
 use Symfony\Component\Yaml\Yaml;
-use AppBundle\Listener\TrickListener;
+use AppBundle\Utils\ThumbnailGenerator;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 class LoadTrick extends AbstractFixture implements OrderedFixtureInterface
 {
+    private $thumbnailGenerator;
+
+    public function __construct(ThumbnailGenerator $thumbnailGenerator)
+    {
+        $this->thumbnailGenerator = $thumbnailGenerator;
+    }
+
     // Dans l'argument de la méthode load, l'objet $manager est l'EntityManager
     public function load(ObjectManager $manager)
     {
         $tricks = Yaml::parseFile('src/AppBundle/DataFixtures/Data/Trick.yml');
-
-        $listenerInst = null;
-        foreach ($manager->getEventManager()->getListeners() as $event => $listeners) {
-            foreach ($listeners as $hash => $listener) {
-                if ($listener instanceof TrickListener) {
-                    $listenerInst = $listener;
-                    break 2;
-                }
-            }
-        }
-        $listenerInst || die('Listener is not registered in the event manager');
-        // then you can remove events you like:
-        $evm = $manager->getEventManager();
-        $evm->removeEventListener(
-            [
-                'prePersist',
-                'preUpdate',
-            ],
-            $listenerInst
-        );
 
         foreach ($tricks as $trickData) {
             $user = $manager
@@ -50,10 +37,12 @@ class LoadTrick extends AbstractFixture implements OrderedFixtureInterface
             foreach ($trickData['image'] as $name) {
                 $image = new Picture();
                 $image->setName($name);
-                $image->setPath('uploads/pictures/'.$name.'.jpeg');
+                $image->setPath('uploads/pictures/'.$name);
                 $image->setHeadlinePicture(true);
                 $image->setTrick($trick);
                 $trick->addPicture($image);
+
+                $this->thumbnailGenerator->makeThumb($image);
             }
 
             foreach ($trickData['video'] as $url) {

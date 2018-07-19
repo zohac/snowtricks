@@ -73,6 +73,7 @@ class Trick
      * @var \DateTime|null
      *
      * @ORM\Column(name="dateModified", type="datetime", nullable=true)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $dateModified;
 
@@ -401,6 +402,26 @@ class Trick
                 return $picture->getPath();
             }
             $path = $picture->getPath();
+        }
+
+        return $path;
+    }
+
+    /**
+     * Retrieves the address of the highlighted image.
+     *
+     * @return string the path
+     */
+    public function getHeadLineThumbnailPath(): string
+    {
+        $path = Picture::DEFAULT_TRICK;
+        foreach ($this->pictures as $picture) {
+            if ($picture->isHeadLinePicture()) {
+                $path = $picture->getUploadDir().'/thumb_'.$picture->getName();
+
+                return $path;
+            }
+            $path = $picture->getUploadDir().'/thumb_'.$picture->getName();
         }
 
         return $path;

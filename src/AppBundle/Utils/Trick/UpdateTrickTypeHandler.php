@@ -48,6 +48,10 @@ class UpdateTrickTypeHandler
             $this->entityManager->persist($trick);
             $this->entityManager->flush();
 
+            foreach ($trick->getPictures() as $picture) {
+                $this->thumbnailGenerator->makeThumb($picture);
+            }
+
             return true;
         }
 

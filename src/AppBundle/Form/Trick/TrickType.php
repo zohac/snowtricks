@@ -83,10 +83,10 @@ class TrickType extends AbstractType
      *
      * @param OptionsResolver $resolver
      */
-/*    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Trick::class,
         ]);
-    }*/
+    }
 }
