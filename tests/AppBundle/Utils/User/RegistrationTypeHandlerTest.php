@@ -6,6 +6,7 @@ use Symfony\Component\Form\Form;
 use AppBundle\Form\User\UserType;
 use AppBundle\Utils\User\UserTypeHandler;
 use Symfony\Component\Form\Test\TypeTestCase;
+use AppBundle\Utils\User\RegistrationTypeHandler;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -18,7 +19,7 @@ use Symfony\Component\Validator\Tests\Fixtures\FakeMetadataFactory;
 use Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-class UserTypeHandlerTest extends TypeTestCase
+class RegistrationTypeHandlerTest extends TypeTestCase
 {
     /**
      * @var \Doctrine\Common\Persistence\ObjectManager
@@ -82,19 +83,20 @@ class UserTypeHandlerTest extends TypeTestCase
             ->getMock();
     }
 
-/*    public function testHandleTrue()
+    public function testHandleTrue()
     {
-        $unitOfWork = $this
-            ->getMockBuilder('Doctrine\ORM\UnitOfWork')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $unitOfWork->expects($this->once())
-            ->method('getOriginalEntityData')
-            ->willReturn(['email' => 'zohac@test.fr']);
-
-        $this->entityManager->expects($this->once())
-            ->method('getUnitOfWork')
-            ->willReturn($unitOfWork);
+        $this->mailer
+            ->expects($this->once())
+            ->method('send')
+            ->willReturn(false);
+        $this->template
+            ->expects($this->any())
+            ->method('renderBlock')
+            ->willReturn('test');
+        $this->twig
+            ->expects($this->once())
+            ->method('load')
+            ->willReturn($this->template);
 
         $formData = [
             'username' => 'zohac',
@@ -110,7 +112,7 @@ class UserTypeHandlerTest extends TypeTestCase
         // submit the data to the form directly
         $form->submit($formData);
 
-        $handler = new UserTypeHandler(
+        $handler = new RegistrationTypeHandler(
             $this->entityManager,
             $this->passwordEncoder,
             $this->session,
@@ -120,7 +122,7 @@ class UserTypeHandlerTest extends TypeTestCase
 
         $this->assertTrue($handler->handle($form));
     }
-*/
+
     public function testHandleFalse()
     {
         $formData = [
@@ -137,7 +139,7 @@ class UserTypeHandlerTest extends TypeTestCase
         // submit the data to the form directly
         $form->submit($formData);
 
-        $handler = new UserTypeHandler(
+        $handler = new RegistrationTypeHandler(
             $this->entityManager,
             $this->passwordEncoder,
             $this->session,
