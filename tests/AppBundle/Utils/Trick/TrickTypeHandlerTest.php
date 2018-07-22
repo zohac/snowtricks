@@ -89,7 +89,7 @@ class TrickTypeHandlerTest extends TypeTestCase
     {
         $trick = new Trick();
         $trick->addPicture(new Picture());
-        
+
         $this->token
             ->expects($this->once())
             ->method('getUser')

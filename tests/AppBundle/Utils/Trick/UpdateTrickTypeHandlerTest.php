@@ -8,7 +8,6 @@ use AppBundle\Entity\Picture;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\Forms;
 use AppBundle\Utils\ThumbnailGenerator;
-use AppBundle\Utils\Trick\TrickTypeHandler;
 use Symfony\Component\Form\Test\TypeTestCase;
 use AppBundle\Utils\Trick\UpdateTrickTypeHandler;
 use Symfony\Component\Translation\IdentityTranslator;
@@ -78,7 +77,7 @@ class UpdateTrickTypeHandlerTest extends TypeTestCase
             ->getMockBuilder(ThumbnailGenerator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->form = $this
             ->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
@@ -113,7 +112,7 @@ class UpdateTrickTypeHandlerTest extends TypeTestCase
             ->method('makeThumb');
 
         $handler = new UpdateTrickTypeHandler($this->entityManager, $this->tokenStorage, $this->thumbnailGenerator);
-        
+
         $this->assertTrue($handler->handle($this->form));
     }
 
@@ -129,7 +128,7 @@ class UpdateTrickTypeHandlerTest extends TypeTestCase
             ->willReturn(false);
 
         $handler = new UpdateTrickTypeHandler($this->entityManager, $this->tokenStorage, $this->thumbnailGenerator);
-        
+
         $this->assertFalse($handler->handle($this->form));
     }
 
