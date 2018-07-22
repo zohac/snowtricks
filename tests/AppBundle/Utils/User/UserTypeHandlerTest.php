@@ -34,7 +34,7 @@ class UserTypeHandlerTest extends TypeTestCase
      * @var Session
      */
     private $session;
-    
+
     /**
      * @var \Twig_Environment
      */
@@ -59,7 +59,7 @@ class UserTypeHandlerTest extends TypeTestCase
             ->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->passwordEncoder = $this
             ->getMockBuilder('Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface')
             ->disableOriginalConstructor()

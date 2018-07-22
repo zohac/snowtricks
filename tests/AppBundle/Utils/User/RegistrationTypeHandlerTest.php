@@ -1,10 +1,9 @@
 <?php
 
-namespace tests\AppBundle\Utils;
+namespace tests\AppBundle\Utils\User;
 
 use Symfony\Component\Form\Form;
 use AppBundle\Form\User\UserType;
-use AppBundle\Utils\User\UserTypeHandler;
 use Symfony\Component\Form\Test\TypeTestCase;
 use AppBundle\Utils\User\RegistrationTypeHandler;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -35,7 +34,7 @@ class RegistrationTypeHandlerTest extends TypeTestCase
      * @var Session
      */
     private $session;
-    
+
     /**
      * @var \Twig_Environment
      */
@@ -60,7 +59,7 @@ class RegistrationTypeHandlerTest extends TypeTestCase
             ->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->passwordEncoder = $this
             ->getMockBuilder('Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface')
             ->disableOriginalConstructor()

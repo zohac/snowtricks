@@ -2,6 +2,7 @@
 
 namespace AppBundle\Utils\Trick;
 
+use AppBundle\Utils\ThumbnailGenerator;
 use Symfony\Component\Form\FormInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -19,14 +20,25 @@ class UpdateTrickTypeHandler
     private $tokenStorage;
 
     /**
+     * @var ThumbnailGenerator
+     */
+    private $thumbnailGenerator;
+
+    /**
      * Constructor.
      *
      * @param ObjectManager $entityManager
+     * @param TokenStorageInterface $tokenStorage
+     * @param ThumbnailGenerator $thumbnailGenerator
      */
-    public function __construct(ObjectManager $entityManager, TokenStorageInterface $tokenStorage)
-    {
+    public function __construct(
+        ObjectManager $entityManager,
+        TokenStorageInterface $tokenStorage,
+        ThumbnailGenerator $thumbnailGenerator
+    ) {
         $this->entityManager = $entityManager;
         $this->tokenStorage = $tokenStorage;
+        $this->thumbnailGenerator = $thumbnailGenerator;
     }
 
     /**

@@ -3,9 +3,7 @@
 namespace tests\AppBundle\Utils;
 
 use AppBundle\Entity\User;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\Form;
-use Doctrine\ORM\EntityRepository;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Form\User\ForgotPasswordType;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -17,7 +15,6 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Form\Extension\Core\CoreExtension;
 use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Context\ExecutionContextFactory;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Validator\Tests\Fixtures\FakeMetadataFactory;
@@ -35,7 +32,7 @@ class ForgotPasswordTypeHandlerTest extends TypeTestCase
      * @var Session
      */
     private $session;
-    
+
     /**
      * @var \Twig_Environment
      */
