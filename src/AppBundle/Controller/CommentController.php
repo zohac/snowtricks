@@ -55,7 +55,11 @@ class CommentController extends Controller
     /**
      * Update a comment.
      *
-     * @Route("/comment/update/{id}", name="ST_comment_update")
+     * @Route(
+     *      "/comment/update/{id}",
+     *      name="ST_comment_update",
+     *      requirements={"id"="\d+"}
+     * )
      * @ParamConverter("comment", options={"mapping"={"id"="id"}})
      *
      * @Security("has_role('ROLE_USER')")
