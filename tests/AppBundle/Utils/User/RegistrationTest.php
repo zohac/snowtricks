@@ -22,6 +22,8 @@ class RegistrationTest extends TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         // Last, mock the EntityManager to return the mock of the repository
         $this->entityManager = $this
             ->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
