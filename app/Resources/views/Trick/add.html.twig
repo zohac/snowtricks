@@ -177,7 +177,7 @@
                 $(".deleteOnLoad").remove();
         
                 // Check the title
-                var addTitle = $("#add_trick_title");
+                var addTitle = $("#trick_title");
         
                 addTitle.on( "blur", function() {
                     var invalidTitle = $("#invalid-title");
@@ -193,11 +193,10 @@
                         data: {title: title}
                     }).done(function(data){
                         var submit = $('#saveTrick');
-                        console.log(submit);
                         addTitle.removeClass("is-invalid");
                         submit.prop('disabled', false);
         
-                        if (data == 'false') {
+                        if (data != null) {
                             var response = '<div id="invalid-title" class="invalid-feedback">Le trick existe déjà!</div>';
         
                             addTitle.parent().append(response);

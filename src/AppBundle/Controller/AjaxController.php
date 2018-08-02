@@ -17,6 +17,27 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 class AjaxController extends Controller
 {
     /**
+     * @var Serializer
+     */
+    private $serializer;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        // Create new normalizer
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setCircularReferenceLimit(1);
+        // Add Circular reference handler
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getId();
+        });
+        // Create new serializer
+        $this->serializer = new Serializer([$normalizer], [new JsonEncoder()]);
+    }
+
+    /**
      * Check a title of a trick.
      *
      * @Route("/ajax/checkTitle", name="ST_check_title_ajax")
@@ -28,15 +49,20 @@ class AjaxController extends Controller
      */
     public function checkTitleAjaxAction(Request $request): Response
     {
+        // filter the title
         $title = filter_var($request->get('title'), FILTER_SANITIZE_STRING);
 
+        // Check if a trick exist with this title
         $trick = $this->getDoctrine()
             ->getRepository(Trick::class)
             ->findOneByTitle($title);
 
-        $response = (empty($trick)) ? 'true' : 'false';
+        // Set response
+        $response = new JsonResponse();
+        $response->setContent($this->serializer->serialize($trick, 'json'));
+        $response->headers->set('Content-Type', 'application/json');
 
-        return new Response($response);
+        return $response;
     }
 
     /**
@@ -71,18 +97,9 @@ class AjaxController extends Controller
             $listOfTricks[$key] = $trick;
         }
 
-        // Serialize the object
-        $normalizer = new ObjectNormalizer();
-        $normalizer->setCircularReferenceLimit(1);
-        // Add Circular reference handler
-        $normalizer->setCircularReferenceHandler(function ($object) {
-            return $object->getId();
-        });
-        $serializer = new Serializer([$normalizer], [new JsonEncoder()]);
-
         // Set response
         $response = new JsonResponse();
-        $response->setContent($serializer->serialize($listOfTricks, 'json'));
+        $response->setContent($this->serializer->serialize($listOfTricks, 'json'));
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
