@@ -15,7 +15,6 @@ use AppBundle\Form\User\ResetPasswordType;
 use AppBundle\Service\User\ForgotPassword;
 use AppBundle\Form\User\ForgotPasswordType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Utils\User\RegistrationTypeHandler;
 use AppBundle\Utils\User\ForgotPasswordTypeHandler;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -43,10 +42,8 @@ class UserController extends Controller
      *
      * @param Request                 $request
      * @param RegistrationTypeHandler $handler
-     *
-     * @return Response
      */
-    public function registrationAction(Request $request, RegistrationTypeHandler $handler): Response
+    public function registrationAction(Request $request, RegistrationTypeHandler $handler)
     {
         // Build the form
         $form = $this->createForm(RegistrationType::class);
@@ -75,10 +72,8 @@ class UserController extends Controller
      *
      * @param User         $user
      * @param Registration $register
-     *
-     * @return Response
      */
-    public function validateUserAction(User $user, Registration $register): Response
+    public function validateUserAction(User $user, Registration $register)
     {
         // User registration
         $register->validate($user);
@@ -98,10 +93,8 @@ class UserController extends Controller
      *      }})
      *
      * @param AuthenticationUtils $authUtils
-     *
-     * @return Response
      */
-    public function loginAction(AuthenticationUtils $authUtils): Response
+    public function loginAction(AuthenticationUtils $authUtils)
     {
         // Render the login form
         return $this->render(
@@ -145,10 +138,8 @@ class UserController extends Controller
      * @param Request            $request
      * @param Update             $updateUser
      * @param UserInterface|null $user
-     *
-     * @return Response
      */
-    public function updateAction(Request $request, UserTypeHandler $handler, ?UserInterface $user): Response
+    public function updateAction(Request $request, UserTypeHandler $handler, ?UserInterface $user)
     {
         // Build the form
         $form = $this->createForm(UserType::class, $user);
@@ -171,10 +162,8 @@ class UserController extends Controller
      *
      * @param Request        $request
      * @param ForgotPassword $forgotPassword
-     *
-     * @return Response
      */
-    public function forgotPasswordAction(Request $request, ForgotPasswordTypeHandler $handler): Response
+    public function forgotPasswordAction(Request $request, ForgotPasswordTypeHandler $handler)
     {
         // Build the form
         $form = $this->createForm(ForgotPasswordType::class);
@@ -202,10 +191,8 @@ class UserController extends Controller
      * @param ResetPassword $resetPassword
      * @param User|null     $user
      * @param Request       $request
-     *
-     * @return Response
      */
-    public function resetPasswordAction(Request $request, UserTypeHandler $handler, ?User $user): Response
+    public function resetPasswordAction(Request $request, UserTypeHandler $handler, ?User $user)
     {
         // Build the form
         $form = $this->createForm(ResetPasswordType::class, $user);
