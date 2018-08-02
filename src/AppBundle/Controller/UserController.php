@@ -55,10 +55,10 @@ class UserController extends Controller
         if ($handler->handle($form)) {
             // Add a flash message
             $this->addFlash('info', 'Vérifiez votre boîte email, pour confirmer votre inscription.');
-
+            // Redirect to home
             return $this->redirectToRoute('ST_index');
         }
-        // Redirect to home
+        // Render the form
         return $this->render('User/registration.html.twig', ['form' => $form->createView()]);
     }
 
@@ -103,6 +103,7 @@ class UserController extends Controller
      */
     public function loginAction(AuthenticationUtils $authUtils): Response
     {
+        // Render the login form
         return $this->render(
             'User/login.html.twig',
             [
@@ -156,10 +157,10 @@ class UserController extends Controller
         if ($handler->handle($form)) {
             // Add a flash message
             $this->addFlash('success', 'Vos infos sont bien misent à jour.');
-
+            // Redirect to home
             return $this->redirectToRoute('ST_index');
         }
-        // Redirect to home
+        // Render the form
         return $this->render('User/update.html.twig', ['form' => $form->createView()]);
     }
 
@@ -182,10 +183,10 @@ class UserController extends Controller
         if ($handler->handle($form)) {
             // Add a flash message
             $this->addFlash('info', 'Nous vous avons envoyé un e-mail pour réinitialiser votre mot de passe.');
-
+            // Redirect to home
             return $this->redirectToRoute('ST_index');
         }
-        // Redirect to home
+        // Render the form
         return $this->render('User/forgot_password.html.twig', ['form' => $form->createView()]);
     }
 
@@ -213,10 +214,10 @@ class UserController extends Controller
         if ($handler->handle($form)) {
             // Add a flash message
             $this->addFlash('success', 'Votre mot de passe est bien mis à jour.');
-
+            // Redirect to the login page
             return $this->redirectToRoute('ST_login');
         }
-        // Redirect to home
+        // Render the form
         return $this->render('User/reset_password.html.twig', ['form' => $form->createView()]);
     }
 }

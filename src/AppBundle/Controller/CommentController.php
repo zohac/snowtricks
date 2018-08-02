@@ -87,7 +87,7 @@ class CommentController extends Controller
             // Redirect to the trick detail
             return $this->redirectToRoute('ST_trick_show', ['slug' => $comment->getTrick()->getSlug()]);
         }
-
+        // Else, return the form
         return $this->render('Comment/update.html.twig', ['form' => $form->createView()]);
     }
 }

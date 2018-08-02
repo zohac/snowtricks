@@ -19,6 +19,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
+/**
+ * This class manages all the tricks.
+ */
 class TrickController extends Controller
 {
     /**
@@ -46,10 +49,10 @@ class TrickController extends Controller
         if ($handler->handle($form)) {
             // Add a flash message
             $this->addFlash('success', 'Nouveau trick bien enregistré!');
-
+            // Redirect to home
             return $this->redirectToRoute('ST_index');
         }
-        // Redirect to home
+        // Else, return the form
         return $this->render('Trick/add.html.twig', ['form' => $form->createView()]);
     }
 
@@ -132,10 +135,10 @@ class TrickController extends Controller
         if ($handler->handle($form, $trick)) {
             // Add a flash message
             $this->addFlash('success', 'Nouveau commentaire bien enregistré!');
-            // Redirect to trick
+            // Redirect to the trick
             return $this->redirectToRoute('ST_trick_show', ['slug' => $trick->getSlug()]);
         }
-
+        // Else
         // Get the form and the list of tricks
         $listOfComment = $entityManager->getRepository(Comment::class)->findWithAllEntities($trick);
 
