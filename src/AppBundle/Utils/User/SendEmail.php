@@ -5,7 +5,6 @@
 namespace AppBundle\Utils\User;
 
 use AppBundle\Entity\User;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
@@ -32,8 +31,8 @@ class SendEmail
      * Constructor.
      *
      * @param \Twig_Environment $twig
-     * @param \Swift_Mailer $mailer
-     * @param SessionInterface $session
+     * @param \Swift_Mailer     $mailer
+     * @param SessionInterface  $session
      */
     public function __construct(\Twig_Environment $twig, \Swift_Mailer $mailer, SessionInterface $session)
     {
@@ -41,7 +40,6 @@ class SendEmail
         $this->mailer = $mailer;
         $this->flashBag = $session->getFlashBag();
     }
-
 
     /**
      * User registration.

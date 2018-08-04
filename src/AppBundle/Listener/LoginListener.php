@@ -41,7 +41,7 @@ class LoginListener
         $user = $event->getAuthenticationToken()->getUser();
         if (empty($user->getRoles())) {
             $template = $this->twig->load('Email/registration.twig');
-            
+
             $this->flashBag->add(
                 'info',
                 $template->renderBlock('resend_email', ['token' => $user->getToken()])

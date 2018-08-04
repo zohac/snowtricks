@@ -7,10 +7,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use AppBundle\Form\User\UserType;
 use AppBundle\Service\User\Update;
-use AppBundle\Utils\User\SendEmail;
 use AppBundle\Utils\User\Registration;
 use AppBundle\Form\User\RegistrationType;
-use AppBundle\Service\User\ResetPassword;
 use AppBundle\Utils\User\UserTypeHandler;
 use AppBundle\Form\User\ResetPasswordType;
 use AppBundle\Service\User\ForgotPassword;
@@ -189,9 +187,9 @@ class UserController extends Controller
      * )
      * @Entity("user", expr="repository.getUserWithToken(token)")
      *
-     * @param Request $request
+     * @param Request         $request
      * @param UserTypeHandler $handler
-     * @param User|null $user
+     * @param User|null       $user
      */
     public function resetPasswordAction(Request $request, UserTypeHandler $handler, ?User $user)
     {
@@ -218,13 +216,13 @@ class UserController extends Controller
      * )
      * @Entity("user", expr="repository.getUserWithToken(token)")
      *
-     * @param User|null $user
-     * @param SendEmail $mail
+     * @param User|null    $user
+     * @param Registration $mail
      */
-    public function resendEmailAction(?User $user, SendEmail $mail)
+    public function resendEmailAction(?User $user, Registration $registration)
     {
         // User registration
-        $mail->sendForValidation($user);
+        $registration->sendEmailForValidation($user);
 
         // Redirect to home
         return $this->redirectToRoute('ST_login');
