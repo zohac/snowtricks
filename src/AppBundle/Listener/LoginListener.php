@@ -16,13 +16,19 @@ class LoginListener
     private $flashBag;
 
     /**
+     * @var \Twig_Environment
+     */
+    private $twig;
+
+    /**
      * Constructor.
      *
      * @param SessionInterface $session
      */
-    public function __construct(SessionInterface $session)
+    public function __construct(SessionInterface $session, \Twig_Environment $twig)
     {
         $this->flashBag = $session->getFlashBag();
+        $this->twig = $twig;
     }
 
     /**
@@ -34,11 +40,11 @@ class LoginListener
     {
         $user = $event->getAuthenticationToken()->getUser();
         if (empty($user->getRoles())) {
+            $template = $this->twig->load('Email/registration.twig');
+
             $this->flashBag->add(
                 'info',
-                'Votre compte n\'est pas validé!
-                Voulez vous que l\'on vous renvoie un mail de confirmation?
-                <a class="btn btn-primary" href="#" role="button">Renvoyez moi un mail</a>'
+                $template->renderBlock('resend_email', ['token' => $user->getToken()])
             );
         }
     }

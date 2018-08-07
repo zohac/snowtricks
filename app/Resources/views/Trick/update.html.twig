@@ -11,8 +11,7 @@
 	<div class="container hv-body">
 		<div class="col-12">
             <h3>Mise à jour d'un trick</h3>
-            <form class="needs-validation" method="POST" enctype="multipart/form-data">
-
+            {{ form_start(form, {'enctype':'multipart/form-data', 'attr': {'class': 'needs-validation'}}) }}
                 {# General errors in the form. #}
                 {{ form_errors(form) }}
 
@@ -54,6 +53,7 @@
                             </button>
                         </a>
                     </div>
+                    {% do form.categories.setRendered %}
                 </fieldset>
 
                 <fieldset>
@@ -92,6 +92,7 @@
                             </button>
                         </a>
                     </div>
+                    {% do form.pictures.setRendered %}
                 </fieldset>
 
                 <fieldset>
@@ -134,13 +135,14 @@
                             </button>
                         </a>
                     </div>
+                    {% do form.videos.setRendered %}
                 </fieldset>
 
                 {{ form_widget(form._token) }}
 
                 <button id="saveTrick" type="submit" class="btn btn-primary">Mettre à jour!</button>
 
-            </form>
+            {{ form_end(form) }}
         </div>
     </div>
 

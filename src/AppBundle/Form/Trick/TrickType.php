@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Regex;
 use AppBundle\Listener\AntiSqlInjectionFormListener;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -18,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 /**
  * Add or update a trick.
  */
-class AddTrickType extends AbstractType
+class TrickType extends AbstractType
 {
     /**
      * Build the form.
@@ -34,12 +35,15 @@ class AddTrickType extends AbstractType
         // The entity fields are added to our form.
         $builder
             ->add('title', TextType::class, [
-                'constraints' => [new Regex([
-                    'pattern' => '/^[a-zA-Z0-9\- ]+$/',
-                    'message' => 'le nom du trick ne doit comporter que des caractères alphanumérique',
-                ])],
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '/^[a-zA-Z0-9\- ]+$/',
+                        'message' => 'le nom du trick ne doit comporter que des caractères alphanumérique',
+                    ]),
+                    new NotBlank(),
+                ],
             ])
-            ->add('content', TextareaType::class)
+            ->add('content', TextareaType::class, ['constraints' => [new NotBlank()]])
             ->add('categories', CollectionType::class, [
                 'entry_type' => EntityType::class,
                 'entry_options' => [
@@ -78,7 +82,7 @@ class AddTrickType extends AbstractType
             ->addEventSubscriber(new AntiSqlInjectionFormListener());
     }
 
-    /**
+    /*
      * {@inheritdoc}
      *
      * @param OptionsResolver $resolver

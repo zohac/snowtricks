@@ -239,7 +239,7 @@ class Picture
     /**
      * @return string
      */
-    protected function getUploadRootDir(): string
+    public function getUploadRootDir(): string
     {
         // On retourne le chemin relatif vers l'image pour notre code PHP
         return __DIR__.'/../../../web/'.$this->getUploadDir();
@@ -255,11 +255,10 @@ class Picture
         if (null === $this->file) {
             return;
         }
-        $uniqid = uniqid();
+        // Set the name
+        $this->name = uniqid().'.'.$this->file->guessExtension();
         // The file name is the entity's ID
-        $this->path = $this->getUploadDir().'/'.$uniqid.'.'.$this->file->guessExtension();
-        // And we keep the original name
-        $this->name = $uniqid;
+        $this->path = $this->getUploadDir().'/'.$this->name;
     }
 
     /**
@@ -274,17 +273,17 @@ class Picture
         }
 
         // A file is present, remove it
-        if (null !== $this->tempFilename) {
-            if (file_exists($this->tempFilename)) {
-                unlink($this->tempFilename);
+        // We only delete files in web/uploads
+        if (preg_match('#uploads#', $this->tempFilename)) {
+            if (null !== $this->tempFilename) {
+                if (file_exists($this->tempFilename)) {
+                    unlink($this->tempFilename);
+                }
             }
         }
 
         // Move the file to the upload folder
-        $this->file->move(
-            $this->getUploadRootDir(),
-            $this->name.'.'.$this->file->guessExtension()
-        );
+        $this->file->move($this->getUploadRootDir(), $this->name);
 
         $this->file = null;
     }
@@ -303,10 +302,13 @@ class Picture
      */
     public function removeUpload()
     {
-        // PostRemove => We no longer have the entity's ID => Use the name we saved
-        if (file_exists($this->tempFilename)) {
-            // Remove file
-            unlink($this->tempFilename);
+        // We only delete files in web/uploads
+        if (preg_match('#uploads#', $this->tempFilename)) {
+            // PostRemove => We no longer have the entity's ID => Use the name we saved
+            if (file_exists($this->tempFilename)) {
+                // Remove file
+                unlink($this->tempFilename);
+            }
         }
     }
 }

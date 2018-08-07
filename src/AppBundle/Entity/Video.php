@@ -109,7 +109,7 @@ class Video
         parse_str(parse_url($this->url, PHP_URL_QUERY), $videoOptions);
 
         $iframe = "<iframe width='480' height='360' src='https://www.youtube.com/embed/";
-        $iframe .= $videoOptions['v'];
+        $iframe .= (isset($videoOptions['v'])) ? $videoOptions['v'] : null;
         $iframe .= "' frameborder='0' allow='autoplay; encrypted-media' allowfullscreen></iframe>";
 
         return $iframe;
@@ -139,6 +139,8 @@ class Video
 
     public function getThumbnail()
     {
+        $image = null;
+
         // Si c’est une url Youtube on execute la fonction correspondante
         if (preg_match("#(?:https?:\/{2})?(?:w{3}.)?youtu(?:be)?.(?:com|be)(?:\/watch\?v=|\/)([^s&]+)#", $this->url)) {
             parse_str(parse_url($this->url, PHP_URL_QUERY), $videoOptions);

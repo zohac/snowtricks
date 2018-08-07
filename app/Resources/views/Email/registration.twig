@@ -10,3 +10,9 @@
 {% block body_text %}
     Veuillez suivre le lien pour confirmer votre inscription {{ absolute_url(path('ST_registration_check', { 'token': token })) }}
 {% endblock %}
+
+{% block resend_email %}
+    Votre compte n'est pas validé!<br/>
+    Voulez vous que l'on vous renvoie un mail de confirmation?
+    <a class="btn btn-primary" href="{{ absolute_url(path('ST_resend_email', { 'token': token })) }}" role="button">Renvoyez moi un mail</a>
+{% endblock %}

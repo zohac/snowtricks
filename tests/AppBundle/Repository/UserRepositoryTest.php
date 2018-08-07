@@ -21,11 +21,11 @@ class UserRepositoryTest extends KernelTestCase
             ->getManager();
     }
 
-    public function testGetUserWithEmailRecovery()
+    public function testGetUserWithEmail()
     {
         $user = $this->entityManager
             ->getRepository(User::class)
-            ->getUserWithemailRecovery('email@test.com')
+            ->getUserWithemail('email@test.com')
         ;
 
         $this->assertContainsOnlyInstancesOf(User::class, [$user]);

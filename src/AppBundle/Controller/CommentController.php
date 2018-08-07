@@ -5,7 +5,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Comment;
-use AppBundle\Utils\FormTypeHandler;
+use AppBundle\Utils\Comment\CommentTypeHandler;
 use AppBundle\Form\Comment\CommentType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -55,7 +55,11 @@ class CommentController extends Controller
     /**
      * Update a comment.
      *
-     * @Route("/comment/update/{id}", name="ST_comment_update")
+     * @Route(
+     *      "/comment/update/{id}",
+     *      name="ST_comment_update",
+     *      requirements={"id"="\d+"}
+     * )
      * @ParamConverter("comment", options={"mapping"={"id"="id"}})
      *
      * @Security("has_role('ROLE_USER')")
@@ -68,7 +72,7 @@ class CommentController extends Controller
      */
     public function updateAction(
         Request $request,
-        FormTypeHandler $handler,
+        CommentTypeHandler $handler,
         Comment $comment
     ): response {
         // 1) Creating the form
@@ -76,14 +80,14 @@ class CommentController extends Controller
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
-        if ($handler->handle($form)) {
+        if ($handler->handle($form, $comment->getTrick())) {
             // Adding a Flash Message
             $this->addFlash('success', 'Le commentaire est bien mis à jour.');
 
             // Redirect to the trick detail
             return $this->redirectToRoute('ST_trick_show', ['slug' => $comment->getTrick()->getSlug()]);
         }
-
+        // Else, return the form
         return $this->render('Comment/update.html.twig', ['form' => $form->createView()]);
     }
 }
