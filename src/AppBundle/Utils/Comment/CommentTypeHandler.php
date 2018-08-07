@@ -22,7 +22,8 @@ class CommentTypeHandler
     /**
      * Constructor.
      *
-     * @param ObjectManager $entityManager
+     * @param ObjectManager         $entityManager
+     * @param TokenStorageInterface $tokenStorage
      */
     public function __construct(ObjectManager $entityManager, TokenStorageInterface $tokenStorage)
     {
@@ -34,6 +35,7 @@ class CommentTypeHandler
      * Handle a form.
      *
      * @param FormInterface $form
+     * @param Trick         $trick
      *
      * @return bool
      */

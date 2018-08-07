@@ -140,7 +140,7 @@ class Video
     public function getThumbnail()
     {
         $image = null;
-        
+
         // Si c’est une url Youtube on execute la fonction correspondante
         if (preg_match("#(?:https?:\/{2})?(?:w{3}.)?youtu(?:be)?.(?:com|be)(?:\/watch\?v=|\/)([^s&]+)#", $this->url)) {
             parse_str(parse_url($this->url, PHP_URL_QUERY), $videoOptions);

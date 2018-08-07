@@ -27,9 +27,9 @@ class UpdateTrickTypeHandler
     /**
      * Constructor.
      *
-     * @param ObjectManager $entityManager
+     * @param ObjectManager         $entityManager
      * @param TokenStorageInterface $tokenStorage
-     * @param ThumbnailGenerator $thumbnailGenerator
+     * @param ThumbnailGenerator    $thumbnailGenerator
      */
     public function __construct(
         ObjectManager $entityManager,

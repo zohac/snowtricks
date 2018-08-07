@@ -273,9 +273,12 @@ class Picture
         }
 
         // A file is present, remove it
-        if (null !== $this->tempFilename) {
-            if (file_exists($this->tempFilename)) {
-                unlink($this->tempFilename);
+        // We only delete files in web/uploads
+        if (preg_match('#uploads#', $this->tempFilename)) {
+            if (null !== $this->tempFilename) {
+                if (file_exists($this->tempFilename)) {
+                    unlink($this->tempFilename);
+                }
             }
         }
 
@@ -299,10 +302,13 @@ class Picture
      */
     public function removeUpload()
     {
-        // PostRemove => We no longer have the entity's ID => Use the name we saved
-        if (file_exists($this->tempFilename)) {
-            // Remove file
-            unlink($this->tempFilename);
+        // We only delete files in web/uploads
+        if (preg_match('#uploads#', $this->tempFilename)) {
+            // PostRemove => We no longer have the entity's ID => Use the name we saved
+            if (file_exists($this->tempFilename)) {
+                // Remove file
+                unlink($this->tempFilename);
+            }
         }
     }
 }

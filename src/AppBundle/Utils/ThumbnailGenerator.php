@@ -14,7 +14,7 @@ class ThumbnailGenerator
     private $desiredWidth = 576;
 
     /**
-     * Generate a thumbnail.
+     * Select the mime/type of the picture.
      *
      * @param Picture $picture
      */
@@ -32,6 +32,11 @@ class ThumbnailGenerator
         }
     }
 
+    /**
+     * Generate a jpeg thumbnail.
+     *
+     * @param Picture $picture
+     */
     private function jpegThumb(Picture $picture)
     {
         $thumbnail = $this->generateThumb(imagecreatefromjpeg($picture->getUploadRootDir().'/'.$picture->getName()));
@@ -40,6 +45,11 @@ class ThumbnailGenerator
         imagejpeg($thumbnail, $picture->getUploadRootDir().'/thumb_'.$picture->getName());
     }
 
+    /**
+     * Generate a png thumbnail.
+     *
+     * @param Picture $picture
+     */
     private function pngThumb(Picture $picture)
     {
         $thumbnail = $this->generateThumb(imagecreatefrompng($picture->getUploadRootDir().'/'.$picture->getName()));
@@ -48,6 +58,9 @@ class ThumbnailGenerator
         imagepng($thumbnail, $picture->getUploadRootDir().'/thumb_'.$picture->getName());
     }
 
+    /**
+     * Generate a thumbnail.
+     */
     private function generateThumb($imageSource)
     {
         $width = imagesx($imageSource);

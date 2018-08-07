@@ -5,7 +5,31 @@
 /var/*
 /vendor/
 /web/bundles/
+
 /web/uploads/*
+!/web/uploads/pictures
+/web/uploads/pictures/*
+!/web/uploads/pictures/5ad5fa2f9d61c.jpeg
+!/web/uploads/pictures/5ad60cd5aa8f3.jpeg
+!/web/uploads/pictures/5ad61cec35c48.jpeg
+!/web/uploads/pictures/5ad61d257078e.jpeg
+!/web/uploads/pictures/5ad61de2539a3.jpeg
+!/web/uploads/pictures/5ad61fcf99941.jpeg
+!/web/uploads/pictures/5ad605dbcd127.jpeg
+!/web/uploads/pictures/5ad618a844937.jpeg
+!/web/uploads/pictures/5ad620d8a9061.jpeg
+!/web/uploads/pictures/5ad6260d529ab.jpeg
+!/web/uploads/pictures/5ad60585c0f38.jpeg
+!/web/uploads/pictures/5ad62594e81ec.jpeg
+!/web/uploads/pictures/5ad62698bec8a.jpeg
+!/web/uploads/pictures/5ad65454a17df.jpeg
+!/web/uploads/pictures/5ad65470b961b.jpeg
+!/web/uploads/pictures/5ad65470ba51f.jpeg
+!/web/uploads/pictures/5ad6237965bda.jpeg
+!/web/uploads/pictures/5ad60634075f7.jpeg
+!/web/uploads/pictures/5ad60708923dd.jpeg
+!/web/uploads/pictures/5ad62651818f8.jpeg
+!/web/uploads/pictures/5b1ff114e9894.jpeg
 
 #PHPUnit Test
 /web/test-coverage/*
