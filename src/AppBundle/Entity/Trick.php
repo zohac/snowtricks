@@ -417,11 +417,11 @@ class Trick
         $path = Picture::DEFAULT_TRICK;
         foreach ($this->pictures as $picture) {
             if ($picture->isHeadLinePicture()) {
-                $path = $picture->getUploadDir().'/thumb_'.$picture->getName();
+                $path = $picture->getUploadDir().'/'.$picture->getName();
 
                 return $path;
             }
-            $path = $picture->getUploadDir().'/thumb_'.$picture->getName();
+            $path = $picture->getUploadDir().'/'.$picture->getName();
         }
 
         return $path;
