@@ -7,7 +7,6 @@ use AppBundle\Entity\Trick;
 use AppBundle\Entity\Picture;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\Forms;
-use AppBundle\Utils\ThumbnailGenerator;
 use AppBundle\Utils\Trick\TrickTypeHandler;
 //use tests\AppBundle\Utils\Trick\FormTypeTestCase;
 use Symfony\Component\Form\Test\TypeTestCase;

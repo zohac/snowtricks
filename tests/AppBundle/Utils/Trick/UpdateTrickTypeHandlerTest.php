@@ -7,7 +7,6 @@ use AppBundle\Entity\Trick;
 use AppBundle\Entity\Picture;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\Forms;
-use AppBundle\Utils\ThumbnailGenerator;
 use Symfony\Component\Form\Test\TypeTestCase;
 use AppBundle\Utils\Trick\UpdateTrickTypeHandler;
 use Symfony\Component\Translation\IdentityTranslator;

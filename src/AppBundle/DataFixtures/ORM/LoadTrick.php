@@ -8,7 +8,6 @@ use AppBundle\Entity\Trick;
 use AppBundle\Entity\Video;
 use AppBundle\Entity\Picture;
 use Symfony\Component\Yaml\Yaml;
-use AppBundle\Utils\ThumbnailGenerator;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
