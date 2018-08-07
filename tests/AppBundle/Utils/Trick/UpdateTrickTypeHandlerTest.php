@@ -39,8 +39,6 @@ class UpdateTrickTypeHandlerTest extends TypeTestCase
      */
     private $tokenStorage;
 
-    private $thumbnailGenerator;
-
     private $form;
 
     protected function setUp()
@@ -73,11 +71,6 @@ class UpdateTrickTypeHandlerTest extends TypeTestCase
             ->method('getToken')
             ->willReturn($this->token);
 
-        $this->thumbnailGenerator = $this
-            ->getMockBuilder(ThumbnailGenerator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->form = $this
             ->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
@@ -107,11 +100,7 @@ class UpdateTrickTypeHandlerTest extends TypeTestCase
             ->method('getData')
             ->willReturn($trick);
 
-        $this->thumbnailGenerator
-            ->expects($this->once())
-            ->method('makeThumb');
-
-        $handler = new UpdateTrickTypeHandler($this->entityManager, $this->tokenStorage, $this->thumbnailGenerator);
+        $handler = new UpdateTrickTypeHandler($this->entityManager, $this->tokenStorage);
 
         $this->assertTrue($handler->handle($this->form));
     }
@@ -127,7 +116,7 @@ class UpdateTrickTypeHandlerTest extends TypeTestCase
             ->method('isValid')
             ->willReturn(false);
 
-        $handler = new UpdateTrickTypeHandler($this->entityManager, $this->tokenStorage, $this->thumbnailGenerator);
+        $handler = new UpdateTrickTypeHandler($this->entityManager, $this->tokenStorage);
 
         $this->assertFalse($handler->handle($this->form));
     }
