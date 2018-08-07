@@ -8,20 +8,12 @@ use AppBundle\Entity\Trick;
 use AppBundle\Entity\Video;
 use AppBundle\Entity\Picture;
 use Symfony\Component\Yaml\Yaml;
-use AppBundle\Utils\ThumbnailGenerator;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 class LoadTrick extends AbstractFixture implements OrderedFixtureInterface
 {
-    private $thumbnailGenerator;
-
-    public function __construct(ThumbnailGenerator $thumbnailGenerator)
-    {
-        $this->thumbnailGenerator = $thumbnailGenerator;
-    }
-
     // Dans l'argument de la méthode load, l'objet $manager est l'EntityManager
     public function load(ObjectManager $manager)
     {
@@ -41,8 +33,6 @@ class LoadTrick extends AbstractFixture implements OrderedFixtureInterface
                 $image->setHeadlinePicture(true);
                 $image->setTrick($trick);
                 $trick->addPicture($image);
-
-                $this->thumbnailGenerator->makeThumb($image);
             }
 
             foreach ($trickData['video'] as $url) {

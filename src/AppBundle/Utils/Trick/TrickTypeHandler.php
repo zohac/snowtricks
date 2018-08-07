@@ -2,7 +2,6 @@
 
 namespace AppBundle\Utils\Trick;
 
-use AppBundle\Utils\ThumbnailGenerator;
 use Symfony\Component\Form\FormInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -20,11 +19,6 @@ class TrickTypeHandler
     private $tokenStorage;
 
     /**
-     * @var ThumbnailGenerator
-     */
-    private $thumbnailGenerator;
-
-    /**
      * Constructor.
      *
      * @param ObjectManager         $entityManager
@@ -33,12 +27,10 @@ class TrickTypeHandler
      */
     public function __construct(
         ObjectManager $entityManager,
-        TokenStorageInterface $tokenStorage,
-        ThumbnailGenerator $thumbnailGenerator
+        TokenStorageInterface $tokenStorage
     ) {
         $this->entityManager = $entityManager;
         $this->tokenStorage = $tokenStorage;
-        $this->thumbnailGenerator = $thumbnailGenerator;
     }
 
     /**
@@ -59,10 +51,6 @@ class TrickTypeHandler
 
             $this->entityManager->persist($trick);
             $this->entityManager->flush();
-
-            foreach ($trick->getPictures() as $picture) {
-                $this->thumbnailGenerator->makeThumb($picture);
-            }
 
             return true;
         }
