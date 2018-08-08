@@ -1,5 +1,7 @@
 # snowtricks
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/42432bbacfee461a9fa1931869691e75)](https://www.codacy.com/project/zohac/snowtricks/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zohac/snowtricks&amp;utm_campaign=Badge_Grade_Dashboard)
+
 P6 - SnowTricks Community Site Development - OC - Application Developer - PHP / Symfony.
 
 SnowTricks community site development.
