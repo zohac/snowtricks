@@ -67,6 +67,9 @@
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
         },
+        "installer-paths": {
+          "../": ["zohac/tricks"]
+        }
         "branch-alias": null
     }
 }
