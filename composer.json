@@ -69,7 +69,8 @@
       "file": "app/config/parameters.yml"
     },
     "installer-paths": {
-      "../": ["zohac/tricks"]
+      "installer-types": ["zohac"],
+      "app/": ["type:zohac"]
     },
     "branch-alias": null
   }
